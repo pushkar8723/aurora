@@ -1,0 +1,39 @@
+body{
+    margin-top: 40px;
+}
+.footer{
+    color: #0f0f0f;
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+.nivoSlider {
+    position:relative;
+    height: 500px;
+    overflow: hidden;
+    background:url(images/loading.gif) no-repeat 50% 50%;
+}
+.nivoSlider img {
+    position:absolute;
+    top:0px;
+    left:0px;
+    display:none;
+}
+.nivoSlider a {
+    border:0;
+    display:block;
+}
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 5px;
+    box-shadow: inset 0px 0px 5px black;
+}
+.nav > li > a:hover{
+    box-shadow: inset 0 0 15px #000;
+}
