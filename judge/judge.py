@@ -21,7 +21,7 @@ sql_hostport = 3306
 sql_username = ''
 sql_password = ''
 sql_database = ''
-HOST, PORT = "127.0.0.1", 8723
+HOST, PORT = "127.0.0.1", 8724
 #timeoffset = 19800
 
 # Initialize Language Constants
@@ -105,7 +105,7 @@ def execute(exename,language, timelimit):
 	elif language=="PHP": cmd = "timeout "+str(timelimit)+" php -f env/"+exename+".php"+inputfile
 	elif language=="Python": cmd = "timeout "+str(timelimit)+" python env/"+exename+".py"+inputfile
 	elif language=="Ruby": cmd = "timeout "+str(timelimit)+" ruby env/"+exename+".rb"+inputfile
-	os.system("chmod 500 .")
+	os.system("chmod 550 .")
 	starttime = time.time()
 	p = subprocess.Popen([cmd], shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	(stdout, stderr)= p.communicate()
@@ -131,7 +131,7 @@ def execute(exename,language, timelimit):
 		p = subprocess.Popen([cmd], shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		(stdout, stderr)= p.communicate()
 	
-	os.system("chmod 700 .")
+	os.system("chmod 750 .")
 	file_write('env/output.txt', stdout);
 	file_write('env/error.txt', stderr);
 	t = p.returncode
@@ -173,9 +173,9 @@ def runjudge(runid):
                 print "Connected to Server ..."
                 print        
 
-                if "-cache" not in sys.argv: cursor.execute("SELECT rid,runs.pid as pid,tid,language,runs.name,runs.code as code,error,input,problems.output as output,timelimit FROM runs,problems WHERE problems.pid=runs.pid and runs.access!='deleted' and rid = '"+str(runid)+"' and runs.language in "+str(tuple(languages))+" ORDER BY rid ASC LIMIT 0,1")
+                if "-cache" not in sys.argv: cursor.execute("SELECT runs.rid as rid,runs.pid as pid,tid,runs.language,subs_code.name as name,subs_code.code as code,error,input,problems.output as output,timelimit FROM runs,problems, subs_code WHERE problems.pid=runs.pid and runs.access!='deleted' and runs.rid = subs_code.rid and runs.rid = '"+str(runid)+"' and runs.language in "+str(tuple(languages))+" ORDER BY runs.rid ASC LIMIT 0,1")
 		# else: cursor.execute("SELECT rid,runs.pid as pid,tid,language,runs.name,runs.code as code,error,timelimit,options FROM runs x,problems WHERE problems.pid=runs.pid and (tid=1 AND runs.rid = (SELECT max(rid) FROM runs WHERE x.tid=tid and x.pid=pid)) and runs.access!='deleted' and runs.result is NULL and runs.language in "+str(tuple(languages))+" ORDER BY rid ASC LIMIT 0,1")
-                else: cursor.execute("SELECT rid,runs1.pid as pid,tid,language,runs1.name,runs1.code as code,error,timelimit FROM runs AS runs1,problems WHERE problems.pid=runs1.pid and runs1.access!='deleted' and rid = '"+str(runid)+"' and runs1.language in "+str(tuple(languages))+" ORDER BY rid ASC LIMIT 0,1")	
+                else: cursor.execute("SELECT runs1.rid as rid,runs1.pid as pid,tid,runs1.language,subs_code.name as name,subs_code.code as code,error,timelimit FROM runs AS runs1,problems, subs_code WHERE problems.pid=runs1.pid and runs1.rid = subs_code.rid and runs1.access!='deleted' and runs1.rid = '"+str(runid)+"' and runs1.language in "+str(tuple(languages))+" ORDER BY runs1.rid ASC LIMIT 0,1")	
 		# Select an Unjudged Submission
 
                 run = cursor.fetchone()
@@ -206,7 +206,7 @@ def runjudge(runid):
                         run["code"]=newcode
 
 		# Check for malicious codes
-		if result==None and (run["code"].find("system(") != -1 or run["code"].find(":(){ :|:& };:") != -1 or run["code"].find("HTTP") != -1 or run["code"].find("exec(") != -1 or run["code"].find("passthru(") != -1 ):
+		if result==None and (run["code"].find(":(){ :|:& };:") != -1 or run["code"].find("HTTP") != -1):
 			print "Suspicious Code."
 			file_write("env/error.txt", "Error : Suspicious code.");
 			result = "SC";
@@ -285,7 +285,8 @@ def runjudge(runid):
                 error = file_read("env/error.txt")
                 if result=="AC": output = ""
                 # if "-cache" in sys.argv: output = "/// Output not saved. ///"
-                cursor.execute("UPDATE runs SET time='%.3f',result='%s',error='%s',output='%s' WHERE rid=%d" % (float(timetaken),result,re.escape(error),re.escape(output),int(run["rid"])));
+                cursor.execute("UPDATE runs SET time='%.3f',result='%s' WHERE rid=%d" % (float(timetaken),result,int(run["rid"])));
+		cursor.execute("UPDATE subs_code SET error='%s',output='%s' WHERE rid=%d" %(re.escape(error), re.escape(output),int(run["rid"])));
                 #link.commit();
                 print "Result (%s,%.3f) updated on Server.\n" % (result,timetaken)
 
@@ -340,10 +341,10 @@ if __name__ == "__main__":
 	sql_database = raw_input("SQL Database : ")
     # Create the server, binding to localhost on port 8723
         server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
-
+	server.request_queue_size = 100
+	print 'Queue Size : ', server.request_queue_size
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
-	os.system('clear')
         print "Supported Languages : " + str(languages) + '\n'
 	print ("Waiting for submissions... ")
         try:

@@ -3,9 +3,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     if (isset($_GET['code'])) {
         $_GET['code'] = addslashes($_GET['code']);
         if (!isset($_SESSION['loggedin']) || $_SESSION['team']['status'] == 'Normal')
-            $query = "select * from runs where rid = $_GET[code] and (access = 'public'" . ((isset($_SESSION['team']['id'])) ? (" or tid=" . $_SESSION['team']['id']) : ("")) . ")";
+            $query = "select runs.rid as rid, pid, tid, runs.language as language, time, result, access, submittime, name, code, error, output from runs, subs_code where runs.rid = subs_code.rid and runs.rid = $_GET[code] and (access = 'public'" . ((isset($_SESSION['team']['id'])) ? (" or tid=" . $_SESSION['team']['id']) : ("")) . ")";
         elseif (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')
-            $query = "select * from runs where rid = $_GET[code]";
+            $query = "select runs.rid as rid, pid, tid, runs.language as language, time, result, access, submittime, name, code, error, output from runs, subs_code where runs.rid = subs_code.rid and runs.rid = $_GET[code]";
         else
             $query = "select * from runs where 1 = 2";
         $res = DB::findOneFromQuery($query);

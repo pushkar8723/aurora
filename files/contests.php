@@ -16,9 +16,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     }
                     if (ctime >= 0){
                         ctime--;
-                        if(ctime == 0)
-                            location.reload(true);
-                        else
+                        if(ctime != 0)
                             window.setTimeout("timer();", 1000);
                     }
                 }
@@ -38,11 +36,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $query = "";
             }
             $prob = DB::findAllFromQuery($query);
-            echo "<table class='table table-hover'><tr><th>ID</th><th>Name</th><th>Score</th><th>Type</th><th>Code</th><th>Submissions</th></tr>";
+            echo "<table class='table table-hover'><tr><th>Name</th><th>Score</th><th>Code</th><th>Submissions</th></tr>";
             foreach ($prob as $row) {
                 $query = "SELECT (SELECT count(*) FROM runs WHERE pid=$row[pid] AND result='AC' AND access!='deleted') as ac, (SELECT count(*) FROM runs WHERE pid=$row[pid] AND access!='deleted') as tot";
                 $subs = DB::findOneFromQuery($query);
-                echo "<tr><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[pid]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$subs[ac]/$subs[tot]</a></td></tr>";
+                echo "<tr><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$subs[ac]/$subs[tot]</a></td></tr>";
             }
             echo "</table><h3>Announcements</h3>$contest[announcement]";
         } else {

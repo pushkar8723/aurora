@@ -51,7 +51,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $_GET['rid'] = addslashes($_GET['rid']);
         $query = "select displayio, access, runs.tid, runs.pid, runs.rid, result, runs.output as output, problems.output as correct, input from runs, problems where rid = $_GET[rid] and problems.pid = runs.pid";
         $runs = DB::findOneFromQuery($query);
-        if (($runs['displayio'] == 1 && $runs['access'] == "public") || ($runs['displayio'] == 1 && isset($_SESSION['loggedin']) && $runs['tid'] == $_SESSION['team']['id']) || (isset($_SESSION['loggedin']) && $_SESSION['team']['status']== "Admin")) {
+        if (($runs['displayio'] == 1 && $runs['access'] == "public") || ($runs['displayio'] == 1 && isset($_SESSION['loggedin']) && $runs['tid'] == $_SESSION['team']['id']) || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) {
             header("Content-type: text/plain");
             header("Content-Disposition: attachment; filename=$_GET[file].txt");
             if ($_GET['file'] == "input") {
@@ -59,9 +59,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             } else if ($_GET['file'] == "correct") {
                 print $runs['correct'];
             } else if ($_GET['file'] == "output") {
-                if($runs['result'] == "WA" || $runs['result'] == "PE"){
+                if ($runs['result'] == "WA" || $runs['result'] == "PE") {
                     print $runs['output'];
-                } else if($runs['result'] == "AC"){
+                } else if ($runs['result'] == "AC") {
                     print $runs['correct'];
                 }
             }
@@ -110,21 +110,28 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
                             } else if ($res['status'] == 'Active' || $_SESSION['team']['status'] == 'Admin') { // Lvl 7
                                 $submittime = time();
-                                $query = "INSERT INTO runs (pid,tid,language,name,code,access,submittime) VALUES ('$res[pid]', '" . $_SESSION['team']['id'] . "', '$_POST[lang]', 'Main', '$sourcecode', 'private', '" . $submittime . "')";
+                                $query = "INSERT INTO runs (pid,tid,language,access,submittime) VALUES ('$res[pid]', '" . $_SESSION['team']['id'] . "', '$_POST[lang]', 'private', '" . $submittime . "')";
                                 $res2 = DB::query($query);
                                 $query = "select rid from runs where tid = " . $_SESSION['team']['id'] . " and pid = $res[pid] and submittime = $submittime";
                                 $result = DB::findOneFromQuery($query);
                                 if ($result) {
                                     $rid = $result['rid'];
-                                    unset($_SESSION['subcode']);
-                                    $_SESSION['msg'] = "Problem submitted successfully. If your problem is not judged then contact admin.";
-                                    $client = stream_socket_client($admin['ip'] . ":" . $admin['port'], $errno, $errorMessage);
-                                    if ($client === false) {
-                                        $_SESSION["msg"] .= "<br/>Cannot connect to Judge: Contact Admin";
+                                    $query = "INSERT INTO subs_code (rid, name, code) VALUES ('$rid', 'Main', '$sourcecode')";
+                                    $result = DB::query($query);
+                                    if ($result) {
+                                        unset($_SESSION['subcode']);
+                                        $_SESSION['msg'] = "Problem submitted successfully. If your problem is not judged then contact admin.";
+                                        $client = stream_socket_client($admin['ip'] . ":" . $admin['port'], $errno, $errorMessage);
+                                        if ($client === false) {
+                                            $_SESSION["msg"] .= "<br/>Cannot connect to Judge: Contact Admin";
+                                        }
+                                        fwrite($client, $rid);
+                                        fclose($client);
+                                        redirectTo(SITE_URL . "/viewsolution/" . $rid);
+                                    } else {
+                                        $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
+                                        redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
                                     }
-                                    fwrite($client, $rid);
-                                    fclose($client);
-                                    redirectTo(SITE_URL . "/viewsolution/" . $rid);
                                 } else {
                                     $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
                                     redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
@@ -460,11 +467,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             DB::query($query);
             $_SESSION['msg'] = "Group Deleted.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
-        } else if (isset ($_POST['statusupdate'])) {
+        } else if (isset($_POST['statusupdate'])) {
             $pid = addslashes($_POST['pid']);
             $status = addslashes($_POST['status']);
             $res = DB::query("update problems set status = '$status' where pid = '$pid'");
-            echo ($res)?("1"):("0");
+            echo ($res) ? ("1") : ("0");
         }
     }
 } else {

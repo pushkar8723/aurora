@@ -111,7 +111,7 @@ function contest_status() {
 
 function latestsubs() {
     echo "<h4>Latest Submissions</h4><table class='table table-condensed'><tr><th>RID</th><th>Team</th><th>Problem</th><th>Result</th></tr >";
-    $query = "SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid = " . $_SESSION['team']['id'] . " order by rid desc limit 0, 5";
+    $query = "SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs order by rid desc limit 0, 5";
     $res = DB::findAllFromQuery($query);
     //echo $query;
     foreach ($res as $row)

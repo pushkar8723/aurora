@@ -5,7 +5,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         $query = "select * from problems where code = '$_GET[code]'";
         $res = DB::findOneFromQuery($query);
         ?>
-        <center><h1>Problem Settings - <?php echo $_GET['code']; ?></h1></center>
+        <center><h1>Problem Settings - <?php echo "<a class='btn btn-primary' href='".SITE_URL."/problems/$_GET[code]'>$_GET[code]</a>"; ?></h1></center>
         <form class='form-horizontal' method='post' action='<?php echo SITE_URL; ?>/process.php' enctype='multipart/form-data'>
             <input type='hidden' name='pid' value='<?php echo $res['pid']; ?>' />
             <div class='row'>

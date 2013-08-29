@@ -26,8 +26,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             }
             if ($flag == 0) {
                 $statement = stripslashes($result["statement"]);
-                $statement = eregi_replace("\n", "<br>", $statement);
-                $statement = eregi_replace("<image ?/?>", "<img src='data:image/jpeg;base64,$result[image]' />", $statement);
+                $statement = preg_replace("/\n/", "<br>", $statement);
+                $statement = preg_replace("/<image \/>/", "<img src='data:image/jpeg;base64,$result[image]' />", $statement);
                 echo "<center><h1>$result[name]</h1></center><div class='btn-group pull-right'>" . ((isset($_SESSION['loggedin'])) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]," . $_SESSION['team']['name'] . "'>My Submissions</a>") : ("")) . "<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]'>All Submissions</a>" . (($result['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/submit/$_GET[code]'>Submit</a>") : ('')) . "</div>
             <br/><br/>" . $statement . "<br/>
                 <b>Time Limit :</b> $result[timelimit] Second(s)<br/><b>Score :</b> $result[score] Point(s)<br/><b>Input File Limit :</b> $result[maxfilesize] Bytes<br/><b>Languages Allowed :</b> $result[languages]";
@@ -96,10 +96,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         echo "<table class='table table-hover'>";
         foreach ($res as $row) {
             if ($row['pgroup'] != $lastgroup){
-                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>ID</th><th>Name</th><th>Score</th><th>Type</th><th>Code</th><th>Submissions</th></tr>";
+                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>Name</th><th>Score</th><th>Type</th><th>Code</th><th>Submissions</th></tr>";
                 $lastgroup = $row['pgroup'];
             }
-            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[pid]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>";
+            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>";
             if(isset($tot[$row['pid']])){
                 echo ((isset($ac[$row['pid']]))?($ac[$row['pid']]):("0")).'/'.$tot[$row['pid']];
             } else {

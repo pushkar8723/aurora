@@ -7,8 +7,8 @@ $query = "select value from admin where variable='notice'";
 $result = DB::findOneFromQuery($query);
 $data = $result['value'];
 $data = str_replace("\r", "", $data);
-$data = eregi_replace("\n\n\n*", "\n\n", $data);
-$data = eregi_replace("[\s\n]*$", "", $data);
+$data = preg_replace("/\n\n\n*/", "\n\n", $data);
+$data = preg_replace("/[\s\n]*$/", "", $data);
 $data = explode("\n\n", $data);
 foreach ($data as $x) {
     $y = explode("\n", $x);

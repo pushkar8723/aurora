@@ -1,0 +1,231 @@
+[2013-07-09 14:11:45]
+Query error:
+insert into logs value ('1373359305', '192.168.101.53', 'Array
+(
+    [url] => /aurora/problems
+    [team] => Array
+        (
+            [id] => 1
+            [name] => ACM
+            [status] => Admin
+        )
+
+    [loggedin] => true
+)
+', 'Array
+(
+    [logout] => 
+)
+' )
+Error: SQLSTATE[HY000]: General error
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 14:13:47]
+Query error:
+insert into logs value ('1373359427', '192.168.101.53', 'Array
+(
+    [url] => /aurora/problems
+)
+', 'Array
+(
+    [teamname] => ACM
+    [password] => nashjohn
+    [login] => Log In
+)
+' )
+Error: SQLSTATE[HY000]: General error
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 14:15:06]
+Query error:
+SELECT count(*)+1 as rank, (select score from teams where tid = ) as sco FROM `teams` WHERE score > (select score from teams where tid = ) and status = 'Normal' or (score = (select score from teams where tid = ) and penalty < (select penalty from teams where tid = )) 
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') as sco FROM `teams` WHERE score > (select score from teams where tid = ) and s' at line 1
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 14:15:06]
+Query error:
+SELECT rid, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 15:11:11]
+Query error:
+insert into logs value ('1373362871', '192.168.101.219', 'Array
+(
+    [url] => /aurora/
+)
+', 'Array
+(
+    [teamname] => -(+TranquillizeR+)-
+    [password] => rajuajur
+    [login] => Log In
+)
+' )
+Error: SQLSTATE[HY000]: General error
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 15:11:12]
+Query error:
+insert into logs value ('1373362872', '192.168.101.219', 'Array
+(
+    [url] => /aurora/
+)
+', 'Array
+(
+    [teamname] => -(+TranquillizeR+)-
+    [password] => rajuajur
+    [login] => Log In
+)
+' )
+Error: SQLSTATE[HY000]: General error
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-09 15:11:13]
+Query error:
+insert into logs value ('1373362873', '192.168.101.219', 'Array
+(
+    [url] => /aurora/
+)
+', 'Array
+(
+    [teamname] => -(+TranquillizeR+)-
+    [password] => rajuajur
+    [login] => Log In
+)
+' )
+Error: SQLSTATE[HY000]: General error
+/srv/http/aurora/functions.php
+======================================================================
+[2013-07-31 20:44:29]
+DB Connection failed:\nSQLSTATE[28000] [1045] Access denied for user 'aurora'@'localhost' (using password: YES)
+======================================================================
+[2013-07-31 22:34:13]
+DB Connection failed:\nSQLSTATE[28000] [1045] Access denied for user 'aurora'@'localhost' (using password: YES)
+======================================================================
+[2013-07-31 22:51:12]
+Query error:
+select pid, name, code, status, pgroup, type, score from problems where status != 'Deleted' and contest='practice' order by pid desc
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'contest' in 'where clause'
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-07-31 22:51:14]
+Query error:
+select pid, name, code, status, pgroup, type, score from problems where status != 'Deleted' and contest='practice' order by pid desc
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'contest' in 'where clause'
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-07-31 22:51:15]
+Query error:
+select * from contest order by starttime desc
+Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'aurora_bit.contest' doesn't exist
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-07-31 22:51:16]
+Query error:
+select pid, name, code, status, pgroup, type, score from problems where status != 'Deleted' and contest='practice' order by pid desc
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'contest' in 'where clause'
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-07-31 22:53:40]
+DB Connection failed:\nSQLSTATE[42000] [1044] Access denied for user 'aurora'@'localhost' to database 'aurora_mo12'
+======================================================================
+[2013-07-31 22:53:49]
+DB Connection failed:\nSQLSTATE[42000] [1044] Access denied for user 'aurora'@'localhost' to database 'aurora_mo12'
+======================================================================
+[2013-07-31 22:58:51]
+Query error:
+select pid, name, code, status, pgroup, type, score from problems where status != 'Deleted' and contest='practice' order by pid desc
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'contest' in 'where clause'
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-07-31 22:58:53]
+Query error:
+select pid, name, code, status, pgroup, type, score from problems where status != 'Deleted' and contest='practice' order by pid desc
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'contest' in 'where clause'
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-17 12:11:57]
+Query error:
+
+Error: SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-19 11:56:10]
+Query error:
+
+Error: SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:24]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:25]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:32]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:33]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:34]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:31:58]
+Query error:
+SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid =  order by rid desc limit 0, 5
+Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by rid desc limit 0, 5' at line 1
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:51:04]
+Query error:
+Insert into subs_code(rid, name, code) values ('7110',  'Main', '#include <iostream>
+#include <cstdio>
+int main(){
+  	int n;
+  	while(scanf(\"%d\", &n) != EOF){
+      	printf(\"%d\\n\", n*n);
+  	}
+	return 0;
+}')
+Error: SQLSTATE[HY000]: General error
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 11:51:15]
+Query error:
+Insert into subs_code(rid, name, code) values ('7111',  'Main', '#include <iostream>
+#include <cstdio>
+int main(){
+  	int n;
+  	while(scanf(\"%d\", &n) != EOF){
+      	printf(\"%d\\n\", n*n);
+  	}
+	return 0;
+}')
+Error: SQLSTATE[HY000]: General error
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
+[2013-08-27 22:18:22]
+DB Connection failed:\nSQLSTATE[28000] [1045] Access denied for user 'aurora'@'localhost' (using password: YES)
+======================================================================
+[2013-08-28 08:13:29]
+Query error:
+
+Error: SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
+/host/Program Files (x86)/EasyPHP-5.3.5.0/www/NewFolder/functions.php
+======================================================================
