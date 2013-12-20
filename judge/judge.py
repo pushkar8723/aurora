@@ -21,7 +21,7 @@ sql_hostport = 3306
 sql_username = ''
 sql_password = ''
 sql_database = ''
-HOST, PORT = "127.0.0.1", 8724
+HOST, PORT = "127.0.0.1", 8723
 #timeoffset = 19800
 
 # Initialize Language Constants
