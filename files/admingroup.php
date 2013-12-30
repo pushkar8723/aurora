@@ -2,8 +2,8 @@
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     echo "<h1>Groups Settings</h1>
         <form method='post' action='".SITE_URL."/process.php'>
-        <input type='text' name='groupname' />
-        <input class='btn btn-primary' style='margin-top: -10px;' type='submit' name='addgroup' value='Add Group' />
+        <div class='col-lg-3'><input class='form-control' type='text' name='groupname' /></div>
+        <input class='btn btn-primary' type='submit' name='addgroup' value='Add Group' />
         </form>";
     $query = "select * from groups";
     $result = DB::findAllFromQuery($query);
@@ -12,10 +12,10 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     foreach ($result as $row){
         echo "<tr>
             <td>
-            <form method='post' action='".SITE_URL."/process.php'>
+            <form role='form' method='post' action='".SITE_URL."/process.php'>
             <input type='hidden' name='gid' value='$row[gid]' />
-            <input type='text' name='groupname' value='$row[groupname]' />
-            <input class='btn btn-primary' style='margin-top: -10px;' type='submit' name='updategroup' value='Update Group' />
+            <div class='col-lg-6'><input class='form-control' type='text' name='groupname' value='$row[groupname]' /></div>
+            <input class='btn btn-primary' type='submit' name='updategroup' value='Update Group' />
             </form>
             </td>
             <td>

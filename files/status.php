@@ -14,7 +14,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo "<center><form method='post' action='" . SITE_URL . "/process.php'>
             <input type='hidden' name='pid' value='$pid' />
             <input type='submit' name='rejudge' class='btn btn-danger' value='Rejudge All Selected Submisssions'/>
-            </form></center>";
+            </form></center><br/>";
         }
         $query = "from runs where pid=$pid and access !='deleted' order by rid desc";
     } else {
@@ -27,7 +27,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 <input type='hidden' name='pid' value='$pid' />
                 <input type='hidden' name='tid' value='$tid' />
                 <input type='submit' name='rejudge' class='btn btn-danger' value='Rejudge All Selected Submisssions'/>
-            </form></center>";
+            </form></center><br/>";
         }
         $query = "from runs where pid=$pid and tid=$tid and access !='deleted' order by rid desc";
     }

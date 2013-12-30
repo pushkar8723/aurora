@@ -31,7 +31,7 @@ USE `aurora_main`;
 CREATE TABLE IF NOT EXISTS `admin` (
   `variable` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `value` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `admin`
@@ -49,6 +49,22 @@ INSERT INTO `admin` (`variable`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `broadcast`
+--
+
+CREATE TABLE IF NOT EXISTS `broadcast` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` tinytext NOT NULL,
+  `msg` text NOT NULL,
+  `createdOn` datetime NOT NULL,
+  `updatedOn` datetime NOT NULL,
+  `deleted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `clar`
 --
 
@@ -61,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `clar` (
   `access` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `createtime` int(11) DEFAULT NULL,
   PRIMARY KEY (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -77,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `contest` (
   `endtime` int(11) NOT NULL,
   `announcement` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -90,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `groupname` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `statusx` int(11) DEFAULT NULL,
   PRIMARY KEY (`gid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -104,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `tid` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `request` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   PRIMARY KEY (`time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -132,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `problems` (
   `displayio` tinyint(1) NOT NULL DEFAULT '0',
   `maxfilesize` int(11) NOT NULL DEFAULT '50000',
   PRIMARY KEY (`pid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `problems`
@@ -158,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `runs` (
   `access` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `submittime` int(11) DEFAULT NULL,
   PRIMARY KEY (`rid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10111 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `runs`
@@ -214,7 +230,7 @@ DELIMITER ;
 --
 
 CREATE TABLE IF NOT EXISTS `subs_code` (
-  `rid` int(11) NOT NULL DEFAULT '0',
+  `rid` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `code` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `error` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
@@ -271,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `session` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `gid` int(11) NOT NULL,
   PRIMARY KEY (`tid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=474 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 --

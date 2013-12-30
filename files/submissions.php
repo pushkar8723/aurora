@@ -19,7 +19,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </form></center>";
         }
         $select = "Select *";
-        $query = "from runs where access!='deleted' and tid in (SELECT tid FROM teams WHERE teamname='$_GET[code]') AND pid in (SELECT pid FROM problems WHERE status='Active') order by rid desc";
+        $query = "from runs where access!='deleted' and tid in (SELECT tid FROM teams WHERE teamname='$_GET[code]') AND pid in (SELECT pid FROM problems WHERE status='Active' or status='Inactive') order by rid desc";
         $result = DB::findAllWithCount($select, $query, $page, 25);
         $data = $result['data'];
         echo "<table class='table table-hover'><tr><th>Run ID</ht><th>Team</th><th>Problem</th><th>Language</th><th>Time</th><th>Result</th><th>Options</th></tr>";
@@ -40,9 +40,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $page = 1;
         $select = "Select *";
         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-            $query = "from runs where tid in (SELECT tid FROM teams WHERE status='Normal' OR status='Admin') AND pid in (SELECT pid FROM problems WHERE status='Active') order by rid desc";
+            $query = "from runs where pid not in (SELECT pid FROM problems WHERE status='Deleted') order by rid desc";
         } else {
-            $query = "from runs where access!='deleted' and tid in (SELECT tid FROM teams WHERE status='Normal' OR status='Admin') AND pid in (SELECT pid FROM problems WHERE status='Active') order by rid desc";
+            $query = "from runs where access!='deleted' AND pid not in (SELECT pid FROM problems WHERE status='Deleted') order by rid desc";
         }
         $result = DB::findAllWithCount($select, $query, $page, 25);
         $data = $result['data'];

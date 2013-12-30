@@ -24,7 +24,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         <h4>Please feel free to post your queries/doubts/praise/criticism/feedback.<br/>We will reply as soon as we can!</h4>
         <form action="<?php echo SITE_URL; ?>/process.php" method="post">
             <input type="hidden" value="0" name="pid" />
-            <textarea style="width: 500px; height: 200px;" name="query"></textarea><br/>
+            <textarea class='form-control' style="width: 500px; height: 200px;" name="query"></textarea><br/>
             <input name="clar" type="submit" class="btn btn-primary" />
         </form>
         <?php

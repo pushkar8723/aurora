@@ -11,13 +11,15 @@
     box-shadow: 0 0 10px #000;
 }
 .footer{
+    margin-left: -30px;
+    padding: 0 15px;
     color: #0f0f0f;
     text-align: center;
     padding: 10px;
     border-top: 1px solid #ccc;
 }
 .bodycont{
-    padding-top: 40px;
+    padding-top: 50px;
     text-align: justify;
 }
 th{
@@ -53,6 +55,9 @@ th{
 }
 code{
     color: #d14;
+    background: none;
+    font-weight: bold;
+    font-size: 14px;
 }
 .faq{
     width: 100%;

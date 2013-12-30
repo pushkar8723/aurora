@@ -19,11 +19,9 @@
 {
     // CommonJS
     typeof(require) != 'undefined' ? SyntaxHighlighter = require('shCore').SyntaxHighlighter : null;
-
     function Brush()
     {
         this.regexList = [
-            {regex: new RegExp(this.getKeywords(keywords), 'gm'), css: 'keyword'}
         ];
     }
     ;

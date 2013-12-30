@@ -1,6 +1,6 @@
 <?php 
 if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin'){
-    echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='".SITE_URL."/adminjudge'><i class='icon-edit icon-white'></i> Edit</a>";
+    echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='".SITE_URL."/adminjudge'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
 }
 echo "<center><h1>Notice</h1></center>";
 $query = "select value from admin where variable='notice'";

@@ -4,7 +4,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $_GET['code'] = addslashes($_GET['code']);
         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin") {
             $query = "select * from problems where code = '$_GET[code]'";
-            echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='icon-edit icon-white'></i> Edit</a>";
+            echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
         } else {
             $query = "select * from problems where code = '$_GET[code]' and status != 'Deleted'";
         }
@@ -38,14 +38,14 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     foreach ($clar as $row) {
                         $query = "select teamname from teams where tid = $row[tid]";
                         $team = DB::findOneFromQuery($query);
-                        $row['query'] = eregi_replace("\n", "<br>", $row['query']);
-                        $row['reply'] = eregi_replace("\n", "<br>", $row['reply']);
-                        echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a>:<br/>Q. $row[query]</b><br/>" . (($row['reply'] != "") ? ("A. $row[reply]<br/>") : ('')) . "<br/>";
+                        $rowquery = eregi_replace("\n", "<br>",htmlspecialchars($row['query']));
+                        $rowreply = eregi_replace("\n", "<br>", htmlspecialchars($row['reply']));
+                        echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a>:<br/>Q. $rowquery</b><br/>" . (($rowreply != "") ? ("A. $rowreply<br/>") : ('')) . "<br/>";
                         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-                            echo "<form method='post' action='" . SITE_URL . "/process.php'>";
-                            echo "Access: <select name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select><br/>";
+                            echo "<form role='form' method='post' action='" . SITE_URL . "/process.php'>";
+                            echo "Access: <select style='width: 250px;' class='form-control' name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select><br/>";
                             echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
-<textarea name='reply' style='width: 450px; height: 100px;'>$row[reply]</textarea><br/>
+<textarea class='form-control' name='reply' style='width: 450px; height: 100px;'>$row[reply]</textarea><br/>
 <input type='submit' class='btn btn-primary' name='clarreply' value='Reply / Change Reply'/>
 </form>";
                         }
@@ -57,11 +57,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     ?>
                     <hr/>
                     <h3>Post Clarification</h3>
-                    <form action="<?php echo SITE_URL; ?>/process.php" method="post">
+                    <form action="<?php echo SITE_URL; ?>/process.php" role='form' method="post">
                         <input type="hidden" value="<?php echo $result['pid']; ?>" name="pid" />
-                        <textarea style="width: 500px; height: 200px;" name="query"></textarea><br/>
+                        <textarea class='form-control' style="width: 500px; height: 200px;" name="query"></textarea><br/>
                         <input name="clar" type="submit" class="btn btn-primary" />
-                    </form>
+                    </form><br/>
                     <?php
                 }
             }

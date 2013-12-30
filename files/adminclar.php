@@ -44,10 +44,10 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         if ($row['reply'] != "") {
             echo "A. $row[reply]<br/><br/>";
         }
-        echo "<form method='post' action='" . SITE_URL . "/process.php'>";
-        echo "Access: <select name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select><br/>";
+        echo "<form class='form-inline' role='form' method='post' action='" . SITE_URL . "/process.php'>";
+        echo "<div class='form-group'>Access:</div><div class='form-group'><select class='form-control'  name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select></div><br/><br/>";
         echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
-<textarea name='reply' style='width: 450px; height: 100px;'>$save</textarea><br/>
+<textarea class='form-control' name='reply' style='width: 450px; height: 100px;'>$save</textarea><br/><br/>
 <input type='submit' class='btn btn-primary' name='clarreply' value='Reply / Change Reply'/>
 </form><hr/>";
     }

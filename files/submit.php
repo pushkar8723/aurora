@@ -15,7 +15,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     <script type='text/javascript'>
         $(document).ready(function() {
             var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('sub'), {'matchBrackets': true, 'autoCloseBrackets': true, 'lineWrapping': true, 'mode': 'text/x-c++src', 'lineNumbers': true});
-            var cmmode = {'C': 'text/x-csrc', 'C++': 'text/x-c++src', 'C#': 'text/x-csharp', 'Java': 'text/x-java', 'JavaScript': 'javascript', 'Pascal': 'text/x-pascal', 'Perl': 'text/x-perl', 'PHP': 'text/x-php', 'Python': 'text/x-python', 'Ruby': 'text/x-ruby'};
+            var cmmode = {<?php echo $cmmode; ?>};
             $('#lang').change(function() {
                 myCodeMirror.setOption('mode', cmmode[$('#lang').val()]);
             });
@@ -40,7 +40,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     <table class='table table-striped'>
                         <tr><th>Language : </th>
                             <td>
-                                <select id='lang' name='lang'>
+                                <select class="form-control" id='lang' name='lang'>
                                     <?php
                                     $lang = split(',', $prob['languages']);
                                     foreach ($lang as $row) {
@@ -54,7 +54,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                     ?>
                                 </select>    
                             </td><th>File : </th><td><input type='file' name='code_file'/></td></tr>
-                        <tr><td colspan='4' style='padding: 0;border-bottom: 1px solid #ddd;'><textarea id='sub' name='sub'><?php
+                        <tr><td colspan='4' style='padding: 0;'><textarea id='sub' name='sub'><?php
                                     if (isset($_SESSION['subcode'])) {
                                         echo stripslashes($_SESSION['subcode']);
                                         unset($_SESSION['subcode']);

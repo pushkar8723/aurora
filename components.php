@@ -5,16 +5,16 @@ function loginbox() {
         ?>
         <h4>Login</h4>
         <center>
-            <form action="<?php echo SITE_URL; ?>/process.php" method="post">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" name="teamname" placeholder="Teamname" required/>
-                </div><br/>
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-asterisk"></i></span>
-                    <input type="password" name="password" placeholder="Password" required/>
+            <form action="<?php echo SITE_URL; ?>/process.php" method="post" role="form">
+                <div class="input-group" style="margin-bottom: -1px;">
+                    <span class="input-group-addon" style="border-bottom-left-radius: 0;"><i class="glyphicon glyphicon-user"></i></span>
+                    <input class="form-control" style="border-bottom-right-radius: 0;" type="text" name="teamname" placeholder="Teamname" required/>
                 </div>
-                <input type="submit" name="login" value="Log In" class="btn btn-primary btn-block"/>
+                <div class="input-group">
+                    <span style="border-top-left-radius: 0;" class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input style="border-top-right-radius: 0;" class="form-control" type="password" name="password" placeholder="Password" required/>
+                </div><br/>
+                    <input type="submit" name="login" value="Log In" class="btn btn-primary btn-block"/>
             </form>
             <a href='<?php echo SITE_URL; ?>/register'>New Team? Register Here.</a>
         </center>
@@ -25,7 +25,7 @@ function loginbox() {
         <table class='table table-condensed'>
             <tr><th>Team Name</th><th>Score</th><th>Overall Rank</th></tr>
             <?php
-            $query = "SELECT count(*)+1 as rank, (select score from teams where tid = " . $_SESSION['team']['id'] . ") as sco FROM `teams` WHERE score > (select score from teams where tid = " . $_SESSION['team']['id'] . ") and status = 'Normal' or (score = (select score from teams where tid = " . $_SESSION['team']['id'] . ") and penalty < (select penalty from teams where tid = " . $_SESSION['team']['id'] . ")) ";
+            $query = "SELECT count(*)+1 as rank, (select score from teams where tid = " . $_SESSION['team']['id'] . ") as sco FROM `teams` WHERE (score > (select score from teams where tid = " . $_SESSION['team']['id'] . ") and status = 'Normal') or (score = (select score from teams where tid = " . $_SESSION['team']['id'] . ") and penalty < (select penalty from teams where tid = " . $_SESSION['team']['id'] . ") and status='Normal') ";
             $res = DB::findOneFromQuery($query);
             echo "<tr><td><a href='" . SITE_URL . "/teams/" . $_SESSION['team']['name'] . "'>" . $_SESSION['team']['name'] . "</a></td><td>$res[sco]</td><td style='text-align: center'>$res[rank]</td></tr>";
             ?>
@@ -99,8 +99,7 @@ function contest_status() {
                         step();
                     </script>
                     <?php
-                }
-                else
+                } else
                     echo "NA";
                 ?>
             </td>
@@ -132,22 +131,22 @@ function rankings() {
     echo "</table>";
 }
 
-function pagination($noofpages, $url, $page, $maxcontent){
+function pagination($noofpages, $url, $page, $maxcontent) {
     if ($noofpages > 1) {
-        if ($page - ($maxcontent/2) > 0)
+        if ($page - ($maxcontent / 2) > 0)
             $start = $page - 5;
         else
             $start = 1;
-	if($noofpages >= $start + $maxcontent) 
-		$end = $start + $maxcontent;
-	else
-		$end = $noofpages;
+        if ($noofpages >= $start + $maxcontent)
+            $end = $start + $maxcontent;
+        else
+            $end = $noofpages;
         ?>
-        <div class ="pagination pagination-centered">
-            <ul>        
+        <div align='center'>
+            <ul class ="pagination">        
                 <?php if ($page > 1) { ?>
-                    <li><a href="<?php echo $url. "&page=1"; ?>">First</a></li>
-                    <li><a href="<?php echo $url. "&page=" . ($page - 1); ?>">Prev</a></li>
+                    <li><a href="<?php echo $url . "&page=1"; ?>">First</a></li>
+                    <li><a href="<?php echo $url . "&page=" . ($page - 1); ?>">Prev</a></li>
                     <?php
                 }
                 for ($i = $start; $i <= $end; $i++) {

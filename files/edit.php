@@ -4,23 +4,23 @@ if(isset($_SESSION['loggedin'])){
     $team = DB::findOneFromQuery($query);
 ?>
 <h1>Account Settings</h1>
-<form class="form-horizontal" method="post" action="<?php echo SITE_URL; ?>/process.php">
-    <div class='control-group'>
-        <div class='control-label'><label for='pass1'>Old Password</label></div>
-        <div class='controls'><input type='password' name='oldpass' id='oldpass' /></div>
+<form class="form-horizontal" role='form' method="post" action="<?php echo SITE_URL; ?>/process.php">
+    <div class='form-group'>
+        <label class='col-lg-2 control-label' for='pass1'>Old Password</label>
+        <div class='col-lg-4'><input class='form-control' type='password' name='oldpass' id='oldpass' /></div>
     </div>
-    <div class='control-group'>
-        <div class='control-label'><label for='pass1'>New Password</label></div>
-        <div class='controls'><input type='password' name='pass1' id='pass1' /></div>
+    <div class='form-group'>
+        <label class='col-lg-2 control-label' for='pass1'>New Password</label>
+        <div class='col-lg-4'><input class='form-control' type='password' name='pass1' id='pass1' /></div>
     </div>
-    <div class='control-group'>
-        <div class='control-label'><label for='pass1'>Retype Password</label></div>
-        <div class='controls'><input type='password' name='repass' id='repass' /></div>
+    <div class='form-group'>
+        <label class='col-lg-2 control-label' for='pass1'>Re-Password</label>
+        <div class='col-lg-4'><input class='form-control' type='password' name='repass' id='repass' /></div>
     </div>
-    <div class='control-group'>
-        <div class='control-label'><label for='pass1'>Group</label></div>
-        <div class='controls'>
-            <select name="group">
+    <div class='form-group'>
+        <label class='col-lg-2 control-label' for='pass1'>Group</label>
+        <div class='col-lg-4'>
+            <select name="group" class='form-control'>
                 <?php
                     $query = 'select * from groups';
                     $result = DB::findAllFromQuery($query);
@@ -31,9 +31,9 @@ if(isset($_SESSION['loggedin'])){
             </select>
         </div>
     </div>
-    <div class='control-group'>
-        <div class='control-label'></div>
-        <div class='controls'>
+    <div class='form-group'>
+        <lable class='col-lg-2 control-label'></lable>
+        <div class='col-lg-4'>
             <input type="submit" class="btn btn-primary btn-large" value="update" name="update" />
         </div>
     </div>

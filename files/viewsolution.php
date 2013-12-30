@@ -12,6 +12,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         if ($res) {
             ?>
             <script type="text/javascript" src="<?php echo SITE_URL; ?>/syntax-highlighter/shCore.js"></script>
+            <script type="text/javascript" src="<?php echo SITE_URL; ?>/syntax-highlighter/shBrushBash.js"></script>
             <script type="text/javascript" src="<?php echo SITE_URL; ?>/syntax-highlighter/shBrushCpp.js"></script>
             <script type="text/javascript" src="<?php echo SITE_URL; ?>/syntax-highlighter/shBrushCSharp.js"></script>
             <script type="text/javascript" src="<?php echo SITE_URL; ?>/syntax-highlighter/shBrushJava.js"></script>
@@ -27,7 +28,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 SyntaxHighlighter.all();
             </script> 
             <?php
-            $brush = array("Brain" => "text", "C" => "c", "C++" => "cpp", "C#" => "csharp", "Java" => "java", "Java", "JavaScript" => "js", "Pascal" => "pascal", "Perl" => "perl", "PHP" => "php", "Python" => "python", "Ruby" => "ruby", "Text" => "text");
+            
             $query = "select code, name, displayio, input, output, teamname from problems, teams where pid = $res[pid] and tid = $res[tid]";
             $prob = DB::findOneFromQuery($query);
             echo "<h1>Solution</h1>
@@ -54,11 +55,13 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         <td>
                             <form class="form-inline" method="post" action="<?php echo SITE_URL; ?>/process.php">
                                 <input type="hidden" value="<?php echo $res['rid']; ?>" name="rid" />
-                                <select name="access">
-                                    <option value="public" <?php if ($res['access'] == "public") echo "selected='selected' "; ?>>Public</option>
-                                    <option value="private" <?php if ($res['access'] == "private") echo "selected='selected' "; ?>>Private</option>
-                                    <option value="deleted" <?php if ($res['access'] == "deleted") echo "selected='selected' "; ?>>Deleted</option>
-                                </select>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="access">
+                                        <option value="public" <?php if ($res['access'] == "public") echo "selected='selected' "; ?>>Public</option>
+                                        <option value="private" <?php if ($res['access'] == "private") echo "selected='selected' "; ?>>Private</option>
+                                        <option value="deleted" <?php if ($res['access'] == "deleted") echo "selected='selected' "; ?>>Deleted</option>
+                                    </select>
+                                </div>
                                 <input type="submit" name="runaccess" value="Update" class="btn btn-danger"/>
                             </form>
                         </td>
@@ -66,53 +69,73 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 </table>
                 <?php
             }
-            echo "<h4>Code</h4><div class='limit'><pre class='brush: " . $brush[$res['language']] . "'>" . htmlspecialchars($res[code]) . "</pre></div>";
+            echo "<h4>Code</h4><div class='limit'><pre class='brush: " . $brush[$res['language']] . "'>" . htmlspecialchars($res['code']) . "</pre></div>";
             if (strlen($res['error']) != 0) {
                 echo "<h4>Error</h4><div class='limit'><pre class='brush: text'>$res[error]</pre></div>";
             }
             if (($prob['displayio'] == 1 && ($res['result'] == 'AC' || $res['result'] == 'WA' || $res['result'] == 'PE')) || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
                 //if (strlen($prob['input']) <= 102400) {
                 ?>
-                <div class='row'>
-                    <?php if (strlen($prob['input']) <= 102400) { ?>
-                        <div class='span3' style='overflow-x: auto;'><h4>Input</h4><div class='limit'><pre class='brush: text'><?php echo $prob['input']; ?></pre></div></div>
-                        <?php
-                    } else {
-                        echo "<div class='span3' style='overflow-x: auto;'><a class='btn btn-primary' target='_blank' href='" . SITE_URL . "/process.php?rid=$_GET[code]&file=input'>Download Input File</a></div>";
-                    }
-                    if (strlen($prob['output']) <= 102400 && strlen($res['output']) <= 102400) {
-                        $correct = explode("\n", $prob['output']);
-                        $output = explode("\n", $res['output']);
-                        $lines = array();
-                        for ($i = 0; $i < count($correct) || $i < count($output);) {
-                            if ($i < count($correct) && $i < count($output) && $correct[$i] != $output[$i]) {
-                                array_push($lines, $i + 1);
-                            } else if ($i > count($correct) && $i < count($output)) {
-                                array_push($lines, $i + 1);
-                            }
-                            $i++;
+                <?php if (strlen($prob['input']) <= 102400) { ?>
+                    <div class='col-md-4' style='overflow-x: auto;'><h4>Input</h4><div class='limit'><pre class='brush: text'><?php echo $prob['input']; ?></pre></div></div>
+                    <?php
+                } else {
+                    echo "<div class='col-md-4' style='overflow-x: auto;'><a class='btn btn-primary' target='_blank' href='" . SITE_URL . "/process.php?rid=$_GET[code]&file=input'>Download Input File</a></div>";
+                }
+                if (strlen($prob['output']) <= 102400 && strlen($res['output']) <= 102400) {
+                    $correct = preg_split("/((\r?\n)|(\r\n?))/", $prob['output']);
+                    $output = preg_split("/((\r?\n)|(\r\n?))/", $res['output']);
+                    $lines = array();
+                    for ($i = 0; $i < count($correct) || $i < count($output);) {
+                        //echo bin2hex($correct[$i])." ".bin2hex($output[$i])."<br/>";
+                        if ($i < count($correct) && $i < count($output) && $correct[$i] != $output[$i]) {
+                            array_push($lines, $i + 1);
+                        } else if ($i > count($correct) && $i < count($output)) {
+                            array_push($lines, $i + 1);
                         }
-                        $lines = "[" . implode(',', $lines) . "]";
-                        ?>
-                        <div class='span3' style='overflow-x: auto;'><h4>Correct Output</h4><div class='limit'><pre class='brush: text'><?php echo $prob['output']; ?></pre></div></div>
-                        <div class='span3' style='overflow-x: auto;'><h4>Actual Output</h4><div class='limit'><pre class='brush: text;<?php if ($res['result'] != 'AC') echo "highlight: " . $lines; ?>;' id="output"><?php echo ($res['result'] != 'AC') ? (stripslashes($res['output'])) : ($prob['output']); ?></pre></div></div>                
-                                <?php
-                            } else {
-                                echo "<a class='btn btn-primary' target='_blank' href='" . SITE_URL . "/process.php?rid=$_GET[code]&file=correct'>Download Correct Output File</a>
+                        $i++;
+                    }
+                    //print_r($lines);
+                    $lines = "[" . implode(',', $lines) . "]";
+                    ?>
+                    <div class='col-md-4' style='overflow-x: auto;'><h4>Correct Output</h4><div class='limit'><pre class='brush: text'><?php echo $prob['output']; ?></pre></div></div>
+                    <div class='col-md-4' style='overflow-x: auto;'><h4>Actual Output</h4><div class='limit'><pre class='brush: text;<?php if ($res['result'] != 'AC') echo " highlight: " . $lines; ?>;' id="output"><?php echo ($res['result'] != 'AC') ? (stripslashes($res['output'])) : ($prob['output']); ?></pre></div></div>                
+                            <?php
+                        } else {
+                            echo "<a class='btn btn-primary' target='_blank' href='" . SITE_URL . "/process.php?rid=$_GET[code]&file=correct'>Download Correct Output File</a>
                             <a class='btn btn-primary' target='_blank' href='" . SITE_URL . "/process.php?rid=$_GET[code]&file=output'>Download Output File</a>";
+                            // First 10 mismatch
+                            if (in_array($res['result'], array('WA', 'PE'))) {
+                                echo "<div style='padding: 10px; background: #f7f7f2; width:62%; overflow-x:auto; margin: 10px; float: left;'><h3>First 10 Mismatch</h3>";
+                                ini_set('memory_limit', '-1');
+                                $correct = preg_split("/((\r?\n)|(\r\n?))/", $prob['output']);
+                                $output = preg_split("/((\r?\n)|(\r\n?))/", $res['output']);
+                                for ($i = 0, $count = 0; ($i < count($correct) || $i < count($output)) && $count < 10; $i++) {
+                                    //echo bin2hex($correct[$i])." ".bin2hex($output[$i])."<br/>";
+                                    if ($i < count($correct) && $i < count($output) && $correct[$i] != $output[$i]) {
+                                        $count++;
+                                        echo "<div style='float:left; width: 6%; padding-right: 5px; margin-right: 10px; text-align: right; color: #afafaf; border-right: 3px solid #6ce26c; left: 50%;'>" . ($i + 1) . "</div><div style='float:left; width: 40%;'>$correct[$i]</div><div style=' padding-right: 5px; float:left; width: 6%; margin-right: 10px; text-align: right; color: #afafaf; border-right: 3px solid #6ce26c;'>" . ($i + 1) . "</div><div style='float:left; width: 40%;'>$output[$i]</div><br/>";
+                                    } else if ($i > count($correct) && $i < count($output)) {
+                                        $count++;
+                                        echo "<b>Line $i: No output<br/><br/>";
+                                    } else if ($i < count($correct) && $i > count($output)) {
+                                        $count++;
+                                        echo "<b>Line $i: Extra output<br/><br/>";
+                                    }
+                                }
                             }
-                            ?>
-                </div>
-                <?php
-                // } else {
+                        }
+                        ?>
+                        <?php
+                        // } else {
 //                    
-                // }
-            }
-        } else {
-            echo "<br/><br/><br/><div style='padding: 10px;'><h1>Solution not Found :(</h1>The solution you are looking for doesn't exsits or you are not authorized to view.</div><br/><br/><br/>";
-        }
-    } else {
-        ?>
+                        // }
+                    }
+                } else {
+                    echo "<br/><br/><br/><div style='padding: 10px;'><h1>Solution not Found :(</h1>The solution you are looking for doesn't exsits or you are not authorized to view.</div><br/><br/><br/>";
+                }
+            } else {
+                ?>
         <script type='text/javascript'>
             $(document).ready(function() {
                 $('#submit').click(function() {

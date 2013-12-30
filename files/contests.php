@@ -8,16 +8,17 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             ?>
             <script type='text/javascript'>
                 var ctime = <?php echo $contest['starttime'] - time(); ?>;
+                function zeroPad(num, places) {
+                    var zero = places - num.toString().length + 1;
+                    return Array(+(zero > 0 && zero)).join("0") + num;
+                }
                 function timer() {
                     if (ctime > 0) {
-                        $("div#contesttimer").html("<h4>Starts in: "+parseInt(ctime / 3600) + ":" + parseInt((ctime / 60)) % 60 + ":" + (ctime % 60)+"</h4>");
+                        $("div#contesttimer").html("<h4>Starts in: " + parseInt(ctime / 3600) + ":" + zeroPad(parseInt((ctime / 60)) % 60,2) + ":" + zeroPad(ctime % 60, 2) + "</h4>");
+                        ctime--;
+                        window.setTimeout("timer();", 1000);
                     } else {
                         $("div#contesttimer").html("<h4>Starts in: NA</h4>");
-                    }
-                    if (ctime >= 0){
-                        ctime--;
-                        if(ctime != 0)
-                            window.setTimeout("timer();", 1000);
                     }
                 }
                 timer();
@@ -25,11 +26,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             <?php
             echo "<div class='contestheader'><center><h1>$contest[name]</h1></center><div id='contesttimer'><h4>Starts in:</h4></div></div>";
             if ($contest['starttime'] <= time() || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
-                if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin'){
-                    $query = "select * from problems where pgroup = '$_GET[code]' order by pid"; 
-                    echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='".SITE_URL."/admincontest/$_GET[code]'><i class='icon-edit icon-white'></i> Edit</a>";
-                }
-                else {
+                if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
+                    $query = "select * from problems where pgroup = '$_GET[code]' order by pid";
+                    echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
+                } else {
                     $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted' order by pid";
                 }
             } else {

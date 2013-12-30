@@ -9,7 +9,19 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 });
             });
         </script>
-        <center><h1>Teams</h1></center>Team Name : <input id='teamname' type='text' /> <input style='margin-top: -10px;' id='submit' value='Search' type='button' class='btn btn-primary' />
+        <center><h1>Teams</h1></center>
+        <div class='form-inline'>
+            <div class='form-group'>
+                Team Name : 
+            </div>
+            <div class='form-group'>
+                <input class='form-control' id='teamname' type='text' />
+            </div>
+            <div class='form-group'>
+                <input id='submit' value='Search' type='button' class='btn btn-primary' />
+            </div>
+        </div>
+        <br/>
     <?php
     if (isset($_GET['page']))
         $page = $_GET['page'];

@@ -34,20 +34,20 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     $result = DB::findAllWithCount($select, $body, $page, 20);
     $data = $result['data'];
     $i = 20 * ($page - 1) + 1;
-    $ac = array();
-    $query = "SELECT tid, count(distinct runs.pid) as count FROM runs,problems WHERE runs.result='AC' and problems.status='Active' and problems.contest='contest' group by tid";
-    $res = DB::findAllFromQuery($query);
-    foreach ($res as $row)
-        $ac[$row['tid']] = $row['count'];
-    $tot = $result;
-    $query = "SELECT tid, count(distinct runs.pid) as count FROM runs,problems WHERE problems.status='Active' and problems.contest='contest' group by tid";
-    $res = DB::findAllFromQuery($query);
-    foreach ($res as $row)
-        $tot[$row['tid']] = $row['count'];
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Team Name</th><th>Team Group</th><th>Problems Solved / Attempted</th><th>Score</th></tr>";
+//    $ac = array();
+//    $query = "SELECT tid, count(distinct(runs.pid)) as count FROM runs,problems WHERE runs.result='AC' and problems.status!='Deleted' and runs.pid = problems.pid and problems.contest='contest' group by tid";
+//    $res = DB::findAllFromQuery($query);
+//    foreach ($res as $row)
+//        $ac[$row['tid']] = $row['count'];
+//    $tot = $result;
+//    $query = "SELECT tid, count(distinct(runs.pid)) as count FROM runs,problems WHERE problems.status!='Deleted' and runs.pid = problems.pid and problems.contest='contest' group by tid";
+//    $res = DB::findAllFromQuery($query);
+//    foreach ($res as $row)
+//        $tot[$row['tid']] = $row['count'];
+    echo "<table class='table table-hover'><tr><th>Rank</th><th>Team Name</th><th>Team Group</th><th>Score</th></tr>";
     foreach ($data as $row) {
-        $subs = ((isset($ac[$row['tid']])) ? ($ac[$row['tid']]) : ("0")) . "/" . ((isset($tot[$row['tid']])) ? ($tot[$row['tid']]) : ("0"));
-        echo "<tr><td>" . $i++ . "</td><td><a href='" . SITE_URL . "/teams/$row[teamname]'>$row[teamname]</a></td><td>" . $group[$row['gid']] . "</td><td>$subs</td><td>$row[score]</td></tr>";
+        //$subs = ((isset($ac[$row['tid']])) ? ($ac[$row['tid']]) : ("0")) . "/" . ((isset($tot[$row['tid']])) ? ($tot[$row['tid']]) : ("0"));<td>$subs</td>
+        echo "<tr><td>" . $i++ . "</td><td><a href='" . SITE_URL . "/teams/$row[teamname]'>$row[teamname]</a></td><td>" . $group[$row['gid']] . "</td><td>$row[score]</td></tr>";
     }
     echo "</table>";
     pagination($result['noofpages'], SITE_URL . "/rankings".((isset($tab)?("/$tab"):(""))), $page, 10);

@@ -3,7 +3,7 @@
 require_once 'config.php';
 
 function customhash($str) {
-    return $str; // To help change the hashing for password saving if needed.
+    return md5($str); // To help change the hashing for password saving if needed.
 }
 
 $query = "select value from admin where variable='mode'";
@@ -34,6 +34,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $_SESSION['team']['name'] = $res['teamname'];
                 $_SESSION['loggedin'] = "true";
                 $_SESSION['team']['status'] = $res['status'];
+                $_SESSION['team']['time'] = time();
                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
             } else if ($res) {
                 $_SESSION['msg'] = "You can not log in as your current status is : $res[status]";
@@ -49,7 +50,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         redirectTo(SITE_URL);
     } else if (isset($_GET['rid'])) {
         $_GET['rid'] = addslashes($_GET['rid']);
-        $query = "select displayio, access, runs.tid, runs.pid, runs.rid, result, runs.output as output, problems.output as correct, input from runs, problems where rid = $_GET[rid] and problems.pid = runs.pid";
+        $query = "select displayio, access, runs.tid, runs.pid, runs.rid, result, subs_code.output as output, problems.output as correct, input from runs, subs_code, problems where runs.rid = $_GET[rid] and runs.rid = subs_code.rid and problems.pid = runs.pid";
         $runs = DB::findOneFromQuery($query);
         if (($runs['displayio'] == 1 && $runs['access'] == "public") || ($runs['displayio'] == 1 && isset($_SESSION['loggedin']) && $runs['tid'] == $_SESSION['team']['id']) || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) {
             header("Content-type: text/plain");
@@ -118,6 +119,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                     $rid = $result['rid'];
                                     $query = "INSERT INTO subs_code (rid, name, code) VALUES ('$rid', 'Main', '$sourcecode')";
                                     $result = DB::query($query);
+                                    $query = "select rid from subs_code where rid = $rid";
+                                    $result = DB::findOneFromQuery($query);
                                     if ($result) {
                                         unset($_SESSION['subcode']);
                                         $_SESSION['msg'] = "Problem submitted successfully. If your problem is not judged then contact admin.";
@@ -127,8 +130,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                         }
                                         fwrite($client, $rid);
                                         fclose($client);
-                                        redirectTo(SITE_URL . "/viewsolution/" . $rid);
+                                        redirectTo(SITE_URL . "/viewsolution/". $rid);
                                     } else {
+                                        DB::query("Delete from runs where rid = $rid");
                                         $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
                                         redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
                                     }
@@ -257,6 +261,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         if (isset($_POST['judgeupdate'])) {
             $admin = Array();
             $admin['mode'] = $_POST['mode'];
+            $admin['endtime'] = $_POST['endtime'];
             if ($admin['mode'] == "Active" && $admin['endtime'] == "") {
                 $admin['endtime'] = (time() + 180 * 60);
             } else {
@@ -293,8 +298,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $_SESSION['msg'] = "Problem Added.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         } else if (isset($_POST['updateproblem'])) {
+            $ioloc = "/home/aurora/home/judge/io_cache";
             $prob = Array();
             $pid = addslashes($_POST['pid']);
+            $_POST['newpid'] = addslashes($_POST['newpid']);
+            $prob['pid'] = addslashes($_POST['newpid']);
             $prob['name'] = addslashes($_POST['name']);
             $prob['code'] = addslashes($_POST['code']);
             $prob['score'] = addslashes($_POST['score']);
@@ -307,13 +315,14 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $prob['displayio'] = addslashes($_POST['displayio']);
             $prob['maxfilesize'] = addslashes($_POST['maxfilesize']);
             $prob['statement'] = addslashes($_POST['statement']);
-            $ioloc = "/home/aurora/home/judge/io_cache";
             if ($_FILES['input']['size'] > 0) {
                 $prob['input'] = addslashes(file_get_contents($_FILES['input']['tmp_name']));
                 unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
+                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
             }
             if ($_FILES['output']['size'] > 0) {
                 $prob['output'] = addslashes(addslashes(file_get_contents($_FILES['output']['tmp_name'])));
+                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
                 unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
             }
             if ($_FILES['image']['size'] > 0) {
@@ -322,6 +331,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             foreach ($prob as $key => $val) {
                 $query = "update problems set $key = '$val' where pid=$pid";
                 DB::query($query);
+            }
+            if($_POST['pid'] != $_POST['newpid']){
+                DB::query("Update runs set pid = $_POST[newpid] where pid = $pid");
+                DB::query("Update clar set pid = $_POST[newpid] where pid = $pid");
+                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
+                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
             }
             $_SESSION['msg'] = "Problem Updated.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
@@ -356,6 +371,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $tid = addslashes($_POST['tid']);
             $team['teamname'] = $_POST['teamname'];
             if (preg_match("/^[a-zA-Z0-9_@]+$/", $team['teamname'], $match) && $match[0] == $team['teamname']) {
+                $team['pass'] = addslashes($_POST['password']);
                 $team['status'] = addslashes($_POST['status']);
                 $team['name1'] = addslashes($_POST['name1']);
                 $team['roll1'] = addslashes($_POST['roll1']);
@@ -472,6 +488,17 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $status = addslashes($_POST['status']);
             $res = DB::query("update problems set status = '$status' where pid = '$pid'");
             echo ($res) ? ("1") : ("0");
+        } else if(isset ($_POST['addbmsg'])){
+            $bcast['title'] = addslashes($_POST['btitle']);
+            $bcast['msg'] = addslashes($_POST['bmsg']);
+            DB::insert('broadcast', $bcast);
+            $_SESSION['msg'] = 'Message queued for delievery.';
+            redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
+        } else if(isset ($_POST['delbmsg'])){
+            $id = addslashes($_POST['id']);
+            DB::delete('broadcast', "id=$id");
+            $_SESSION['msg'] = 'Message deleted.';
+            redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         }
     }
 } else {
