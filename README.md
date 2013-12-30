@@ -11,7 +11,7 @@ Setup Judge Python Script
 Python script for judge can be found in judge folder. To protect rest of the machine from potenial treat it is recommended to run the judge in a sandboxed environment to trap it inside a folder or run it on a virtual machine. Both processes are described below.
 
 ### How to Setup Sandbox Environment
-In this method Judge is tarped inside an area in machine by using chroot command in linux and detailed steps for seting up judge can be found in 'set up judge' file inside judge folder.
+In this method Judge is tarped inside an area in machine by using chroot command in linux and detailed steps for seting up judge can be found in 'set up judge.md' file inside judge folder.
 
 ### How to Setup Judge in Virtual Machine 
 
@@ -19,19 +19,27 @@ Follow following steps.
 
 1. Install Ubuntu 12.04 on a virtual machine.
 2. Install required compliers/interpreters (one time process).
-<code>
-sudo apt-get update
-sudo apt-get install bf g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python-mysqldb rhino ruby
-</code>
-** Note **
-You may need to add following two lines in '/etc/apt/sources.list' file
-deb http://in.archive.ubuntu.com/ubuntu/ precise main universe 
-deb-src http://in.archive.ubuntu.com/ubuntu/ precise main universe
+
+	```
+	sudo apt-get update
+	sudo apt-get install bf g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python-mysqldb rhino ruby
+	```
+	
+	**Note:**
+	
+	You may need to add following two lines in '/etc/apt/sources.list' file
+	
+	```
+	deb http://in.archive.ubuntu.com/ubuntu/ precise main universe 
+	deb-src http://in.archive.ubuntu.com/ubuntu/ precise main universe
+	```
 
 3. Edit <code>sql_hostname, sql_hostport, sql_username, sql_password, sql_database, HOST, PORT</code> appropriately. Run the python script.
-<code>
-python judge.py -judge -unsafe -cache
-</code>
+
+	```
+	python judge.py -judge -unsafe -cache
+	```
+	
 	* <code>-judge</code> option turn on the judgement. Without this judgement will not begin only short description of options available will be shown
 	* <code>-unsafe</code> option set the judgement for all languages (some which can used to perform suspicious operations)
 	* <code>-cache</code> option tells the judge to cache input and correct output first time the solution for a problem is submitted and later use this cache rather than fetching data from database each time. Judge can be shutdown by keyboard intrupt i.e, CTRL+C
