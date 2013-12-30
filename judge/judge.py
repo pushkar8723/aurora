@@ -20,7 +20,7 @@ sql_hostport = 3306
 sql_username = 'aurora'
 sql_password = 'aurora'
 sql_database = 'aurora_main'
-HOST, PORT = "127.0.0.1", 8724
+HOST, PORT = "127.0.0.1", 8723
 #timeoffset = 19800
 
 # Initialize Language Constants
