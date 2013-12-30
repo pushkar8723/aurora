@@ -97,13 +97,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li>
-                        <li><a href="http://172.16.32.222/acm">ACM</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/problems">Problems</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/contests">Contests</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/rankings">Rankings</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/submissions">Submissions</a></li>
-                        <li><a href="http://172.16.32.222/acm/forum">Forum</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
                     </ul>
                     <?php if (isset($_SESSION['loggedin'])) { ?>
