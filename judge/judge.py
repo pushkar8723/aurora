@@ -20,7 +20,7 @@ sql_hostport = 3306
 sql_username = 'aurora'
 sql_password = 'aurora'
 sql_database = 'aurora_main'
-HOST, PORT = "127.0.0.1", 8723
+HOST, PORT = "127.0.0.1", 8724
 #timeoffset = 19800
 
 # Initialize Language Constants
@@ -308,7 +308,7 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
         # Likewise, self.wfile is a file-like object used to write back
         # to the client
         if(self.data == 'rejudge'):
-                print (("{} wrote:").format(self.client_address[0]))
+		print (("{} wrote:").format(self.client_address[0]))
                 print self.data
                 link = sql.connect(host=sql_hostname,port=sql_hostport,user=sql_username,passwd=sql_password,db=sql_database);
                 cursor = link.cursor(sql.cursors.DictCursor)
@@ -320,8 +320,18 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
                         runjudge(run['rid'])
                         i = i + 1 
                 cursor.close()
+	elif(self.data[0:3] == 'del'):
+		print (("{} wrote:").format(self.client_address[0]))
+		print self.data
+		print "Deleting io files for pid - "+self.data[3:]
+		filename = "io_cache/Aurora Online Judge - Problem ID "+self.data[3:]+" - Input.txt"
+		if (os.path.exists(filename)):
+			os.remove(filename)
+		filename = "io_cache/Aurora Online Judge - Problem ID "+self.data[3:]+" - Output.txt"
+		if (os.path.exists(filename)):
+			os.remove(filename)
         elif (len(self.data) > 0):
-                print (("{} wrote:").format(self.client_address[0]))
+		print (("{} wrote:").format(self.client_address[0]))
                 runjudge(int(self.data))
                 
         

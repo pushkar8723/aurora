@@ -130,7 +130,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                         }
                                         fwrite($client, $rid);
                                         fclose($client);
-                                        redirectTo(SITE_URL . "/viewsolution/". $rid);
+                                        redirectTo(SITE_URL . "/viewsolution/" . $rid);
                                     } else {
                                         DB::query("Delete from runs where rid = $rid");
                                         $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
@@ -298,7 +298,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $_SESSION['msg'] = "Problem Added.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         } else if (isset($_POST['updateproblem'])) {
-            $ioloc = "/home/aurora/home/judge/io_cache";
+            $query = "select * from admin where variable='ip' or variable ='port'";
+            $check = DB::findAllFromQuery($query);
+            $admin = Array();
+            foreach ($check as $row) {
+                $admin[$row['variable']] = $row['value'];
+            }
             $prob = Array();
             $pid = addslashes($_POST['pid']);
             $_POST['newpid'] = addslashes($_POST['newpid']);
@@ -317,13 +322,21 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $prob['statement'] = addslashes($_POST['statement']);
             if ($_FILES['input']['size'] > 0) {
                 $prob['input'] = addslashes(file_get_contents($_FILES['input']['tmp_name']));
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
+                $client = stream_socket_client($admin['ip'] . ":" . $admin['port'], $errno, $errorMessage);
+                if ($client === false) {
+                    $_SESSION["msg"] .= "<br/>Cannot connect to Judge: Contact Admin";
+                }
+                fwrite($client, "del$pid");
+                fclose($client);
             }
             if ($_FILES['output']['size'] > 0) {
                 $prob['output'] = addslashes(addslashes(file_get_contents($_FILES['output']['tmp_name'])));
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
+                $client = stream_socket_client($admin['ip'] . ":" . $admin['port'], $errno, $errorMessage);
+                if ($client === false) {
+                    $_SESSION["msg"] .= "<br/>Cannot connect to Judge: Contact Admin";
+                }
+                fwrite($client, "del$pid");
+                fclose($client);
             }
             if ($_FILES['image']['size'] > 0) {
                 $prob['image'] = base64_encode(file_get_contents($_FILES['image']['tmp_name']));
@@ -332,13 +345,17 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $query = "update problems set $key = '$val' where pid=$pid";
                 DB::query($query);
             }
-            if($_POST['pid'] != $_POST['newpid']){
+            if ($_POST['pid'] != $_POST['newpid']) {
                 DB::query("Update runs set pid = $_POST[newpid] where pid = $pid");
                 DB::query("Update clar set pid = $_POST[newpid] where pid = $pid");
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Input.txt");
-                unlink("$ioloc/Aurora Online Judge - Problem ID $pid - Output.txt");
+                $client = stream_socket_client($admin['ip'] . ":" . $admin['port'], $errno, $errorMessage);
+                if ($client === false) {
+                    $_SESSION["msg"] .= "<br/>Cannot connect to Judge: Contact Admin";
+                }
+                fwrite($client, "del$pid");
+                fclose($client);
             }
-            $_SESSION['msg'] = "Problem Updated.";
+            $_SESSION['msg'] .= "Problem Updated.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         } else if (isset($_POST['addcontest'])) {
             $newcontest['code'] = addslashes($_POST['code']);
@@ -488,13 +505,13 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $status = addslashes($_POST['status']);
             $res = DB::query("update problems set status = '$status' where pid = '$pid'");
             echo ($res) ? ("1") : ("0");
-        } else if(isset ($_POST['addbmsg'])){
+        } else if (isset($_POST['addbmsg'])) {
             $bcast['title'] = addslashes($_POST['btitle']);
             $bcast['msg'] = addslashes($_POST['bmsg']);
             DB::insert('broadcast', $bcast);
             $_SESSION['msg'] = 'Message queued for delievery.';
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
-        } else if(isset ($_POST['delbmsg'])){
+        } else if (isset($_POST['delbmsg'])) {
             $id = addslashes($_POST['id']);
             DB::delete('broadcast', "id=$id");
             $_SESSION['msg'] = 'Message deleted.';
