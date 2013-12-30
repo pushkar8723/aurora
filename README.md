@@ -22,7 +22,7 @@ Follow following steps.
 
 	```
 	sudo apt-get update
-	sudo apt-get install bf g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python-mysqldb rhino ruby
+	sudo apt-get install bf bc g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python3 python-mysqldb rhino ruby
 	```
 	
 	**Note:**
