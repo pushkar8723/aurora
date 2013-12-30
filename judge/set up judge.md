@@ -67,8 +67,17 @@ Exit chroot by simply using
 * To enquire about the job number use 'jobs'.
 * To shutdown judge simply bring it to foreground and send keyboard interupt i.e, CTRL+C
 
---- perl config ---
+# perl config
 ```
 # locale-gen en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
 # dpkg-reconfigure locales
 ```
+
+# Distributer Script
+
+During contest it may happen that one judge may not be able to handel the load and so several judges are needed to be run simultaniously. 'distributer.py' is made for this purpose.
+
+When connected with web interface, it can assign different run id to different judge script. For this two variables are to be taken care of:
+
+1. **servers** : This contains the list of judge srcipt running on different sockets
+2. **HOST, PORT** : This is the socket settings of distributer scrit. Web interface should point to this socket.
