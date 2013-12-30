@@ -37,11 +37,10 @@ Follow following steps.
 3. Edit <code>sql_hostname, sql_hostport, sql_username, sql_password, sql_database, HOST, PORT</code> appropriately. Run the python script.
 
 	```
-	python judge.py -judge -unsafe -cache
+	python judge.py -judge -cache
 	```
 	
 	* <code>-judge</code> option turn on the judgement. Without this judgement will not begin only short description of options available will be shown
-	* <code>-unsafe</code> option set the judgement for all languages (some which can used to perform suspicious operations)
 	* <code>-cache</code> option tells the judge to cache input and correct output first time the solution for a problem is submitted and later use this cache rather than fetching data from database each time. Judge can be shutdown by keyboard intrupt i.e, CTRL+C
 
 How to start using this software
