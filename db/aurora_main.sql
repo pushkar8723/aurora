@@ -191,6 +191,9 @@ INSERT INTO `runs` (`rid`, `pid`, `tid`, `language`, `time`, `result`, `access`,
 (8, 1, 1, 'PHP', '', '', 'public', NULL),
 (9, 1, 1, 'Python', '', '', 'public', NULL),
 (10, 1, 1, 'Ruby', '', '', 'public', NULL);
+(11, 1, 1, 'Python3', '', '', 'public', NULL);
+(12, 1, 1, 'AWK', '', '', 'public', NULL);
+(13, 1, 1, 'Bash', '', '', 'public', NULL);
 
 --
 -- Triggers `runs`
@@ -234,7 +237,8 @@ CREATE TABLE IF NOT EXISTS `subs_code` (
   `name` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `code` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `error` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `output` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci
+  `output` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -252,6 +256,9 @@ INSERT INTO `subs_code` (`rid`, `name`, `code`, `error`, `output`) VALUES
 (8, 'code', '<?php\r\n$stdin = fopen("php://stdin","r");\r\nwhile($i = trim(fgets($stdin))){\r\n	echo ($i*$i)."\\n";\r\n	}\r\nfclose($stdin);\r\n?>', '', ''),
 (9, 'code', 'try:\n	while 1:\n		i = int(raw_input())\n		print i*i\nexcept:\n	pass\n', '', ''),
 (10, 'code', 'while n = gets\n	n = n.chomp.to_i\n	puts (n*n).to_s\nend', '', '');
+(11, 'Main', 'try:\n    while 1:\n        i = int(input())\n        print(i*i)\nexcept:\n    pass', '', '');
+(12, 'Main', 'BEGIN{\r\n}\r\n{\r\n	n = $1;\r\n	printf("%d\\n", n*n);\r\n}\r\nEND{\r\n}\r\n', '', ''),
+(13, 'Main', '#!/bin/bash\r\nwhile read line;\r\ndo\r\n	echo "$line*$line" | bc\r\ndone\r\n', '', '');
 
 -- --------------------------------------------------------
 

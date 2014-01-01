@@ -35,6 +35,20 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
     <body>
         <?php if ($judge['value'] == 'Active' && isset($_SESSION['loggedin'])) { ?>
             <script type='text/javascript'>
+                function settitle() {
+                    var t = window.document.title;
+                    var n = t.match(/(\d*)\)/gi);
+                    console.log(n);
+                    if (n != null) {
+                        n = parseInt(n) + 1;
+                    } else {
+                        n = 1;
+                    }
+                    window.document.title = "(" + n + ") Aurora";
+                }
+                function resettile() {
+                    window.document.title = "Aurora";
+                }
                 window.setTimeout("bchk();", <?php echo rand(300000, 600000); ?>);
                 $.ajax("<?php echo SITE_URL; ?>/broadcast.php").done(function(msg) {
                     var json = eval('(' + msg + ')');
@@ -45,7 +59,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         for (i = 0; i < json.broadcast.length; i++)
                             str += "<b>" + json.broadcast[i].title + ":</b><br/>" + json.broadcast[i].msg + "<br/><br/>";
                         $("#bmsg").html(str);
+                        $('#myModal').on('hidden.bs.modal', function() {
+                            resettile();
+                        })
                         $("#myModal").modal('show');
+                        settitle();
                     }
                 });
                 function bchk() {
@@ -59,6 +77,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                                 str += "<b>" + json.broadcast[i].title + ":</b><br/>" + json.broadcast[i].msg + "<br/><br/>";
                             $("#bmsg").html(str);
                             $("#myModal").modal('show');
+                            settitle();
                         }
                     });
                     window.setTimeout("bchk();", 600000);
