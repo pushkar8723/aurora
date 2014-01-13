@@ -302,7 +302,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                     <div class='form-group'>
                         <label class='control-label col-lg-4' for='languages'>Languages Allowed</label>
                         <div class='col-lg-8'>
-                            <input type='hidden' name='languages' value='Brain,C,C++,Java,C#,JavaScript,Pascal,Perl,PHP,Python,Python3,Ruby,Text' id='languages'>
+                            <input type='hidden' name='languages' value='AWK,Bash,Brain,C,C++,Java,C#,JavaScript,Pascal,Perl,PHP,Python,Python3,Ruby,Text' id='languages'>
                             <select class='form-control' multiple='multiple' >
                                 <?php
                                         foreach ($valtoname as $key => $value) {

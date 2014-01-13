@@ -47,6 +47,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                     window.document.title = "(" + n + ") Aurora";
                 }
                 function resettile() {
+                    $.ajax({
+                        type: "GET",
+                        url: "<?php echo SITE_URL; ?>/broadcast.php",
+                        data: {updatetime: ""}
+                    });
                     window.document.title = "Aurora";
                 }
                 window.setTimeout("bchk();", <?php echo rand(300000, 600000); ?>);
@@ -61,7 +66,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         $("#bmsg").html(str);
                         $('#myModal').on('hidden.bs.modal', function() {
                             resettile();
-                        })
+                        });
                         $("#myModal").modal('show');
                         settitle();
                     }
@@ -76,6 +81,9 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                             for (i = 0; i < json.broadcast.length; i++)
                                 str += "<b>" + json.broadcast[i].title + ":</b><br/>" + json.broadcast[i].msg + "<br/><br/>";
                             $("#bmsg").html(str);
+                            $('#myModal').on('hidden.bs.modal', function() {
+                                resettile();
+                            });
                             $("#myModal").modal('show');
                             settitle();
                         }

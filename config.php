@@ -11,7 +11,7 @@ displayErrors(FALSE);                   // Display PHP errors or not.
 // Language specific variables 
 $brush = array("AWK" => "text", "Bash" =>"sh", "Brain" => "text", "C" => "c", "C++" => "cpp", "C#" => "csharp", "Java" => "java", "Java", "JavaScript" => "js", "Pascal" => "pascal", "Perl" => "perl", "PHP" => "php", "Python" => "python", "Python3" => "python", "Ruby" => "ruby", "Text" => "text");
 $cmmode = "'C': 'text/x-csrc', 'C++': 'text/x-c++src', 'C#': 'text/x-csharp', 'Java': 'text/x-java', 'JavaScript': 'javascript', 'Pascal': 'text/x-pascal', 'Perl': 'text/x-perl', 'PHP': 'text/x-php', 'Python': 'text/x-python', 'Python3': 'text/x-python', 'Ruby': 'text/x-ruby'";
-$valtoname = array("AWK"=>"AWK", "Bash"=>"Bash", "Brain" => "Brainf**k", "C" => "C", "C++" => "C++", "Java" => "Java", "C#" => "C#", "JavaScript" => "JavaScript", "Perl" => "Perl", "PHP" => "PHP", "Python" => "Python", "Python3" => "Python3", "Ruby" => "Ruby", "Text" => "Text"); 
+$valtoname = array("AWK"=>"AWK", "Bash"=>"Bash", "Brain" => "Brainf**k", "C" => "C", "C++" => "C++", "Java" => "Java", "C#" => "C#", "JavaScript" => "JavaScript", "Pascal" => "Pascal", "Perl" => "Perl", "PHP" => "PHP", "Python" => "Python", "Python3" => "Python3", "Ruby" => "Ruby", "Text" => "Text"); 
 
 /* 
  * 

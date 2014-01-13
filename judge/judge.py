@@ -110,13 +110,7 @@ def execute(exename,language, timelimit):
 	(stdout, stderr)= p.communicate()
 	endtime = time.time()
 	timediff = endtime - starttime
-
-	if p.returncode != 0 and p.returncode != 124:
-		cmd = langarr[language]["execute"]
-		cmd = cmd.replace("[exename]", exename)
-		cmd = cmd.replace("[inputfile]", inputfile)
-		p = subprocess.Popen([cmd], shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		(stdout, stderr)= p.communicate()
+	print p.returncode
 	
 	os.system("chmod 750 .")
 	file_write('env/output.txt', stdout);
@@ -203,7 +197,7 @@ def runjudge(runid):
 
                 # Check for malicious codes in Python
                 if result==None and (run["language"]=="Python" or run["language"]=="Python3") and (
-                        run["code"].find("subprocess") != -1 or run["code"].find("os.") != -1) or run["code"].find("os as") != -1:
+                        run["code"].find("subprocess") != -1 or re.findall(r'(\sos.)',run["code"]) or run["code"].find("os as") != -1):
                         print "Suspicious Code."
                         file_write("env/error.txt","Error : Suspicious code.");
                         result = "SC"; timetaken = 0
@@ -254,6 +248,22 @@ def runjudge(runid):
                                 timetaken = run["timelimit"]
                                 #kill(codefilename,run["language"])
                                 file_write('env/error.txt', "Time Limit Exceeded - Process killed.")
+			elif t == 139:
+				file_write('env/error.txt', 'SIGSEGV||'+file_read("env/error.txt"))
+				print file_read("env/error.txt")
+				timetaken = timediff
+			elif t == 136:
+				file_write('env/error.txt', 'SIGFPE||'+file_read("env/error.txt"))
+				print file_read("env/error.txt")
+				timetaken = timediff
+			elif t == 134:
+				file_write('env/error.txt', 'SIGABRT||'+file_read("env/error.txt"))
+				print file_read("env/error.txt")
+				timetaken = timediff
+			elif t != 0:
+				file_write('env/error.txt', 'NZEC||'+file_read("env/error.txt"))
+				print file_read("env/error.txt")
+				timetaken = timediff
                         else:
                                 timetaken = timediff
 

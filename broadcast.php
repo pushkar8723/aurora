@@ -11,7 +11,19 @@
         $row['msg'] = preg_replace("/\r\n|\r|\n/",'<br/>',$row['msg']);
         $msg .= "{'title':'$row[title]', 'msg':'$row[msg]'}";
     }
+    if(isset($_SESSION['loggedin']) && isset($_SESSION['team']['status']) == "Admin"){
+        $query = "select time from clar where reply is NULL and access='public' and time > ".$_SESSION['team']['time'];
+        $result = DB::findAllFromQuery($query);
+        if($result)
+            if($i != 0)
+                $msg .= ",{'title':'$row[title]', 'msg':'$row[msg]'}";
+            else
+                $msg .= "{'title':'Clarification', 'msg':'New Clarification. Pending Reply!'}";
+    }
     $msg .= "]}";
-    $_SESSION['team']['time'] = time();
+    if(isset($_GET['updatetime'])){
+        echo "done";
+        $_SESSION['team']['time'] = time();
+    }
     echo $msg;
 ?>
