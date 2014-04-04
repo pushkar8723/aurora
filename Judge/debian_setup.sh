@@ -104,10 +104,10 @@ if [ "$MIRROR" = "" ]; then
 	MIRROR="http://archive.ubuntu.com/ubuntu/";
 fi
 
-printf "\n\nEnter judge.py location [https://raw.github.com/pushkar8723/Aurora/master/judge/judge.py] : "
+printf "\n\nEnter judge.py location [https://raw.githubusercontent.com/pushkar8723/Aurora/master/Judge/judge.py] : "
 read JUDGELOC
 if [ "$JUDGELOC" = "" ]; then
-	JUDGELOC="https://raw.github.com/pushkar8723/Aurora/master/judge/judge.py"
+	JUDGELOC="https://raw.githubusercontent.com/pushkar8723/Aurora/master/Judge/judge.py"
 fi
 wget $JUDGELOC
 
