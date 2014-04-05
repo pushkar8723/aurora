@@ -56,10 +56,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                     $lang = split(',', $prob['languages']);
                                     foreach ($lang as $row) {
                                         if ($row == 'Brain')
-                                            echo "<option value='$row'>Brainf**k</option>";
-                                        else if ($row == 'C++' && !isset ($_GET['edit']))
-                                            echo "<option value='$row' selected='selected'>$row</option>";
+                                            echo "<option value='$row'".((isset ($_GET['edit']) && $row == $runs['language'])?"selected='selected'":"").">Brainf**k</option>";
                                         else if (isset ($_GET['edit']) && $row == $runs['language'])
+                                            echo "<option value='$row' selected='selected'>$row</option>";
+                                        else if ($row == 'C++' && !isset ($_GET['edit']))
                                             echo "<option value='$row' selected='selected'>$row</option>";
                                         else
                                             echo "<option value='$row'>$row</option>";
