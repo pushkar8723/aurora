@@ -16,6 +16,7 @@ initjail() {
 	pip3 install pymysql || {
 		printf "\n\n\e[1;31mERROR:\e[0m  You need to install pymysql for python3 manually!"
 	}
+	chmod 700 /tmp
 	useradd -m -u 8723 -s /bin/bash judge
 	cd /home/judge
 	mv /boot/judge.py ./
