@@ -12,7 +12,7 @@ displayErrors(FALSE);                   // Display PHP errors or not.
 $brush = array("AWK" => "text", "Bash" =>"sh", "Brain" => "text","C" => "c", "C++" => "cpp", "C#" => "csharp", "Java" => "java", "Java", "JavaScript" => "js", "Pascal" => "pascal", "Perl" => "perl", "PHP" => "php", "Python" => "python", "Python3" => "python", "Ruby" => "ruby", "Text" => "text");
 $cmmode = "'C': 'text/x-csrc', 'C++': 'text/x-c++src', 'C#': 'text/x-csharp', 'Java': 'text/x-java', 'JavaScript': 'javascript', 'Pascal': 'text/x-pascal', 'Perl': 'text/x-perl', 'PHP': 'text/x-php', 'Python': 'text/x-python', 'Python3': 'text/x-python', 'Ruby': 'text/x-ruby'";
 $valtoname = array("AWK"=>"AWK", "Bash"=>"Bash", "Brain" => "Brainf**k", "C" => "C", "C++" => "C++", "Java" => "Java", "C#" => "C#", "JavaScript" => "JavaScript", "Pascal" => "Pascal", "Perl" => "Perl", "PHP" => "PHP", "Python" => "Python", "Python3" => "Python3", "Ruby" => "Ruby", "Text" => "Text"); 
-$valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "bf", "C" => "c", "C++" => "cpp", "Java" => "java", "C#" => "cs", "JavaScript" => "js", "Pascal" => "pas", "Perl" => "pl", "PHP" => "php", "Python" => "py", "Python3" => "py", "Ruby" => "rb", "Text" => "txt");
+$valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "b", "C" => "c", "C++" => "cpp", "Java" => "java", "C#" => "cs", "JavaScript" => "js", "Pascal" => "pas", "Perl" => "pl", "PHP" => "php", "Python" => "py", "Python3" => "py", "Ruby" => "rb", "Text" => "txt");
 
 /* 
  * 
