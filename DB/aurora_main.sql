@@ -197,8 +197,8 @@ INSERT INTO `runs` (`rid`, `pid`, `tid`, `language`, `time`, `result`, `access`,
 (10, 1, 1, 'Ruby', '', NULL, 'public', NULL),
 (11, 1, 1, 'Python3', '', NULL, 'public', NULL),
 (12, 1, 1, 'AWK', '', NULL, 'public', NULL),
-(13, 1, 1, 'Bash', '', NULL, 'public', NULL);
-
+(13, 1, 1, 'Bash', '', NULL, 'public', NULL),
+(14, 1,	1, 'Brain', '',	NULL, 'public',	NULL);
 --
 -- Triggers `runs`
 --
@@ -294,7 +294,8 @@ INSERT INTO `subs_code` (`rid`, `name`, `code`, `error`, `output`) VALUES
 (10, 'code', 'while n = gets\n	n = n.chomp.to_i\n	puts (n*n).to_s\nend', '', ''),
 (11, 'Main', 'try:\n    while 1:\n        i = int(input())\n        print(i*i)\nexcept:\n    pass', '', ''),
 (12, 'Main', 'BEGIN{\r\n}\r\n{\r\n	n = $1;\r\n	printf("%d\\n", n*n);\r\n}\r\nEND{\r\n}\r\n', '', ''),
-(13, 'Main', '#!/bin/bash\r\nwhile read line;\r\ndo\r\n	echo "$line*$line" | bc\r\ndone\r\n', '', '');
+(13, 'Main', '#!/bin/bash\r\nwhile read line;\r\ndo\r\n	echo "$line*$line" | bc\r\ndone\r\n', '', ''),
+(14, 'Main', '>>\r\n, +\r\n[\r\n    -\r\n    <+>\r\n    ----------\r\n    [\r\n        <-<[-]+>>\r\n        ++++++++++\r\n        >++++++++[<------>-]<\r\n        [\r\n            <<->>\r\n            [>+>+>+<<<-]>>>-\r\n            [<[<+<+>>-]<<[>>+<<-]>>>-]<< \r\n            >[-]>[-]++++++++++<<\r\n            [>>\r\n              [->+<<<-[>]>>>\r\n                [<\r\n                  [-<+>]\r\n                  >>\r\n                ]\r\n                <<\r\n              ]\r\n              <[>>[->>>+<<<]>>-<<<<[-]]>\r\n              >[-<+>]>>+<<<<<\r\n            ]\r\n            >>>>>\r\n            [>>[-]++++++[-<<++++++++>>]<<.[-]]\r\n            >\r\n            [>[-]++++++[-<++++++++>]<.[-]]\r\n            <<<<<<[-]\r\n        ]\r\n        <<[->++++++++[<++++++>-]<..[-]]\r\n    ]\r\n    <[+++++++++.[-]]>[-]>\r\n    , +\r\n]', '', '');
 
 -- --------------------------------------------------------
 
