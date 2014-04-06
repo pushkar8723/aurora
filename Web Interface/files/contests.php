@@ -37,9 +37,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             }
             $prob = DB::findAllFromQuery($query);
             echo "<table class='table table-hover'><tr><th>Name</th><th>Score</th><th>Code</th><th>Submissions</th></tr>";
-            foreach ($prob as $row) {
-                echo "<tr><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
-            }
+            if ($prob) {
+				foreach ($prob as $row) {
+                	echo "<tr><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
+            	}
+			}
             echo "</table><h3>Announcements</h3>$contest[announcement]";
         } else {
             echo "<br/><br/><br/><div style='padding: 10px;'><h1>Contest not Found :(</h1>The contest you are looking for is not found. Are you on the wrong website?</div><br/><br/><br/>";

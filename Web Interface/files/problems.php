@@ -38,8 +38,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     foreach ($clar as $row) {
                         $query = "select teamname from teams where tid = $row[tid]";
                         $team = DB::findOneFromQuery($query);
-                        $rowquery = eregi_replace("\n", "<br>",htmlspecialchars($row['query']));
-                        $rowreply = eregi_replace("\n", "<br>", htmlspecialchars($row['reply']));
+                        $rowquery = preg_replace("/\n/", "<br>",htmlspecialchars($row['query']));
+                        $rowreply = preg_replace("/\n/", "<br>", htmlspecialchars($row['reply']));
                         echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a>:<br/>Q. $rowquery</b><br/>" . (($rowreply != "") ? ("A. $rowreply<br/>") : ('')) . "<br/>";
                         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                             echo "<form role='form' method='post' action='" . SITE_URL . "/process.php'>";
