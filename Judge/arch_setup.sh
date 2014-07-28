@@ -55,7 +55,7 @@ if [ $USER != "root" ]; then
 fi
 
 ################# MKARCHROOT INSTALLATION #################
-## Do nothing if already install otherwise if possible, install debootstrap  
+## Do nothing if already install otherwise if possible, install devtools 
 
 if [[ $( find /usr/bin -name mkarchroot ) != "/usr/bin/mkarchroot" ]]; then
 	if [[ $(pacman -Ss devtools) != "" ]];then
