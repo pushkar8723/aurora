@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `contest` (
   `starttime` int(11) NOT NULL,
   `endtime` int(11) NOT NULL,
   `announcement` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `ranktable` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `ranktable` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
