@@ -124,7 +124,7 @@ function rankings() {
     $result = DB::findAllWithCount($select, $body, 1, 10);
     $data = $result['data'];
     $i = 1;
-    echo "<table class='table table-condensed'><tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
+    echo "<table class='table table-condensed elipsis_sizer'><tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
     foreach ($data as $row) {
         echo "<tr><td>" . $i++ . "</td><td><a href='" . SITE_URL . "/teams/$row[teamname]'>" . $row['teamname'] . "</a></td><td>" . $row['score'] . "</td></tr>";
     }

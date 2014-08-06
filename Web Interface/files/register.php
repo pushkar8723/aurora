@@ -12,10 +12,41 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $('#teamname').blur(function() {
                 $('#teamname').tooltip('hide');
             });
+            
+            for(var i = 1; i <= 3; i++){
+                var id = '#roll' + i;
+                $(id).focus(function() {
+                    console.log('sk11');
+                    $(this).tooltip('show');
+                });
+                $(id).blur(function() {
+                    $(this).tooltip('hide');
+                });
+            }
+
+            
         });
+
+        function validate(){
+                
+                var regex = /[A-Z]{2,6}[/][0-9]{4,5}[/]201[1-4]$/;
+                //console.log('A'.match(regex));
+                var roll1 = document.getElementById("roll1").value;
+                var m = regex.exec(roll1);
+                console.log(roll1);
+                if(m==null)
+                {
+                    $("#roll1").tooltip('show');
+                    document.getElementById("roll1").style.borderColor="red";
+                    return false;
+                }
+                    
+                return true;
+
+           }
     </script>
     <h1>Register</h1>
-    <form method='post' class='form-horizontal' role='form' action='<?php echo SITE_URL; ?>/process.php'>
+    <form method='post' class='form-horizontal'  role="form" onsubmit="return validate()" action='<?php echo SITE_URL; ?>/process.php'>
         <div class='col-lg-12'>
             <div class='form-group'>
                 <label class="col-lg-2 control-label" for='teamname'>Team Name</label>
@@ -63,7 +94,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-2 control-label' for='roll1'>Roll No</label>
-                <div class='col-lg-4'><input class='form-control' type='text' name='roll1' id='roll1' required <?php
+                <div class='col-lg-4'><input class='form-control' type='text' name='roll1' id='roll1' required data-placement='right' title='Ex : BE/10206/2013'<?php
                     if (isset($_SESSION['reg']['roll1'])) {
                         echo "value='" . $_SESSION['reg']['roll1'] . "' ";
                         unset($_SESSION['reg']['roll1']);
@@ -81,7 +112,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-2 control-label' for='email1'>E-mail</label>
-                <div class='col-lg-4'><input class='form-control' type='text' name='email1' id='email1' required <?php
+                <div class='col-lg-4'><input class='form-control' type='email' name='email1' id='email1' required <?php
                     if (isset($_SESSION['reg']['email1'])) {
                         echo "value='" . $_SESSION['reg']['email1'] . "' ";
                         unset($_SESSION['reg']['email1']);
@@ -90,7 +121,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-2 control-label' for='phno1'>Phone No</label>
-                <div class='col-lg-4'><input class='form-control' type='text' name='phno1' id='phno1' required <?php
+                <div class='col-lg-4'><input class='form-control' type='number' name='phno1' id='phno1' required <?php
                     if (isset($_SESSION['reg']['phno1'])) {
                         echo "value='" . $_SESSION['reg']['phno1'] . "' ";
                         unset($_SESSION['reg']['phno1']);
@@ -111,7 +142,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='roll2'>Roll No</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='roll2' id='roll2' <?php
+                <div class='col-lg-8'><input class='form-control' type='text' name='roll2' id='roll2' data-placement='right' title='Ex : BE/10206/2013'<?php
                     if (isset($_SESSION['reg']['roll2'])) {
                         echo "value='" . $_SESSION['reg']['roll2'] . "' ";
                         unset($_SESSION['reg']['roll2']);
@@ -129,7 +160,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='email2'>E-mail</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='email2' id='email2' <?php
+                <div class='col-lg-8'><input class='form-control' type='email' name='email2' id='email2' <?php
                     if (isset($_SESSION['reg']['email2'])) {
                         echo "value='" . $_SESSION['reg']['email2'] . "' ";
                         unset($_SESSION['reg']['email2']);
@@ -138,7 +169,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='phno2'>Phone No</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='phno2' id='phno2' <?php
+                <div class='col-lg-8'><input class='form-control' type='number' name='phno2' id='phno2' <?php
                     if (isset($_SESSION['reg']['phno2'])) {
                         echo "value='" . $_SESSION['reg']['phno2'] . "' ";
                         unset($_SESSION['reg']['phno2']);
@@ -159,7 +190,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='roll3'>Roll No</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='roll3' id='roll3' <?php
+                <div class='col-lg-8'><input class='form-control' type='text' name='roll3' id='roll3' data-placement='left' title='Ex : BE/10206/2013'<?php
                     if (isset($_SESSION['reg']['roll3'])) {
                         echo "value='" . $_SESSION['reg']['roll3'] . "' ";
                         unset($_SESSION['reg']['roll3']);
@@ -177,7 +208,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='email3'>E-mail</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='email3' id='email3' <?php
+                <div class='col-lg-8'><input class='form-control' type='email' name='email3' id='email3' <?php
                     if (isset($_SESSION['reg']['email3'])) {
                         echo "value='" . $_SESSION['reg']['email3'] . "' ";
                         unset($_SESSION['reg']['email3']);
@@ -186,7 +217,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </div>
             <div class='form-group'>
                 <label class='col-lg-4 control-label' for='phno3'>Phone No</label>
-                <div class='col-lg-8'><input class='form-control' type='text' name='phno3' id='phno3' <?php
+                <div class='col-lg-8'><input class='form-control' type='number' name='phno3' id='phno3' <?php
                     if (isset($_SESSION['reg']['phno3'])) {
                         echo "value='" . $_SESSION['reg']['phno3'] . "' ";
                         unset($_SESSION['reg']['phno3']);

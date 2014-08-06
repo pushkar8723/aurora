@@ -25,12 +25,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             </script>
             <?php
             echo "<div class='contestheader'><center><h1>$contest[name]</h1></center><div id='contesttimer'><h4>Starts in:</h4></div></div>";
-            if ($contest['starttime'] <= time() || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
+            if (isset($contest['starttime'])|| (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
                 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-                    $query = "select * from problems where pgroup = '$_GET[code]' order by pid";
+                    $query = "select * from problems where pgroup = '$_GET[code]' order by code";
                     echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
                 } else {
-                    $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted' order by pid";
+                    $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted' order by code";
                 }
             } else {
                 $query = "";

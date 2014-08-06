@@ -16,7 +16,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $query = "select starttime from contest where code = '$result[pgroup]'";
                 $check = DB::findOneFromQuery($query);
                 if ($check['starttime'] > time()) {
-                    echo "<br/><br/><br/><div style='padding: 10px;'><h1>Problem not Found. :(</h1>The problem you are looking for doesn't exsits.</div><br/><br/><br/>";
+                    echo "<br/><br/><br/><div style='padding: 10px;'><h1>Contest not yet started</h1>keep calm and let the server keep calm</div><br/><br/><br/>";
                     $flag = 1;
                 } else {
                     $flag = 0;
@@ -67,7 +67,16 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             }
         }
     } else {
-        echo "<center><h1>Practice Problems</h1></center>";
+        $button_drop='<div class="btn-group">
+            
+            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li id="prob_tag">Hide/Show Tag</li>
+            </ul>
+        </div>';
+        echo '<script src="'.SITE_URL.'/js/custom.js" type="text/javascript"></script>';
+        echo '<center><h1>Practice Problems&nbsp;'.$button_drop.'</h1></center>';
+
         if (isset($_SESSION['loggedin'])){
             $solved = array();
             $query = "select distinct(pid) as pid from runs where result = 'AC' and tid = ".$_SESSION['team']['id'];
@@ -83,15 +92,21 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         }
         $res = DB::findAllFromQuery($query);
         $lastgroup = "";
-        echo "<table class='table table-hover'>";
+        echo '<div id="table_prob_tag">';
+        echo "<table  class='table table-hover'>";
+        $counter=0;
         foreach ($res as $row) {
             if ($row['pgroup'] != $lastgroup){
-                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>Name</th><th>Score</th><th>Type</th><th>Code</th><th>Submissions</th></tr>";
+                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>Name</th><th class='tabletaghidden'>Type</th><th>Score</th><th>Code</th><th>Submissions</th></tr>";
+                $counter=$counter++;
                 $lastgroup = $row['pgroup'];
             }
-            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
+            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td class='tabletaghidden' ><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
+            $counter=$counter+1;
         }
         echo "</table>";
+        echo '</div>';
+
     }
 } else {
     echo "<br/><br/><br/><div style='padding: 10px;'><h1>Lockdown Mode :(</h1>This feature is now offline as Judge is in Lockdown mode.</div><br/><br/><br/>";
