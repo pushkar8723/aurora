@@ -216,8 +216,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                 </div>
             </div>
             <div class="footer">
-                Created by - Kaustubh Karkare<br/>
-                Upgraded by - Pushkar Anand
+                <a href="https://github.com/pushkar8723/Aurora" target="_blank">Aurora - An Open Source Online Judge</a>
             </div>
         </div>
     </body>
