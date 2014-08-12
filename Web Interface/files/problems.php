@@ -85,6 +85,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $solved[$row['pid']] = true;
             }
         }
+        $editorial = array();
+        $query = "select pid from editorials";
+        $res = DB::findAllFromQuery($query);
+        foreach($res as $row){
+            $editorial[$row['pid']] = 1;
+        }
         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin") {
             $query = "select pid, name, code, status, pgroup, type, score, solved, total from problems where contest='practice' order by pid desc";
         } else {
@@ -97,11 +103,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $counter=0;
         foreach ($res as $row) {
             if ($row['pgroup'] != $lastgroup){
-                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>Name</th><th class='tabletaghidden'>Type</th><th>Score</th><th>Code</th><th>Submissions</th></tr>";
+                echo "<tr><td colspan='6'><center><h3>$row[pgroup]</h3></center></td></tr><tr><th>Name</th><th class='tabletaghidden'>Type</th><th>Score</th><th>Code</th><th>Submissions</th><th>Editorial</th></tr>";
                 $counter=$counter++;
                 $lastgroup = $row['pgroup'];
             }
-            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td class='tabletaghidden' ><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
+            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td class='tabletaghidden' ><a href='" . SITE_URL . "/problems/$row[code]'>$row[type]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td><td>" . (isset($editorial[$row['pid']])?("<a href='" . SITE_URL . "/editorial/$row[code]'>Link</a>"):(($_SESSION['team']['status'] == 'Admin')?"<a href='". SITE_URL . "/admineditorial/$row[code]'>Add</a>":"None")) . "</td></tr>";
             $counter=$counter+1;
         }
         echo "</table>";
