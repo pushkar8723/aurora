@@ -14,7 +14,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         if($result == NULL){
             $data['pid'] = $pid;
             $data['content'] = $_POST['statement'];
-            DB::query("INSERT into editorials VALUES ( $pid, '$statement' )");
+            DB::query("INSERT into editorials VALUES ( $pid, '$_POST[statement]' )");
         }else {
             DB::query("update editorials set content = '$_POST[statement]' where pid = '$pid'");
         }
@@ -28,6 +28,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
             $result = DB::findOneFromQuery("select content from editorials where pid = '$res[pid]'");
         }
         ?>
+
         <center><h1>Editorial Settings - <?php echo "<a class='btn btn-primary' href='" . SITE_URL . "/editorial/$_GET[code]'>$_GET[code] Editorial</a>"; ?></h1></center>
         <form class='form-horizontal' role='form' method='post' action='<?php echo SITE_URL . "/admineditorial/$_GET[code]'"; ?> enctype='multipart/form-data'>
             <div class='form-group'>
@@ -64,7 +65,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     redirectTo(SITE_URL);
 }
 ?>
-<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script type="text/javascript" src="<?php echo JS_URL; ?>/tinymce/tinymce.min.js"></script>
 <script>
         tinymce.init({selector:'textarea',
             plugins: "link",
