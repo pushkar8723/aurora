@@ -253,7 +253,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         if (isset($_SESSION['loggedin'])) {
             if (isset($_POST['query']) && $_POST['query'] != "") {
                 $query = "Insert into clar (time, pid, tid, query, access) 
-                values ('" . time() . "', '" . addslashes($_POST['pid']) . "', '" . $_SESSION['team']['id'] . "', '" . addslashes($_POST['query']) . "', 'public')";
+                values ('" . time() . "', '" . addslashes($_POST['pid']) . "', '" . $_SESSION['team']['id'] . "', '" . htmlentities(addslashes($_POST['query'])) . "', 'public')";
                 $res = DB::query($query);
                 $_SESSION['msg'] = "Clarification posted... we will reply soon.";
                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
