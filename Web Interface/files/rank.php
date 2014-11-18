@@ -32,7 +32,7 @@ if (isset($_GET['code'])) {
         $rank = null;
     }
     $i = 1;
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Temaname</th><th>Time</th><th>Penalty</th><th>Score</th><th>Solved</th><th>Final Time</th></tr>";
+    echo "<table class='table table-hover'><tr><th>Rank</th><th>Teamname</th><th>Time</th><th>Penalty</th><th>Score</th><th>Solved</th><th>Final Time</th></tr>";
     foreach ($rank as $val) {
         $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
         $val['time'] = timeformating($val['time']);
