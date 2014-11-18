@@ -168,7 +168,6 @@ function pagination($noofpages, $url, $page, $maxcontent) {
 
 function getrankings($code) {
     $result =  Leaderboard::getStaticRankTableInJSON($code);
-	//echo $result;
     return json_decode($result['ranktable'], true);	
 }
 ?>
