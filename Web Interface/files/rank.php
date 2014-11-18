@@ -1,4 +1,6 @@
 <?php
+include_once '../functions.php';
+include_once '../components.php';
 function timeformating($a) {
     $sec = $a % 60;
     $a -= $sec;
@@ -24,13 +26,13 @@ if (isset($_GET['code'])) {
     ?>
 <center><?php if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin"){ ?><a class="pull-right btn btn-danger" href="<?php echo SITE_URL; ?>/process.php?freeze=<?php echo $contest['code']; ?>"><?php echo ($contest['ranktable'] == "")?"Freeze Board":"Refresh" ?></a><?php } ?><h1>Rankings - <?php echo $contest['name'] ?></h1></center>
     <?php
-    if($contest['ranktable'] == ""){
+    if($contest['ranktable'] != ""){
         $rank = getrankings($contest['code']);
     } else {
-        $rank = DB::findAllFromQuery("select * from $_GET[code]");
+        $rank = null;
     }
     $i = 1;
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Temaname</th><th>Time</th><th>Penalty</th><th>Score</th><th>Solved</th><th>Final Time</th></tr>";
+    echo "<table class='table table-hover'><tr><th>Rank</th><th>Teamname</th><th>Time</th><th>Penalty</th><th>Score</th><th>Solved</th><th>Final Time</th></tr>";
     foreach ($rank as $val) {
         $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
         $val['time'] = timeformating($val['time']);
