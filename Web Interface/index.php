@@ -1,8 +1,6 @@
 <?php
 require_once 'config.php';
 require_once 'components.php';
-session_unset();
-session_destroy();
 $_SESSION['url'] = $_SERVER['REQUEST_URI']; // used by process.php to send to last visited page
 $query = "select value from admin where variable='mode'";
 $judge = DB::findOneFromQuery($query);
@@ -201,14 +199,17 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         
                         <?php 
 	                        if ($judge['value'] == 'Active') {?>
-	                        	<h4 align="center">Live Contest Ranking</h4>
-	                        	<div id="live-ranking">Retrieving Ranking. . .</div>
-	                       		<script>
+	                        	<h4 align="center">Contest Ranking</h4>
+                                <div id="live-ranking">
+<?php getCurrentContestRanking(); ?>
+<a style="float:right;" href="<?php echo SITE_URL.'/rank/'.getCurrentContest(); ?>">View all</a>
+</div>
+                                <!--	                       		<script>
 		                       		var eventSource = new EventSource('<?php echo SITE_URL.'/files/LiveContestRanking.php'?>');
 		                			eventSource.addEventListener('message',function(e) {
 		                				document.getElementById('live-ranking').innerHTML = e.data;
 		                			}, false);
-								</script>                     
+								</script>                     -->
 	                    <?php }
 	                        else {
 								echo '<h4>Overall Rankings</h4>';

@@ -2,19 +2,7 @@
 include_once '../functions.php';
 include_once '../components.php';
 function timeformating($a) {
-    $sec = $a % 60;
-    $a -= $sec;
-    $a = $a / 60;
-    $min = $a % 60;
-    $a -= $min;
-    $hr = $a / 60;
-    $str = "";
-    if ($hr > 0)
-        $str .= $hr . ":";
-    if ($min > 0)
-        $str .= $min . ":";
-    $str .= $sec;
-    return $str;
+    return gmdate("H:i:s", $a);
 }
 
 if (isset($_GET['code'])) {

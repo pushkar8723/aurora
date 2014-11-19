@@ -1,6 +1,7 @@
 <?php
 include_once 'functions.php';
 include_once 'files/Leaderboard.php';
+include_once 'files/LiveContestRanking.php';
 function loginbox() {
     if (!isset($_SESSION['loggedin'])) {
         ?>
@@ -170,4 +171,17 @@ function getrankings($code) {
     $result =  Leaderboard::getStaticRankTableInJSON($code);
     return json_decode($result['ranktable'], true);	
 }
+
+function getCurrentContest() {
+    $result = DB::findOneFromQuery("SELECT value from admin where variable = 'currentContest'");
+    $contestCode = $result['value'];
+    return $contestCode;
+}
+
+function getCurrentContestRanking(){
+    $contestCode = getCurrentContest();
+    $printTable = liveContestRanking($contestCode, 10);
+    echo $printTable;
+}
+
 ?>

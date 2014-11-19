@@ -4,7 +4,7 @@
 include_once '../functions.php';
 include_once 'SSE_Util.php';
 
-function liveContestRanking($contestCode) {
+function liveContestRanking($contestCode, $limit) {
 	$query = "SELECT ranktable FROM contest WHERE code = '$contestCode'";
 	$table = '<table class="table table-striped table-bordered table-condensed">' ;
 	$result = DB::findOneFromQuery($query);
@@ -12,18 +12,14 @@ function liveContestRanking($contestCode) {
 	$rank = 1;
 	foreach ($rankTable as $row) {
 		$table .= '<tr>';
-		$table .= '<td align = "center">'.$rank.'</td><td align="center">'.$row['teamname'].'</td><td align="center">'.$row['score'].'</td>';
+		$table .= '<td align = "center">'.$rank.'</td><td align="center"><a href="'.SITE_URL.'/teams/'.$row['teamname'].'">'.$row['teamname'].'</a></td><td align="center">'.$row['score'].'</td>';
 		$table .= '</tr>';
-		if($rank >= 15)
+		if($rank >= $limit)
 			break;
 		$rank ++;
 		
 	}
-	$table .= '</table>';
+    $table .= '</table>';
 	return $table;
 }
-
-$contestCode = 'CQM-3';
-$printTable = liveContestRanking($contestCode);
-//echo $printTable;
-SSE_Util::sendMessageToClient($printTable);
+//SSE_Util::sendMessageToClient($printTable);
