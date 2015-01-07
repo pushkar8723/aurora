@@ -113,7 +113,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                             if ($admin['mode'] == 'Active' && $admin['endtime'] >= time() && $res['contest'] == 'practice') { // Lvl 5
                                 $_SESSION['msg'] = "Submissions are only accepted for CQM question right now. Come back later.";
                                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
-                            } else if ($admin['mode'] == 'Passive' && $res['contest'] == 'contest') { // Lvl 6
+                            } else if ($admin['mode'] == 'Passive' && $res['contest'] == 'contest' && $_SESSION['team']['status'] != 'Admin') { // Lvl 6
                                 $_SESSION['msg'] = "Submissions are only accepted for Practice question right now.";
                                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
                             } else if ($res['status'] == 'Active' || $_SESSION['team']['status'] == 'Admin') { // Lvl 7
