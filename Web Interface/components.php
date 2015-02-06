@@ -184,4 +184,7 @@ function getCurrentContestRanking(){
     echo $printTable;
 }
 
+function errorMessageHTML($msg){
+    return '<br /><div class="alert alert-danger" role="alert">'.$msg.'</div>';
+}
 ?>

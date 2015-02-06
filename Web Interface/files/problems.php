@@ -2,21 +2,27 @@
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     if (isset($_GET['code'])) {
         $_GET['code'] = addslashes($_GET['code']);
-        if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin") {
+        if (isAdmin()) {
             $query = "select * from problems where code = '$_GET[code]'";
-            echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
         } else {
             $query = "select * from problems where code = '$_GET[code]' and status != 'Deleted'";
         }
         $result = DB::findOneFromQuery($query);
         if ($result == NULL) {
-            echo "<br/><br/><br/><div style='padding: 10px;'><h1>Problem not Found :(</h1>The problem you are looking for doesn't exsits.</div><br/><br/><br/>";
+            echo errorMessageHTML("<b>Problem not found!</b>");
+            // echo "<br/><br/><br/><div style='padding: 10px;'><h1>Problem not Found :(</h1>The problem you are looking for doesn't exsits.</div><br/><br/><br/>";
         } else {
-            if ($result['contest'] == 'contest' && ( (!isset($_SESSION['loggedin'])) || ($_SESSION['team']['status'] != 'Admin'))) {
+            if(isAdmin()){
+                echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
+            }
+            // if($result['contest'] == 'contest'){
+            //     echo "<a class='btn btn-primary' style='margin-top: 10px;' href='" . SITE_URL . "/contests/$result[pgroup]'><i class='glyphicon glyphicon-edit'></i> Problems</a>";
+            // }
+            if ($result['contest'] == 'contest' && !isAdmin()) {
                 $query = "select starttime from contest where code = '$result[pgroup]'";
                 $check = DB::findOneFromQuery($query);
                 if ($check['starttime'] > time()) {
-                    echo "<br/><br/><br/><div style='padding: 10px;'><h1>Contest not yet started</h1>keep calm and let the server keep calm</div><br/><br/><br/>";
+                    echo errorMessageHTML("<b>Contest not yet started!</b>");
                     $flag = 1;
                 } else {
                     $flag = 0;
@@ -28,20 +34,31 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $statement = stripslashes($result["statement"]);
                 $statement = preg_replace("/\n/", "<br>", $statement);
                 $statement = preg_replace("/<image \/>/", "<img src='data:image/jpeg;base64,$result[image]' />", $statement);
-                echo "<center><h1>$result[name]</h1></center><div class='btn-group pull-right'>" . ((isset($_SESSION['loggedin'])) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]," . $_SESSION['team']['name'] . "'>My Submissions</a>") : ("")) . "<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]'>All Submissions</a>" . (($result['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/submit/$_GET[code]'>Submit</a>") : ('')) . "</div>
+                echo "<center><h1>$result[name]</h1></center>";
+                echo "<div style='text-align:left'>";
+                if($result['contest'] == 'contest'){
+                    echo "<span class='btn-group'>".
+                        "<a class='btn btn-primary' href='". SITE_URL . "/contests/$result[pgroup]'><span class='glyphicon glyphicon-chevron-left'></span> Problems</a>".
+                        "</span>";
+                }
+                echo "<span class='btn-group' style='float:right;'>" . ((isset($_SESSION['loggedin'])) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]," . $_SESSION['team']['name'] . "'>My Submissions</a>") : ("")) . "<a class='btn btn-primary' href='" . SITE_URL . "/status/$_GET[code]'>All Submissions</a>" . (($result['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) ? ("<a class='btn btn-primary' href='" . SITE_URL . "/submit/$_GET[code]'>Submit</a>") : ('')) . "</span></div>
             <br/><br/>" . $statement . "<br/>
                 <b>Time Limit :</b> $result[timelimit] Second(s)<br/><b>Score :</b> $result[score] Point(s)<br/><b>Input File Limit :</b> $result[maxfilesize] Bytes<br/><b>Languages Allowed :</b> $result[languages]";
                 echo "<hr/><h3>Clarifications</h3>";
                 $query = "select * from clar where pid = $result[pid] and access = 'Public'";
                 $clar = DB::findAllFromQuery($query);
                 if ($clar != NULL) {
+                    $id = 0;
                     foreach ($clar as $row) {
+                        if($id != 0)
+                            echo '<hr>';
+                        $id++;
                         $query = "select teamname from teams where tid = $row[tid]";
                         $team = DB::findOneFromQuery($query);
-                        $rowquery = preg_replace("/\n/", "<br>",htmlspecialchars($row['query']));
-                        $rowreply = preg_replace("/\n/", "<br>", htmlspecialchars($row['reply']));
-                        echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a>:<br/>Q. $rowquery</b><br/>" . (($rowreply != "") ? ("A. $rowreply<br/>") : ('')) . "<br/>";
-                        if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
+                        $rowquery = preg_replace("/\n/", " ",htmlspecialchars($row['query']));
+                        $rowreply = preg_replace("/\n/", " ", htmlspecialchars($row['reply']));
+                        echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a>:<br/>Q. $rowquery</b><br/>" . (($rowreply != "") ? ("A. $rowreply") : (''));
+                        if (isAdmin()) {
                             echo "<form role='form' method='post' action='" . SITE_URL . "/process.php'>";
                             echo "Access: <select style='width: 250px;' class='form-control' name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select><br/>";
                             echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
