@@ -40,9 +40,9 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
             $prob['code'] = 'contact';
         }
         echo "<a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a> (<a href='" . SITE_URL . "/$prob[code]'>$prob[name]</a>):<br/>
-                <b>Q. $row[query]</b><br/>";
+                <b>Q. ".htmlspecialchars($row[query])."</b><br/>";
         if ($row['reply'] != "") {
-            echo "A. $row[reply]<br/><br/>";
+            echo "A. ". htmlspecialchars($row[reply]) . "<br/><br/>";
         }
         echo "<form class='form-inline' role='form' method='post' action='" . SITE_URL . "/process.php'>";
         echo "<div class='form-group'>Access:</div><div class='form-group'><select class='form-control'  name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select></div><br/><br/>";
