@@ -21,6 +21,7 @@ $valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "b", "C" => "c", "C++" 
  * 
  */
 
+session_start();
 session_set_cookie_params (0, substr(SITE_URL, strlen("http://" . $_SERVER['HTTP_HOST'])));
 ini_set("session.gc_maxlifetime", 86400);
 function displayErrors($option = true) {
@@ -36,7 +37,6 @@ function displayErrors($option = true) {
 
 define("DEBUG", true);
 
-session_start();
 clearstatcache();
 
 define("JS_URL", SITE_URL . "/js");
