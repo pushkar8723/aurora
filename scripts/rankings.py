@@ -15,9 +15,9 @@ def scoreCmp(ai, bi):
     elif ai['score'] < bi['score']:
         return 1
     else:
-        if ai['solved'] > bi['solved']:
+        if len(ai['solved']) > len(bi['solved']):
             return -1
-        elif ai['solved'] < bi['solved']:
+        elif len(ai['solved']) < len(bi['solved']):
             return 1
         else:
             if ai['time'] + ai['penalty'] * 20 * 60 < bi['time'] + bi['penalty'] * 20 * 60:
@@ -39,7 +39,7 @@ def updateRanking(contestCode):
     query = """
     select runs.tid as tid, teamname, problems.score, submittime as time,
     (select count(rid) from runs r where tid = runs.tid and pid = runs.pid and result != 'AC'
-    and result is not NULL and submittime < runs.submittime) as penalty
+    and result is not NULL and submittime < runs.submittime) as penalty, runs.pid as pid
     from runs, teams, problems, contest
     where
     teams.status = 'Normal' and runs.tid = teams.tid and problems.pid = runs.pid and
@@ -53,14 +53,14 @@ def updateRanking(contestCode):
             ranks[row['tid']]['time'] += row['time'] - contest['starttime']
             ranks[row['tid']]['score'] += row['score']
             ranks[row['tid']]['penalty'] += row['penalty']
-            ranks[row['tid']]['solved']+=1
+            ranks[row['tid']]['solved'][row['pid']] = row['penalty']
         else:
             ranks[row['tid']] = {}
             ranks[row['tid']]['teamname'] = row['teamname']
             ranks[row['tid']]['time'] = (row['time'] - contest['starttime'])
             ranks[row['tid']]['score'] = row['score']
             ranks[row['tid']]['penalty'] = row['penalty']
-            ranks[row['tid']]['solved'] = 1
+            ranks[row['tid']]['solved'] = {row['pid']: row['penalty']}
 
     ret = []
     for tid, dic in ranks.items():
