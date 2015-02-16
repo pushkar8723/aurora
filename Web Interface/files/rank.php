@@ -28,7 +28,7 @@ if (isset($_GET['code'])) {
     $i = 1;
     $probCells = "";
     foreach($pidToProbCode as $pid=>$code){
-        $probCells .= "<th><a href='". SITE_URL . "/problems/$code". "'>".$code."</a></th>";
+        $probCells .= "<th><a target='_blank' href='". SITE_URL . "/problems/$code". "'>".$code."</a></th>";
     }
     echo "<table class='table table-hover'><tr><th>Rank</th><th>Teamname</th><th>Score</th>$probCells<th>Final Time</th></tr>";
     foreach ($rank as $val) {
