@@ -22,7 +22,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         } else {
             $_POST['teamname'] = addslashes($_POST['teamname']);
-            $_POST['password'] = addslashes($_POST['password']);
+            $_POST['password'] = customhash(addslashes($_POST['password']));
             $query = "select * from teams where teamname  = '$_POST[teamname]' and pass = '$_POST[password]'";
             echo $query;
             $res = DB::findOneFromQuery($query);
@@ -181,7 +181,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     $res = DB::findOneFromQuery($query);
                     if ($res == NULL) {
                         $query = "Insert into teams (teamname, pass, status, name1, roll1, branch1, email1, phone1, name2, roll2, branch2, email2, phone2, name3, roll3, branch3, email3, phone3, score, penalty, gid) 
-                        values ('" . addslashes($_POST['teamname']) . "', '" . addslashes($_POST['password']) . "', 'Normal', '" . addslashes($_POST['name1']) . "', '" . addslashes($_POST['roll1']) . "','" . addslashes($_POST['branch1']) . "','" . addslashes($_POST['email1']) . "','" . addslashes($_POST['phno1']) . "','" . addslashes($_POST['name2']) . "', '" . addslashes($_POST['roll2']) . "', '" . addslashes($_POST['branch2']) . "', '" . addslashes($_POST['email2']) . "', '" . addslashes($_POST['phno2']) . "', '" . addslashes($_POST['name3']) . "', '" . addslashes($_POST['roll3']) . "', '" . addslashes($_POST['branch3']) . "','" . addslashes($_POST['email3']) . "','" . addslashes($_POST['phno3']) . "','0','0','" . addslashes($_POST['group']) . "')";
+                        values ('" . addslashes($_POST['teamname']) . "', '" . customhash(addslashes($_POST['password'])) . "', 'Normal', '" . addslashes($_POST['name1']) . "', '" . addslashes($_POST['roll1']) . "','" . addslashes($_POST['branch1']) . "','" . addslashes($_POST['email1']) . "','" . addslashes($_POST['phno1']) . "','" . addslashes($_POST['name2']) . "', '" . addslashes($_POST['roll2']) . "', '" . addslashes($_POST['branch2']) . "', '" . addslashes($_POST['email2']) . "', '" . addslashes($_POST['phno2']) . "', '" . addslashes($_POST['name3']) . "', '" . addslashes($_POST['roll3']) . "', '" . addslashes($_POST['branch3']) . "','" . addslashes($_POST['email3']) . "','" . addslashes($_POST['phno3']) . "','0','0','" . addslashes($_POST['group']) . "')";
                         $res = DB::query($query);
                         $query = "select * from teams where teamname='" . addslashes($_POST['teamname']) . "'";
                         $res = DB::findOneFromQuery($query);
