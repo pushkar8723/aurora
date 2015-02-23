@@ -240,6 +240,10 @@ function getSessionMessage($name) {
   return $data;
 }
 
+function isAdmin() {
+    return isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin";
+}
+
 class DB {
 
   public static $connection = null;

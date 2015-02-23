@@ -1,18 +1,8 @@
 <?php
+include_once '../functions.php';
+include_once '../components.php';
 function timeformating($a) {
-    $sec = $a % 60;
-    $a -= $sec;
-    $a = $a / 60;
-    $min = $a % 60;
-    $a -= $min;
-    $hr = $a / 60;
-    $str = "";
-    if ($hr > 0)
-        $str .= $hr . ":";
-    if ($min > 0)
-        $str .= $min . ":";
-    $str .= $sec;
-    return $str;
+    return gmdate("H:i:s", $a);
 }
 
 if (isset($_GET['code'])) {
@@ -21,21 +11,35 @@ if (isset($_GET['code'])) {
     $contest = DB::findOneFromQuery($query);
     $query = "select value from admin where variable = 'penalty'";
     $admin = DB::findOneFromQuery($query);
+    $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted'";
+    $problems = DB::findAllFromQuery($query);
+    $pidToProbCode = array();
+    foreach($problems as $prob){
+        $pidToProbCode[$prob['pid']] = $prob['code'];
+    }
     ?>
-<center><?php if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin"){ ?><a class="pull-right btn btn-danger" href="<?php echo SITE_URL; ?>/process.php?freeze=<?php echo $contest['code']; ?>"><?php echo ($contest['ranktable'] == "")?"Freeze Board":"Refresh" ?></a><?php } ?><h1>Rankings - <?php echo $contest['name'] ?></h1></center>
+<center><?php if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin"){ ?><?php } ?><h1>Rankings - <?php echo $contest['name'] ?></h1></center>
     <?php
-    if($contest['ranktable'] == ""){
+    if($contest['ranktable'] != ""){
         $rank = getrankings($contest['code']);
     } else {
-        $rank = DB::findAllFromQuery("select * from $_GET[code]");
+        $rank = null;
     }
     $i = 1;
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Temaname</th><th>Time</th><th>Penalty</th><th>Score</th><th>Solved</th><th>Final Time</th></tr>";
+    $probCells = "";
+    foreach($pidToProbCode as $pid=>$code){
+        $probCells .= "<th><a target='_blank' href='". SITE_URL . "/problems/$code". "'>".$code."</a></th>";
+    }
+    echo "<table class='table table-hover'><tr><th>Rank</th><th>Teamname</th><th>Score</th>$probCells<th>Final Time</th></tr>";
     foreach ($rank as $val) {
         $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
         $val['time'] = timeformating($val['time']);
         $finaltime = timeformating($finaltime);
-        echo "<tr><td>$i</td><td><a href='" . SITE_URL . "/teams/$val[teamname]'>$val[teamname]</a></td><td>$val[time]</td><td>$val[penalty]</td><td>$val[score]</td><td>$val[solved]</td><td>$finaltime</td></tr>";
+        $probCells = "";
+        foreach($pidToProbCode as $pid=>$code){
+            $probCells .= "<td style='text-align:center'>". (array_key_exists($pid, $val['solved'])?"<span class='glyphicon glyphicon-ok' style='color: green'></span> (<span style='color:". ($val['solved'][$pid]>0?"red":"green") ."'>". $val['solved'][$pid]. "</span>)":"-") ."</td>";
+        }
+        echo "<tr><td>$i</td><td><a href='" . SITE_URL . "/teams/$val[teamname]'>$val[teamname]</a></td><td>$val[score] (<span style='color:". ($val['penalty']>0?"red":"green") ."'>$val[penalty]</span>)</td>". $probCells ."<td>$finaltime</td></tr>";
         $i++;
     }
     echo "</table>";

@@ -4,7 +4,7 @@ require_once 'components.php';
 $_SESSION['url'] = $_SERVER['REQUEST_URI']; // used by process.php to send to last visited page
 $query = "select value from admin where variable='mode'";
 $judge = DB::findOneFromQuery($query);
-if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['team']['status'] != 'Admin') {
+if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin()) {
     session_destroy();
     session_regenerate_id(true);
     session_start();
@@ -118,18 +118,23 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora v2</a>
+                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora</a>
                 </div>
 
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
+                        <!-- <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li> -->
                         <li><a href="<?php echo SITE_URL; ?>/problems">Problems</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/contests">Contests</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/rankings">Rankings</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/submissions">Submissions</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span class="caret"></span></a>
+                            <ul class="dropdown-menu navbar-nav navbar-inverse" role="menu">
+                                <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
+                                <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <?php if (isset($_SESSION['loggedin'])) { ?>
                         <ul class="nav navbar-nav pull-right">
@@ -196,6 +201,27 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         <hr/>
                         <h4>Contest Status</h4>
                         <?php contest_status(); ?>
+                        
+                        <?php 
+	                        if ($judge['value'] == 'Active') {?>
+	                        	<h4 align="center">Contest Ranking</h4>
+                                <div id="live-ranking">
+<?php getCurrentContestRanking(); ?>
+<a style="float:right;" href="<?php echo SITE_URL.'/rank/'.getCurrentContest(); ?>">View all</a>
+</div>
+                                <!--	                       		<script>
+		                       		var eventSource = new EventSource('<?php echo SITE_URL.'/files/LiveContestRanking.php'?>');
+		                			eventSource.addEventListener('message',function(e) {
+		                				document.getElementById('live-ranking').innerHTML = e.data;
+		                			}, false);
+								</script>                     -->
+	                    <?php }
+	                        else {
+								echo '<h4>Overall Rankings</h4>';
+	                        	rankings();  
+	                       	}                     	
+                        ?>
+                        
                         <hr />
                         <?php
                         if (isset($_SESSION['loggedin'])) {
@@ -203,8 +229,6 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                             echo "<hr/>";
                         }
                         ?>
-                        <h4>Overall Rankings</h4>
-                        <?php rankings(); ?>
                         <hr/>
                         <?php
                         if ($judge['value'] == 'Active') {

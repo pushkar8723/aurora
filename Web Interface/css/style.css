@@ -69,3 +69,30 @@ code{
     padding: 10px;
     box-shadow: 0 0 5px #000;
 }
+.mismatch th{
+    background: none;
+    font-size: 20px;
+    width: 300px;
+}
+.mismatch td {
+    padding: 0 10px;
+}
+.line {
+    text-align: right;
+    color: #afafaf;
+    border-right: 3px solid rgb(108, 226, 108);
+}
+
+.elipsis_sizer td {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-menu li:hover {
+    cursor: pointer;
+}
+.tabletaghidden {
+    display:none;
+}

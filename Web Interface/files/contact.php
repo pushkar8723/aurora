@@ -12,8 +12,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     $result = DB::findAllWithCount($select, $query, $page, 10);
     $data = $result['data'];
     foreach ($data as $row) {
-        $row['query'] = preg_replace("/\n/", "<br>", $row['query']);
-        $row['reply'] = preg_replace("/\n/", "<br>", $row['reply']);
+        $row['query'] = htmlentities(preg_replace("/\n/", "<br>", $row['query']));
+        $row['reply'] = htmlentities(preg_replace("/\n/", "<br>", $row['reply']));
         $query = "Select teamname from teams where tid = $row[tid]";
         $team = DB::findOneFromQuery($query);
         echo "<div class='post'><b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a> : $row[query]</b>" . (($row['reply'] != "") ? ("<hr/>A. $row[reply]<br/>") : ('')) . "</div>";

@@ -7,6 +7,7 @@ function customhash($str) {
 }
 
 $query = "select value from admin where variable='mode'";
+
 $judge = DB::findOneFromQuery($query);
 $query = "insert into logs value ('" . time() . "', '$_SERVER[REMOTE_ADDR]', '" . addslashes(print_r($_SESSION, TRUE)) . "', '" . addslashes(print_r($_REQUEST, TRUE)) . "' )";
 DB::query($query);
@@ -21,8 +22,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
         } else {
             $_POST['teamname'] = addslashes($_POST['teamname']);
-            $_POST['password'] = customhash(addslashes($_POST['password']));
+            $_POST['password'] = addslashes($_POST['password']);
             $query = "select * from teams where teamname  = '$_POST[teamname]' and pass = '$_POST[password]'";
+            echo $query;
             $res = DB::findOneFromQuery($query);
             if ($res && ($res['status'] == 'Normal' || $res['status'] == 'Admin')) {
                 $save = $_SESSION;
@@ -111,7 +113,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                             if ($admin['mode'] == 'Active' && $admin['endtime'] >= time() && $res['contest'] == 'practice') { // Lvl 5
                                 $_SESSION['msg'] = "Submissions are only accepted for CQM question right now. Come back later.";
                                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
-                            } else if ($admin['mode'] == 'Passive' && $res['contest'] == 'contest') { // Lvl 6
+                            } else if ($admin['mode'] == 'Passive' && $res['contest'] == 'contest' && $_SESSION['team']['status'] != 'Admin') { // Lvl 6
                                 $_SESSION['msg'] = "Submissions are only accepted for Practice question right now.";
                                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
                             } else if ($res['status'] == 'Active' || $_SESSION['team']['status'] == 'Admin') { // Lvl 7
@@ -179,7 +181,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     $res = DB::findOneFromQuery($query);
                     if ($res == NULL) {
                         $query = "Insert into teams (teamname, pass, status, name1, roll1, branch1, email1, phone1, name2, roll2, branch2, email2, phone2, name3, roll3, branch3, email3, phone3, score, penalty, gid) 
-                        values ('" . addslashes($_POST['teamname']) . "', '" . customhash(addslashes($_POST['password'])) . "', 'Normal', '" . addslashes($_POST['name1']) . "', '" . addslashes($_POST['roll1']) . "','" . addslashes($_POST['branch1']) . "','" . addslashes($_POST['email1']) . "','" . addslashes($_POST['phno1']) . "','" . addslashes($_POST['name2']) . "', '" . addslashes($_POST['roll2']) . "', '" . addslashes($_POST['branch2']) . "', '" . addslashes($_POST['email2']) . "', '" . addslashes($_POST['phno2']) . "', '" . addslashes($_POST['name3']) . "', '" . addslashes($_POST['roll3']) . "', '" . addslashes($_POST['branch3']) . "','" . addslashes($_POST['email3']) . "','" . addslashes($_POST['phno3']) . "','0','0','" . addslashes($_POST['group']) . "')";
+                        values ('" . addslashes($_POST['teamname']) . "', '" . addslashes($_POST['password']) . "', 'Normal', '" . addslashes($_POST['name1']) . "', '" . addslashes($_POST['roll1']) . "','" . addslashes($_POST['branch1']) . "','" . addslashes($_POST['email1']) . "','" . addslashes($_POST['phno1']) . "','" . addslashes($_POST['name2']) . "', '" . addslashes($_POST['roll2']) . "', '" . addslashes($_POST['branch2']) . "', '" . addslashes($_POST['email2']) . "', '" . addslashes($_POST['phno2']) . "', '" . addslashes($_POST['name3']) . "', '" . addslashes($_POST['roll3']) . "', '" . addslashes($_POST['branch3']) . "','" . addslashes($_POST['email3']) . "','" . addslashes($_POST['phno3']) . "','0','0','" . addslashes($_POST['group']) . "')";
                         $res = DB::query($query);
                         $query = "select * from teams where teamname='" . addslashes($_POST['teamname']) . "'";
                         $res = DB::findOneFromQuery($query);
@@ -251,7 +253,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         if (isset($_SESSION['loggedin'])) {
             if (isset($_POST['query']) && $_POST['query'] != "") {
                 $query = "Insert into clar (time, pid, tid, query, access) 
-                values ('" . time() . "', '" . addslashes($_POST['pid']) . "', '" . $_SESSION['team']['id'] . "', '" . addslashes($_POST['query']) . "', 'public')";
+                values ('" . time() . "', '" . addslashes($_POST['pid']) . "', '" . $_SESSION['team']['id'] . "', '" . (addslashes($_POST['query'])) . "', 'public')";
                 $res = DB::query($query);
                 $_SESSION['msg'] = "Clarification posted... we will reply soon.";
                 redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);
@@ -372,6 +374,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $newcontest['endtime'] = $date->getTimestamp();
             $newcontest['announcement'] = addslashes($_POST['announcement']);
             $query = "insert into contest (" . implode(array_keys($newcontest), ",") . ") values ('" . implode(array_values($newcontest), "','") . "')";
+            echo $query;
             DB::query($query);
             $_SESSION['msg'] = "Contest Added.";
             redirectTo("http://" . $_SERVER['HTTP_HOST'] . $_SESSION['url']);

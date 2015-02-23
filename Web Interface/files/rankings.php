@@ -7,7 +7,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     if(isset($_GET['code'])){
         $tab = addslashes($_GET['code']);
     }
-    $query = "select * from groups";
+    $query = "select * from groups order by gid";
     $result = DB::findAllFromQuery($query);
     $group = Array();
     $groupval = Array();

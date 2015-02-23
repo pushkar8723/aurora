@@ -169,6 +169,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 </div>
             </div>
         </form><br/>
+        <script type="text/javascript" src="<?php echo JS_URL; ?>/tinymce/tinymce.min.js"></script>
+        <script>
+            tinymce.init({
+                selector:'textarea',
+                plugins: "link",
+                forced_root_block : false,
+            });
+        </script>
         <?php
     } else {
         $langopt = implode(',',array_keys($valtoname));
