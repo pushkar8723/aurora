@@ -16,8 +16,8 @@ Aurora is divided into two parts
 Both these components communicates with each other and interacts with the database. 
 Setup guidelines can be found inside each of these components.
 
-Acknowledgements
-----------------
+Acknowledgement
+---------------
 
 * Kaustubh Karkare, creator of Aurora Online Judge from which this version was derived.
 * Siddhartha Sahu, created functions.php which is extensively used for database interaction.
