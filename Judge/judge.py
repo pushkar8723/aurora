@@ -1,5 +1,5 @@
 import pymysql as sql
-import platform,re, os, shutil, signal, sys, _thread as thread, time, urllib, socketserver as SocketServer, subprocess
+import platform,re, os, shutil, signal, sys, _thread as thread, time, urllib, socketserver as SocketServer, subprocess, codecs
 
 if "-judge" not in sys.argv:
 	print("\nArgus Online Judge : Execution Protocol (Linux Version 1.0)");
@@ -53,9 +53,9 @@ languages = []
 # File Read/Write Functions
 def file_read(filename):
 	if not os.path.exists(filename): return "";
-	f = open(filename,"r"); d = f.read(); f.close(); return d.replace("\r","")
+	f = codecs.open(filename,"r","utf-8"); d = f.read(); f.close(); return d.replace("\r","")
 def file_write(filename,data):
-	f = open(filename,"w"); f.write(data.replace("\r","")); f.close();
+	f = codecs.open(filename,"w","utf-8"); f.write(data.replace("\r","")); f.close();
 
 # Systems Check
 def system():
@@ -175,7 +175,7 @@ def runjudge(runid):
 			if run["language"]=="Java": codefilename = run["name"]
 			elif run["language"]=="Text": codefilename = "output"
 			else: codefilename = "code";
-			codefile = open("env/"+codefilename+"."+langarr[run["language"]]["extension"],"w")
+			codefile = codecs.open("env/"+codefilename+"."+langarr[run["language"]]["extension"],"w","utf-8")
 			if(run["language"]=="PHP"): codefile.write(php_prefix); # append prefix for PHP
 			codefile.write(run["code"].replace("\r","")); codefile.close();
 			if "-cache" not in sys.argv: file_write("env/input.txt",run["input"]);
