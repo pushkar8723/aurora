@@ -350,4 +350,4 @@ CREATE TABLE IF NOT EXISTS `editorials` (
   `pid` int(11) NOT NULL,
   `content` text CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
