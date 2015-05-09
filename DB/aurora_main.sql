@@ -340,3 +340,14 @@ CREATE TABLE IF NOT EXISTS `teams` (
 
 INSERT INTO `teams` (`tid`, `teamname`, `teamname2`, `pass`, `status`, `score`, `penalty`, `name1`, `roll1`, `branch1`, `email1`, `phone1`, `name2`, `roll2`, `branch2`, `email2`, `phone2`, `name3`, `roll3`, `branch3`, `email3`, `phone3`, `platform`, `ip`, `session`, `gid`) VALUES
 (1, 'judge', NULL, '99c8ef576f385bc322564d5694df6fc2', 'Admin', '', '', '', '', '', 'pushkar8723@gmail.com', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[]', '[]', '', 2);
+
+
+--
+-- Table structure for table `editorials`
+--
+
+CREATE TABLE IF NOT EXISTS `editorials` (
+  `pid` int(11) NOT NULL,
+  `content` text CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
