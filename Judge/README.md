@@ -113,3 +113,8 @@ To start judge, execute
 
 To stop judge simpy press ```CTRL+C```
 and to exit jail execute ```exit```
+
+**Note :** Each time the system is restarted, proc has to be mounted again using following command.
+```
+# mount -o bind /proc /path/to/chroot/proc
+```
