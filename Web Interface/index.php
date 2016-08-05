@@ -18,11 +18,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <link type="text/css" rel="stylesheet" href="<?php echo CSS_URL; ?>/bootstrap.css" media="screen" />
-        <link type="text/css" rel="stylesheet" href="<?php echo CSS_URL; ?>/style.css" media="screen" />
-        <script type="text/javascript" src="<?php echo JS_URL; ?>/jquery.js"></script>
-        <script type="text/javascript" src="<?php echo JS_URL; ?>/bootstrap.js"></script> 
-        <script type="text/javascript" src="<?php echo JS_URL; ?>/plugin.js"></script>
+        <link type="text/css" rel="stylesheet" href="<?php echo SITE_URL ?>/css/bootstrap.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="<?php echo SITE_URL ?>/css/style.css" media="screen" />
+        <script type="text/javascript" src="<?php echo SITE_URL ?>/js/jquery-3.1.0.min.js"></script>
+        <script type="text/javascript" src="<?php echo SITE_URL ?>/js/bootstrap.js"></script>
+        <script type="text/javascript" src="<?php echo SITE_URL ?>/js/plugin.js"></script>
         <script type="text/javascript">
             $(window).load(function() {
                 if ($('#sidebar').height() < $('#mainbar').height())
@@ -109,10 +109,10 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
             </div>
         <?php }
         ?>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -121,7 +121,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                     <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora</a>
                 </div>
 
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <!-- <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li> -->
                         <li><a href="<?php echo SITE_URL; ?>/problems">Problems</a></li>
@@ -129,8 +129,8 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                         <li><a href="<?php echo SITE_URL; ?>/rankings">Rankings</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/submissions">Submissions</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span class="caret"></span></a>
-                            <ul class="dropdown-menu navbar-nav navbar-inverse" role="menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
                                 <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
                             </ul>
@@ -140,7 +140,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                         <ul class="nav navbar-nav pull-right">
                             <?php if ($_SESSION['team']['status'] == 'Admin') { ?>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         Admin
                                         <b class="caret"></b>
                                     </a>
@@ -157,7 +157,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                                 </li>                              
                             <?php } ?>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     Account
                                     <b class="caret"></b>
                                 </a>
@@ -196,9 +196,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                     ?>
                 </div>
                 <div class='col-md-3'>
-                    <div id='sidebar'>
+                    <div class="panel panel-default">
                         <?php loginbox(); ?>
-                        <hr/>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
                         <h4>Contest Status</h4>
                         <?php contest_status(); ?>
                         
@@ -237,6 +239,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                         }
                         ?>
                     </div>
+                        </div>
                 </div>
             </div>
             <div class="footer">

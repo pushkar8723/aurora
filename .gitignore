@@ -1,3 +1,4 @@
 scripts/config.py
 *.pyc
 *~
+.idea

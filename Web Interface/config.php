@@ -1,6 +1,7 @@
 <?php
 // Change the following parameters according to the instructions beside them
-define("SITE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/aurora");      // path to directory
+//define("SITE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/aurora");      // path to directory
+define("SITE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/aurora/Web Interface");   //Dev only, please use the above line
 define("SQL_USER", "aurora");           // Database username    
 define("SQL_PASS", "aurora");           // Database password
 define("SQL_DB", "aurora_main");     	// Database name  

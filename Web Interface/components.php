@@ -5,8 +5,11 @@ include_once 'files/LiveContestRanking.php';
 function loginbox() {
     if (!isset($_SESSION['loggedin'])) {
         ?>
-        <h4>Login</h4>
-        <center>
+        <div class="panel-heading text-center">
+            <h3 class="panel-title">Login</h3>
+        </div>
+        <div class="panel-body text-center">
+
             <form action="<?php echo SITE_URL; ?>/process.php" method="post" role="form">
                 <div class="input-group" style="margin-bottom: -1px;">
                     <span class="input-group-addon" style="border-bottom-left-radius: 0;"><i class="glyphicon glyphicon-user"></i></span>
@@ -19,19 +22,30 @@ function loginbox() {
                 <input type="submit" name="login" value="Log In" class="btn btn-primary btn-block"/>
             </form>
             <a href='<?php echo SITE_URL; ?>/register'>New Team? Register Here.</a>
-        </center>
+        </div>
         <?php
     } else {
         ?>
-        <h4>Team</h4> 
-        <table class='table table-condensed'>
-            <tr><th>Team Name</th><th>Score</th><th>Overall Rank</th></tr>
-            <?php
-            $query = "SELECT count(*)+1 as rank, (select score from teams where tid = " . $_SESSION['team']['id'] . ") as sco FROM `teams` WHERE (score > (select score from teams where tid = " . $_SESSION['team']['id'] . ") and status = 'Normal') or (score = (select score from teams where tid = " . $_SESSION['team']['id'] . ") and penalty < (select penalty from teams where tid = " . $_SESSION['team']['id'] . ") and status='Normal') ";
-            $res = DB::findOneFromQuery($query);
-            echo "<tr><td><a href='" . SITE_URL . "/teams/" . $_SESSION['team']['name'] . "'>" . $_SESSION['team']['name'] . "</a></td><td>$res[sco]</td><td style='text-align: center'>$res[rank]</td></tr>";
-            ?>
-        </table>
+        <div class="panel-heading text-center">
+            <h3 class="panel-title">Team</h3>
+        </div>
+        <div class="panel-body text-center">
+
+            <table class='table table-hover'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Overall Rank</th>
+                    </tr>
+                </thead>
+                <?php
+                $query = "SELECT count(*)+1 as rank, (select score from teams where tid = " . $_SESSION['team']['id'] . ") as sco FROM `teams` WHERE (score > (select score from teams where tid = " . $_SESSION['team']['id'] . ") and status = 'Normal') or (score = (select score from teams where tid = " . $_SESSION['team']['id'] . ") and penalty < (select penalty from teams where tid = " . $_SESSION['team']['id'] . ") and status='Normal') ";
+                $res = DB::findOneFromQuery($query);
+                echo "<tr><td><a href='" . SITE_URL . "/teams/" . $_SESSION['team']['name'] . "'>" . $_SESSION['team']['name'] . "</a></td><td>$res[sco]</td><td style='text-align: center'>$res[rank]</td></tr>";
+                ?>
+            </table>
+        </div>
         <?php
     }
 }
@@ -61,7 +75,13 @@ function contest_status() {
     }
     ?>
     <table class='table table-condensed'>
-        <tr><th>Mode</th><th>Judge</th><th>End Time</th></tr>
+        <thead>
+            <tr>
+                <th>Mode</th>
+                <th>Judge</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
         <tr><td><div id="ajax-contest-mode">
                     <?php
                     if ($status['mode'] == "Active" && $status['endtime'] < time())
@@ -126,7 +146,7 @@ function rankings() {
     $result = DB::findAllWithCount($select, $body, 1, 10);
     $data = $result['data'];
     $i = 1;
-    echo "<table class='table table-condensed elipsis_sizer'><tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
+    echo "<table class='table table-condensed'><tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
     foreach ($data as $row) {
         echo "<tr><td>" . $i++ . "</td><td><a href='" . SITE_URL . "/teams/$row[teamname]'>" . $row['teamname'] . "</a></td><td>" . $row['score'] . "</td></tr>";
     }
