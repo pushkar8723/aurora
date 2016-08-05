@@ -43,6 +43,7 @@ INSERT INTO `admin` (`variable`, `value`) VALUES
 ('penalty', '20'),
 ('notice', 'Aurora Online Judge\r\nWelcome to Aurora Online Judge'),
 ('endtime', '0'),
+('starttime', '0'),
 ('port', '8723'),
 ('ip', '127.0.0.1'),
 ('test', 'test');

@@ -196,55 +196,62 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
                     ?>
                 </div>
                 <div class='col-md-3'>
+                    <!-- Login Panel -->
                     <div class="panel panel-default">
                         <?php loginbox(); ?>
                     </div>
+                    <!-- ./Login Panel -->
+
+                    <!-- Contest Panel -->
                     <div class="panel panel-default">
-                        <div class="panel-body">
-                        <h4>Contest Status</h4>
-                        <?php contest_status(); ?>
-                        
-                        <?php 
-	                        if ($judge['value'] == 'Active') {?>
-	                        	<h4 align="center">Contest Ranking</h4>
-                                <div id="live-ranking">
-<?php getCurrentContestRanking(); ?>
-<a style="float:right;" href="<?php echo SITE_URL.'/rank/'.getCurrentContest(); ?>">View all</a>
-</div>
-                                <!--	                       		<script>
-		                       		var eventSource = new EventSource('<?php echo SITE_URL.'/files/LiveContestRanking.php'?>');
-		                			eventSource.addEventListener('message',function(e) {
-		                				document.getElementById('live-ranking').innerHTML = e.data;
-		                			}, false);
-								</script>                     -->
-	                    <?php }
-	                        else {
-								echo '<h4>Overall Rankings</h4>';
-	                        	rankings();  
-	                       	}                     	
-                        ?>
-                        
-                        <hr />
-                        <?php
-                        if (isset($_SESSION['loggedin'])) {
-                            mysubs();
-                            echo "<hr/>";
-                        }
-                        ?>
-                        <hr/>
-                        <?php
-                        if ($judge['value'] == 'Active') {
-                            latestsubs();
-                            echo "<hr/>";
-                        }
-                        ?>
-                    </div>
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title">Contest</h3>
                         </div>
+                        <div class="panel-body text-center">
+                            <?php contest_status(); ?>
+                        </div>
+                    </div>
+                    <!-- ./Contest Panel -->
+
+                    <!-- Ranking Panel -->
+                    <div class="panel panel-default">
+
+                    <?php if ($judge['value'] == 'Active') { ?>
+                        <!-- Contest Ranking -->
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title">Contest Ranking</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <div id="live-ranking">
+                            <?php getCurrentContestRanking(); ?>
+                                <a style="float:right;" href="<?php echo SITE_URL.'/rank/'.getCurrentContest(); ?>">View all</a>
+                            </div>
+                        </div>
+
+                    <?php } else { ?>
+                        <!-- Overall Ranking -->
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title">Overall Rankings</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <?php rankings(); ?>
+                        </div>
+                    <?php } ?>
+                    </div>
+                    <!-- ./Ranking Panel -->
+
+                    <?php
+                    /* My Submissions Panel */
+                    if (isset($_SESSION['loggedin'])) mysubs();
+                    /* Latest Submissions Panel */
+                    if ($judge['value'] == 'Active') latestsubs();
+                    ?>
+
                 </div>
             </div>
-            <div class="footer">
-                <a href="https://github.com/pushkar8723/Aurora" target="_blank">Aurora - An Open Source Online Judge</a>
-            </div>
+        </div>
+        <div class="footer">
+            <a href="https://github.com/pushkar8723/Aurora" target="_blank">Aurora - An Open Source Online Judge</a>
         </div>
     </body>
 </html>

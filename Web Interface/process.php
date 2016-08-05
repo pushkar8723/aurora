@@ -270,10 +270,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $admin = Array();
             $admin['mode'] = $_POST['mode'];
             $admin['endtime'] = $_POST['endtime'];
+            $curTime = time(); //so both start and endtime use same time
+            $admin['starttime'] = $curTime;
             if ($admin['mode'] == "Active" && $admin['endtime'] == "") {
-                $admin['endtime'] = (time() + 180 * 60);
+                $admin['endtime'] = ($curTime + 180 * 60);
             } else {
-                $admin['endtime'] = (time() + $_POST['endtime'] * 60);
+                $admin['endtime'] = ($curTime + $_POST['endtime'] * 60);
             }
             $admin['penalty'] = $_POST['penalty'];
             foreach ($admin as $key => $val) {
