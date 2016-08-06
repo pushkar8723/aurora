@@ -142,6 +142,8 @@ CREATE TABLE IF NOT EXISTS `problems` (
   `statement` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `image` longblob,
   `imgext` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `sampleinput` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `sampleoutput` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `input` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `output` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `timelimit` float DEFAULT NULL,
