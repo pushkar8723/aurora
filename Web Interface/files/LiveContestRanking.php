@@ -1,7 +1,7 @@
 <?php
 /** @author: utk
  */
-include_once '../functions.php';
+include_once(dirname(__FILE__) . '/../functions.php');
 include_once 'SSE_Util.php';
 
 function liveContestRanking($contestCode, $limit) {

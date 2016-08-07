@@ -1,5 +1,5 @@
 <?php
-include_once '../functions.php';
+include_once(dirname(__FILE__) . '/../functions.php');
 
 class Leaderboard {
 	private static function cmp($a, $b) {

@@ -1,7 +1,7 @@
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     ?>
-    <center><h1>Request Logs</h1></center>
+    <div class="text-center page-header"><h1>Request Logs</h1></div>
     <script type='text/javascript'>
             $(document).ready(function() {
                 $('#submit').click(function() {
@@ -9,7 +9,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 });
             });
         </script>
-        <center><h1>Teams</h1></center>
+        <div class="text-center"><h3>Teams</h3></div>
         <div class='form-inline'>
             <div class='form-group'>
                 Team Name : 
@@ -18,7 +18,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 <input class='form-control' id='teamname' type='text' />
             </div>
             <div class='form-group'>
-                <input id='submit' value='Search' type='button' class='btn btn-primary' />
+                <input id='submit' value='Search' type='button' class='btn btn-default' />
             </div>
         </div>
         <br/>
@@ -34,7 +34,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     $body .= " order by time desc";
     $result = DB::findAllWithCount("select *", $body, $page, 10);
     $data = $result['data'];
-    echo "<table class='table table-condensed table-hover'><tr><th>Time</th><th>IP</th><th>Session</th><th>Request</th></tr>";
+    echo "<table class='table table-condensed table-hover'><thead><tr><th>Time</th><th>IP</th><th>Session</th><th>Request</th></tr></thead>";
     foreach ($data as $row) {
         echo "<tr><td>" . date("d/m/Y h:i:sa", $row['time']) . "</td><td>$row[ip]</td><td><pre>$row[tid]</pre></td><td><pre>$row[request]</pre></td></tr>";
     }

@@ -300,6 +300,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $prob['statement'] = addslashes(file_get_contents($_FILES['statement']['tmp_name']));
             $prob['input'] = addslashes(file_get_contents($_FILES['input']['tmp_name']));
             $prob['output'] = addslashes(addslashes(file_get_contents($_FILES['output']['tmp_name'])));
+            $prob['sampleinput'] = addslashes(file_get_contents($_FILES['sampleinput']['tmp_name']));
+            $prob['sampleoutput'] = addslashes(addslashes(file_get_contents($_FILES['sampleoutput']['tmp_name'])));
             if ($_FILES['image']['size'] > 0) {
                 $prob['image'] = base64_encode(file_get_contents($_FILES['image']['tmp_name']));
             }
@@ -347,6 +349,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 }
                 fwrite($client, "del$pid");
                 fclose($client);
+            }
+            if ($_FILES['sampleinput']['size'] > 0) {
+                $prob['sampleinput'] = addslashes(file_get_contents($_FILES['sampleinput']['tmp_name']));
+            }
+            if ($_FILES['sampleoutput']['size'] > 0) {
+                $prob['sampleoutput'] = addslashes(file_get_contents($_FILES['sampleoutput']['tmp_name']));
             }
             if ($_FILES['image']['size'] > 0) {
                 $prob['image'] = base64_encode(file_get_contents($_FILES['image']['tmp_name']));

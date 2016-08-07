@@ -12,7 +12,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo errorMessageHTML("<b>Problem not found!</b>");
         } else {
             if(isAdmin()){
-                echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
+                echo "<a class='btn btn-default pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminproblem/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
             }
             // if($result['contest'] == 'contest'){
             //     echo "<a class='btn btn-primary' style='margin-top: 10px;' href='" . SITE_URL . "/contests/$result[pgroup]'><i class='glyphicon glyphicon-edit'></i> Problems</a>";
@@ -54,7 +54,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                             <strong>Time Limit: </strong>$result[timelimit] Second(s)<br/>
                             <strong>Score: </strong>$result[score] Point(s)<br/>
                             <strong>Input File Limit: </strong>$result[maxfilesize] Bytes<br/><br/>
-                            ". (($result['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) ? ("<a class='btn btn-block btn-success' href='\" . SITE_URL . \"/submit/$_GET[code]'>Submit <span class='glyphicon glyphicon-cloud-upload'></span></a>") : ('')) . "
+                            ". (($result['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")) ? ("<a class='btn btn-block btn-success' href='" . SITE_URL . "/submit/$_GET[code]'>Submit <span class='glyphicon glyphicon-cloud-upload'></span></a>") : ('')) . "
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                         echo "<form role='form' method='post' action='" . SITE_URL . "/process.php'>";
                                         echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
                                                 <textarea class='form-control' name='reply' placeholder='Enter response...'>$row[reply]</textarea><br/>
-                                                    <div class='form-inline'><select style='width: 250px;' class='form-control' name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select><input type='submit' class='btn btn-success' name='clarreply' value='Reply / Change Reply'/></div>
+                                                    <div class='form-inline'><select style='width: 250px;' class='form-control' name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select>  <input type='submit' class='btn btn-success' name='clarreply' value='Reply / Change Reply'/></div>
                                             </form>";
                                     }
                                 }
@@ -146,6 +146,9 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $res = DB::findAllFromQuery($query);
         $lastgroup = "";
         $counter=0;
+        if(empty($res)){
+            echo "<h3 class='text-center'>No problems available :( Check back later</h3>";
+        }
         foreach ($res as $row) {
             if ($row['pgroup'] != $lastgroup){
                 if($lastgroup!="") echo "</table></div>";
@@ -159,8 +162,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td class='tabletaghidden' >$row[type]</td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td><td><span class='badge'>$row[score] pt</span></td><td>" . (isset($editorial[$row['pid']])?("<a href='" . SITE_URL . "/editorial/$row[code]'>Link</a>"):(($_SESSION['team']['status'] == 'Admin')?"<a href='". SITE_URL . "/admineditorial/$row[code]'>Add</a>":"None")) . "</td></tr>";
             $counter=$counter+1;
         }
-        echo "</table>";
-        echo '</div>';
+        if(!empty($res)) echo "</table></div>"; //in the rare event there is NOTHING, need to remove divs to avoid fucking up layout
     }
 } else {
     echo "<br/><br/><br/><div style='padding: 10px;'><h1>Lockdown Mode :(</h1>This feature is now offline as Judge is in Lockdown mode.</div><br/><br/><br/>";

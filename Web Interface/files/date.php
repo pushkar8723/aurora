@@ -9,5 +9,5 @@
 $date = new DateTime('01-02-2014');
 $startdate = $date->getTimestamp();
 echo $startdate;
-
+var_dump(Leaderboard::getStaticRankTableInJSON('test-1'));
 ?>

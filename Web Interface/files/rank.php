@@ -1,6 +1,5 @@
 <?php
-include_once '../functions.php';
-include_once '../components.php';
+
 function timeformating($a) {
     return gmdate("H:i:s", $a);
 }
@@ -18,7 +17,7 @@ if (isset($_GET['code'])) {
         $pidToProbCode[$prob['pid']] = $prob['code'];
     }
     ?>
-<center><?php if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin"){ ?><?php } ?><h1>Rankings - <?php echo $contest['name'] ?></h1></center>
+<div class="text-center page-header"><?php if(isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin"){ ?><?php } ?><h1>Rankings - <?php echo $contest['name'] ?></h1></div>
     <?php
     if($contest['ranktable'] != ""){
         $rank = getrankings($contest['code']);
@@ -30,7 +29,7 @@ if (isset($_GET['code'])) {
     foreach($pidToProbCode as $pid=>$code){
         $probCells .= "<th><a target='_blank' href='". SITE_URL . "/problems/$code". "'>".$code."</a></th>";
     }
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Teamname</th><th>Score</th>$probCells<th>Final Time</th></tr>";
+    echo "<table class='table table-hover table-bordered'><thead><tr><th>Rank</th><th>Teamname</th><th>Score</th>$probCells<th>Final Time</th></tr></thead>";
     foreach ($rank as $val) {
         $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
         $val['time'] = timeformating($val['time']);
@@ -44,12 +43,12 @@ if (isset($_GET['code'])) {
     }
     echo "</table>";
 } else {
-    echo "<h1>Select a Contest</h1>
+    echo "<div class='text-center page-header'><h1>Select a Contest</h1></div>
         <div class='row'>";
     $query = "select * from contest";
     $res = DB::findAllFromQuery($query);
     foreach ($res as $row) {
-        echo "<div class='span2'><a href='" . SITE_URL . "/rank/$row[code]'>$row[name]</a></div>";
+        echo "<a class='btn btn-default' href='" . SITE_URL . "/rank/$row[code]'>$row[name]</a>";
     }
     echo "</div>";
 }

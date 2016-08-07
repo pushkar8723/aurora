@@ -5,7 +5,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         $query = "select * from problems where code = '$_GET[code]'";
         $res = DB::findOneFromQuery($query);
         ?>
-        <center><h1>Problem Settings - <?php echo "<a class='btn btn-primary' href='" . SITE_URL . "/problems/$_GET[code]'>$_GET[code]</a>"; ?></h1></center>
+        <a class='btn btn-default pull-right' style='margin-top: 10px;' href='<?= SITE_URL . "/problems/" . $_GET[code]?>'> View problem</a>
+        <div class="text-center page-header"><h1>Problem Settings - <?php echo "$_GET[code]"; ?></h1></div>
         <form class='form-horizontal' role='form' method='post' action='<?php echo SITE_URL; ?>/process.php' enctype='multipart/form-data'>
             <input type='hidden' name='pid' value='<?php echo $res['pid']; ?>' />
             <div class='col-md-6'>
@@ -150,6 +151,23 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 </div>
                 <br/>
             </div>
+            <div class='col-md-6'>
+                <div class='form-group'>
+                    <label class='control-label col-lg-4' for='sampleinput'>Sample Input File</label>
+                    <div class='col-lg-8'>
+                        <input type='file' name='sampleinput' id='sampleinput'/>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-6'>
+                <div class='form-group'>
+                    <label class='control-label col-lg-4' for='sampleoutput'>Sample Output File</label>
+                    <div class='col-lg-8'>
+                        <input type='file' name='sampleoutput' id='sampleoutput'/>
+                    </div>
+                </div>
+                <br/>
+            </div>
             <div class='col-md-2'>
                 <div class='form-group'>
                     <label class='control-label col-lg-12'for='statement'>Problem Statement</label>
@@ -164,7 +182,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 <div class='form-group'>
                     <label class='control-label col-lg-4'></label>
                     <div class='col-lg-8'>
-                        <input type='submit' class='btn btn-primary btn-large' value='Submit' name='updateproblem' />
+                        <input type='submit' class='btn btn-default btn-block' value='Save' name='updateproblem' />
                     </div>
                 </div>
             </div>
@@ -210,8 +228,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 //document.getElementById('languages').value = str;
             }
         </script>
-        <center><h1>Problem Settings</h1></center>
-        <div id='probadd'>
+        <div class="text-center page-header"><h1>Problem Settings</h1></div>
+        <div id='probadd' style='display:none;'>
             <form class='form-horizontal' role='form' method='post' action='<?php echo SITE_URL; ?>/process.php' enctype='multipart/form-data'>
                 <div class='col-md-6'>
                     <div class='form-group'>
@@ -289,6 +307,23 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
 
                 <div class='col-md-6'>
                     <div class='form-group'>
+                        <label class='control-label col-lg-4' for='sampleinput'>Sample Input File</label>
+                        <div class='col-lg-8'>
+                            <input type='file' name='sampleinput' id='sampleinput'/>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-6'>
+                    <div class='form-group'>
+                        <label class='control-label col-lg-4' for='sampleoutput'>Sample Output File</label>
+                        <div class='col-lg-8'>
+                            <input type='file' name='sampleoutput' id='sampleoutput'/>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+                <div class='col-md-6'>
+                    <div class='form-group'>
                         <label class='control-label col-lg-4' for='contest'>Contest type</label>
                         <div class='col-lg-8'>
                             <select class='form-control' name='contest' id='contest'>
@@ -356,26 +391,24 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 </div>
                 <div class='col-md-12'>
                     <div class='form-group'>
-                        <label class='control-label col-lg-2'></label>
-                        <div class='col-lg-4'>
-                            <input type='submit' class='btn btn-primary' value='Submit' name='addproblem' />
-                        </div>
+                        <input type='submit' class='btn btn-default btn-block' value='Add Problem' name='addproblem' />
                     </div>
                 </div>
                 <div>
-                    <small>The values of all text fields must be a combination of upto 30 characters (single and double quotes are not allowed).
-                        <br>Please do not put the name of the problem in the Problem Statement File. You may use the following HTML tags in the Statement File: &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;ol&gt;, &lt;ul&gt;, &lt;li&gt; & &lt;code&gt; (all others will be deactivated). &lt;br&gt tags will be inserted at line breaks automatically (replacing '\n').
-                        <br>If you have uploaded an image (only one jpeg/gif/png, max 3MB, allowed per problem), you must specify its position by inserting the (custom) "&lt;image /&gt;" tag somewhere in your code. It will be replaced by the (proper) &lt;img&gt; tag with the src attribute set appropriately.
-                        <br>The Problem Statement, Input and Output Files must be of text format and can have a maximum size of 3MB.</small>
+                    <p>The values of all text fields must be a combination of upto 30 characters (single and double quotes are not allowed).</p>
+                    <p>Please do not put the name of the problem in the Problem Statement File. You may use the following HTML tags in the Statement File: &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;ol&gt;, &lt;ul&gt;, &lt;li&gt; & &lt;code&gt; (all others will be deactivated). &lt;br&gt tags will be inserted at line breaks automatically (replacing '\n').</p>
+                    <p>If you have uploaded an image (only one jpeg/gif/png, max 3MB, allowed per problem), you must specify its position by inserting the (custom) "&lt;image /&gt;" tag somewhere in your code. It will be replaced by the (proper) &lt;img&gt; tag with the src attribute set appropriately. </p>
+                    <p>The Problem Statement, Input, Output, Sample Input and Sample Output Files must be of text format and can have a maximum size of 3MB.</p>
                 </div>
             </form>
-            <center><a class='btn btn-primary' onclick="$('#probadd').slideUp();
-                            $('#list').slideDown();">Display List of Problem</a></center><br/>
+            <br />
+            <div class="text-center"><a class='btn btn-default' onclick="$('#probadd').slideUp();
+                            $('#list').slideDown();">Display List of Problems</a></div><br/>
         </div>
         <?php
         $query = "select pid, name, score, code, status from problems order by pid desc";
         $res = DB::findAllFromQuery($query);
-        echo "<div id='list' style='display:none;'><h3>List of Problems</h3><table class='table table-hover'><tr><th>ID</th><th>Name</th><th>Score</th><th>Code</th><th>Status</th><th>Options</th></tr>";
+        echo "<div id='list'><h3>List of Problems</h3><table class='table table-hover'><thead><tr><th>ID</th><th>Name</th><th>Score</th><th>Code</th><th>Status</th><th>Options</th></tr></thead>";
         foreach ($res as $row) {
             $diffstatus = array('Active', 'Inactive', 'Deleted');
             $statusstr = "<div class='col-lg-8'><select class='form-control' id='status_$row[pid]'>";
@@ -385,7 +418,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
             $statusstr .= "</select></div> <a href='#' class='btn btn-danger statusupdate' id='prob_$row[pid]'>Update</a>";
             echo "<tr><td>$row[pid]</td><td>$row[name]</td><td>$row[score]</td><td>$row[code]</td><td>$statusstr</td><td><a class='btn btn-primary' href='" . SITE_URL . "/adminproblem/$row[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a></td></tr>";
         }
-        echo "</table><center><a class='btn btn-primary' onclick=\"$('#probadd').slideDown(); $('#list').slideUp();\">Add New Problem</a></center></div><br/>";
+        echo "</table><div class='text-center'><a class='btn btn-default' onclick=\"$('#probadd').slideDown(); $('#list').slideUp();\">Add New Problem</a></div></div><br/>";
     }
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";

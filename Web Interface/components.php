@@ -67,8 +67,9 @@ function mysubs() { ?>
                 <?php
                 $query = "SELECT rid, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs WHERE tid = " . $_SESSION['team']['id'] . " order by rid desc limit 0, 5";
                 $res = DB::findAllFromQuery($query);
+                $resAttr = array('AC' => 'success', 'RTE' => 'warning', 'WA' => 'danger', 'TLE' => 'warning', 'CE' => 'warning', 'DQ' => 'danger', 'PE' => 'info', '...' => 'default', '' => 'default'); //Defines label attributes
                 foreach ($res as $row)
-                    echo "<tr><td><a href='" . SITE_URL . "/viewsolution/$row[rid]'>$row[rid]</a></td><td><a href='" . SITE_URL . "/problems/$row[pcode]'>$row[pname]</a></td><td>$row[result]</td></tr>";
+                    echo "<tr><td><a href='" . SITE_URL . "/viewsolution/$row[rid]'>$row[rid]</a></td><td><a href='" . SITE_URL . "/problems/$row[pcode]'>$row[pname]</a></td><td><span class='label label-".$resAttr[$row['result']]."'>$row[result]</span></td></tr>";
                 ?>
             </table>
         </div>
@@ -100,12 +101,12 @@ function contest_status() {
                         if ($status['mode'] == "Active" && $status['endtime'] < time())
                             echo "<span class=\"label label-danger\">Disabled</span>";
                         else {
-                            $attributes = [
+                            $attributes = array(
                                 "Active" => "success",
                                 "Passive" => "primary",
                                 "Disabled" => "default",
                                 "Lockdown" => "danger"
-                            ];
+                            );
                             echo "<span class=\"label label-" . $attributes[$status['mode']] . "\">" . $status['mode'] . "</span>";
                         }
                         ?>
@@ -163,7 +164,6 @@ function latestsubs() {?>
             <table class='table table-hover'>
                 <thead>
                 <tr>
-                    <th>RID</th>
                     <th>Team</th>
                     <th>Problem</th>
                     <th>Result</th>
@@ -172,8 +172,9 @@ function latestsubs() {?>
                 <?php
                 $query = "SELECT rid, (select teamname from teams where tid = runs.tid) as tname, (select name from problems where pid = runs.pid) as pname,(select code from problems where pid = runs.pid) as pcode, result FROM runs order by rid desc limit 0, 5";
                 $res = DB::findAllFromQuery($query);
+                $resAttr = array('AC' => 'success', 'RTE' => 'warning', 'WA' => 'danger', 'TLE' => 'warning', 'CE' => 'warning', 'DQ' => 'danger', 'PE' => 'info', '...' => 'default', '' => 'default'); //Defines label attributes
                 foreach ($res as $row)
-                    echo "<tr><td><a href='" . SITE_URL . "/viewsolution/$row[rid]'>$row[rid]</a></td><td><a href='" . SITE_URL . "/teams/$row[tname]'>$row[tname]</a></td><td><a href='" . SITE_URL . "/problems/$row[pcode]'>$row[pname]</a></td><td>$row[result]</td></tr>";
+                    echo "<tr><td><a href='" . SITE_URL . "/teams/$row[tname]'>$row[tname]</a></td><td><a href='" . SITE_URL . "/problems/$row[pcode]'>$row[pname]</a></td><td><span class='label label-".$resAttr[$row['result']]."'>$row[result]</span></td></tr>";
                 ?>
             </table>
         </div>

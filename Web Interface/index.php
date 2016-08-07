@@ -175,12 +175,12 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
             <div class='row'>
                 <div class='col-md-9' id='mainbar'>
                     <?php if (isset($_SESSION['msg'])) { ?>
-                        <div class="alert alert-danger" style="margin-top: 20px;">
+                        <div class="alert alert-info" style="margin-top: 20px;">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <center><?php
+                            <div class="text-center"><?php
                                 echo $_SESSION['msg'];
                                 unset($_SESSION['msg']);
-                                ?></center>
+                                ?></div>
                         </div>
                         <?php
                     }

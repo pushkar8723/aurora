@@ -16,7 +16,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 echo "<a class='btn btn-primary pull-right' style='margin-top: 10px;' href='" . SITE_URL . "/adminteam/$_GET[code]'><i class='icon-edit icon-white'></i> Edit</a>";
             }
             ?>
-            <center><h1><?php echo $teamname; ?></h1></center>
+            <div class="text-center page-header"><h1><?php echo $teamname; ?></h1></div>
             <table class='table table-bordered'>
                 <tr>
                     <th width='150px'>Team Members</th>
@@ -53,7 +53,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         ?></td>
                 </tr>
             </table>
-            <center><a href="<?php echo SITE_URL."/submissions/$_GET[code]"; ?>"><?php echo $_GET['code']."'s " ?>Submissions</a></center>
+            <div class="text-center"><a class="btn btn-default" href="<?php echo SITE_URL."/submissions/$_GET[code]"; ?>"><?php echo $_GET['code']."'s " ?>Submissions</a></div>
             <h3>Practice Problems Solved</h3>
             <div class='row'>
                 <?php

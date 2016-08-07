@@ -46,7 +46,7 @@ INSERT INTO `admin` (`variable`, `value`) VALUES
 ('starttime', '0'),
 ('port', '8723'),
 ('ip', '127.0.0.1'),
-('test', 'test');
+('currentContest', 'test');
 -- --------------------------------------------------------
 
 --
