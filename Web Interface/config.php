@@ -8,7 +8,7 @@ define("SQL_DB", "aurora_main");     	// Database name
 define("SQL_HOST", "127.0.0.1");        // Database host
 define("SQL_PORT", "3306");             // Database port
 displayErrors(FALSE);                   // Display PHP errors or not.
-
+date_default_timezone_set("Asia/Taipei"); //Set your timezone
 // Language specific variables 
 $brush = array("AWK" => "text", "Bash" =>"sh", "Brain" => "text","C" => "c", "C++" => "cpp", "C#" => "csharp", "Java" => "java", "Java", "JavaScript" => "js", "Pascal" => "pascal", "Perl" => "perl", "PHP" => "php", "Python" => "python", "Python3" => "python", "Ruby" => "ruby", "Text" => "text");
 $cmmode = "'C': 'text/x-csrc', 'C++': 'text/x-c++src', 'C#': 'text/x-csharp', 'Java': 'text/x-java', 'JavaScript': 'javascript', 'Pascal': 'text/x-pascal', 'Perl': 'text/x-perl', 'PHP': 'text/x-php', 'Python': 'text/x-python', 'Python3': 'text/x-python', 'Ruby': 'text/x-ruby'";
@@ -57,7 +57,5 @@ define("MAIL_PATH", "Mail.php");
 
 define("ERROR_LOG", dirname(__FILE__) . "/errors.txt");
 
-date_default_timezone_set("Asia/Kolkata");
-
 require_once 'functions.php';
-?>
+

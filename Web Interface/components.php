@@ -134,11 +134,11 @@ function contest_status() {
             var totaltime = <?php echo ($status['endtime'] - $status['starttime']); ?>;
             var countdown = <?php echo $status['endtime'] - time(); ?>;
             function step() {
-                if (countdown > 0) {
+                if (countdown >= 0) {
                     var currentPercent = (totaltime-countdown)/totaltime*100;
                     var attribute = currentPercent < 70 ? "success" : currentPercent < 90 ? "warning" : "danger"; //0-70% green, 70-90% orange, 90-100% red
-                    $("div#ajax-contest-time").html("<p>Time Elapsed</p><div class=\"progress\"><div class=\"progress-bar progress-bar-" + attribute + "\" role=\"progressbar\" aria-valuenow=\""+countdown+"\" aria-valuemin=\"0\" aria-valuemax=\""+totaltime+"\" style=\"width: "+ currentPercent +"%\"><span class=\"sr-only\">"+currentPercent+"% Elapsed</span></div></div>"+
-                        "<h2><span class=\"label label-info\">" + parseInt(countdown / 3600) + ":" + parseInt((countdown / 60)) % 60 + ":" + (countdown % 60)+"</span></h2>"
+                    $("div#ajax-contest-time").html("<div class=\"progress\"><div class=\"progress-bar progress-bar-" + attribute + "\" role=\"progressbar\" aria-valuenow=\""+countdown+"\" aria-valuemin=\"0\" aria-valuemax=\""+totaltime+"\" style=\"width: "+ currentPercent +"%\"><span class=\"sr-only\">"+currentPercent+"% Elapsed</span></div></div>"+
+                        "<h2><span class=\"label label-"+attribute+"\">" + parseInt(countdown / 3600) + ":" + parseInt((countdown / 60)) % 60 + ":" + (countdown % 60)+"</span></h2>"
                     );
                 } else {
                     $("div#ajax-contest-time").html();
@@ -248,4 +248,26 @@ function getCurrentContestRanking(){
 function errorMessageHTML($msg){
     return '<br /><div class="alert alert-danger" role="alert">'.$msg.'</div>';
 }
+
+function doCompetitionCheck(){
+    //Automates starting of planned contests
+    //No need for a cron job since nobody's gunna push code if they're not on the site anyways
+    $query = "select value from admin where variable = 'mode'";
+    $result = DB::findOneFromQuery($query);
+    if($result['value'] != 'Active' && $result['value'] != 'Lockdown') {
+        $curTime = time();
+        $query = "select endtime from contest where endtime >= $curTime and starttime<=$curTime";
+        $result = DB::findOneFromQuery($query);
+        if(isset($result['endtime'])) {
+            $admin = Array();
+            $admin['mode'] = 'Active';
+            $admin['endtime'] = $result['endtime'];
+            foreach ($admin as $key => $val) {
+                $query = "update admin set value = '$val' where variable = '$key'";
+                DB::query($query);
+            }
+        }
+    }
+}
+
 ?>

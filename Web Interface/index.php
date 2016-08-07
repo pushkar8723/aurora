@@ -11,6 +11,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
     $_SESSION['msg'] = "Judge is in Lockdown mode and so you have been logged out.";
     redirectTo(SITE_URL);
 }
+doCompetitionCheck(); //Activate competition when planned
 ?>
 <!DOCTYPE html>
 <html>
