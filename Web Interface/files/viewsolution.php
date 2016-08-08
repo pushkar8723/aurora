@@ -34,9 +34,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             if ($prob['status'] == 'Active' || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin' && $prob['contest'] == 'practice')) {
                 $btn = "<a class='btn btn-danger' href='" . SITE_URL . "/submit&edit=$res[rid]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
             }
+            $resAttr = array('AC' => 'success', 'RTE' => 'warning', 'WA' => 'danger', 'TLE' => 'warning', 'CE' => 'warning', 'DQ' => 'danger', 'PE' => 'info', '...' => 'default', '' => 'default'); //Defines label attributes
             echo "<h1>Solution<div class='pull-right btn-group'>$btn<a class='btn btn-danger' href='" . SITE_URL . "/process.php?rid=$res[rid]&file=code'><i class='glyphicon glyphicon-download'></i> Download</a></div></h1>
                 <table class='table'><tr><th>Run ID</th><th>Problem</th><th>Team Name</th><th>Result</th><th>Run time</th><th>Language</th><th>Submission Time</th></tr>
-                <tr><td>$res[rid]</td><td><a href='" . SITE_URL . "/problems/$prob[code]'>$prob[name]</a></td><td><a href='" . SITE_URL . "/teams/$prob[teamname]'>$prob[teamname]</a></td><td>$res[result]</td><td>$res[time]</td><td>$res[language]</td><td>" . date("d F Y, l, H:i:s", $res['submittime']) . "</td></tr>
+                <tr><td>$res[rid]</td><td><a href='" . SITE_URL . "/problems/$prob[code]'>$prob[name]</a></td><td><a href='" . SITE_URL . "/teams/$prob[teamname]'>$prob[teamname]</a></td><td><span class='label label-".$resAttr[$res['result']]."'>$res[result]</span></td><td>$res[time]</td><td>$res[language]</td><td>" . date("d F Y, l, H:i:s", $res['submittime']) . "</td></tr>
                 </table>";
             if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 ?>

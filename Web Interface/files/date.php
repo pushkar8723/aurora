@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var_dump(doCompetitionCheck());
+//var_dump(doCompetitionCheck());
 $date = new DateTime('08-08-2016 00:00:00');
 $startdate = $date->getTimestamp();
 echo $startdate;
