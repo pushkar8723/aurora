@@ -95,7 +95,7 @@ def execute(exename,language, timelimit):
 	inputfile = " <env/input.txt 1>env/output.txt 2>env/error.txt"
 	if language == "Java" and not(os.path.exists("env/"+exename+".class")): 
 			exename = "main/"+exename
-	cmd = 'su judge -c \"'+langarr[language]["execute"]+"; exit;\""
+	cmd = 'ulimit -p 100; su judge -c \"'+langarr[language]["execute"]+"; exit;\""
 	cmd = cmd.replace("[exename]", exename)
 	cmd = cmd.replace("[inputfile]", inputfile)
 
