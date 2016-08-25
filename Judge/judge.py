@@ -115,7 +115,7 @@ def execute(exename,language, timelimit):
 	timediff = endtime - starttime
 	
 	os.system("chmod 750 .")
-	os.system("killall -u judge")
+	os.system("pkill -u judge")
 	print("Return Code : "+str(t))
 	return t
 
