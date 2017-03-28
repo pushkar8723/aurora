@@ -12,7 +12,10 @@
 initjail() {
 	echo "deb :MIRROR: :SUITE: main universe" > "/etc/apt/sources.list"
 	apt-get update
-	apt-get install bf bc g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python3 rhino ruby psmisc python3-pip
+	locale-gen en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
+	dpkg-reconfigure locales
+	apt-get install bf bc g++ fpc mono-complete mono-mcs openjdk-8-jdk perl php python python3 rhino ruby psmisc python3-pip
+	ln -s /usr/bin/mcs /usr/bin/gmcs
 	pip3 install pymysql || {
 		printf "\n\n\e[1;31mERROR:\e[0m  You need to install pymysql for python3 manually!"
 	}
@@ -26,8 +29,6 @@ initjail() {
 	chown judge env
 	chgrp judge env
 	chmod 600 judge.py
-	locale-gen en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
-	dpkg-reconfigure locales
 }
 
 ################# Script to start Judge #################
@@ -79,10 +80,10 @@ fi
 
 ## Suite (Default is raring)
 
-printf "\n\nEnter Suite name\nEXAMPLE : precise for 12.04, raring for 13.04\nResponse [raring] : ";
+printf "\n\nEnter Suite name\nEXAMPLE : xenial for 16.04\nResponse [xenial] : ";
 read SUITE;
 if [ "$SUITE" = "" ]; then
-	SUITE="raring";
+	SUITE="xenial";
 fi
 
 ## Target path

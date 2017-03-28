@@ -1,4 +1,4 @@
-Judge Setup (Arch Linux / Debian)
+Judge Setup (Arch Linux / Ubuntu)
 =================================
 
 Judge is basically a python script which compiles, execute and test the generated output file for its correctness. It executes various system commands and after evaluation updates the database.
@@ -10,7 +10,7 @@ Since, executing someone else's code can be a security threat. There two options
 Jail Setup
 ----------
 
-The steps to configure a system is bit different for each flavour of linux. I have writen bash script (arch_setup.sh and debian_setup.sh for arch and debian system respectively) to automate the process of installation of jail but they are not tested throughly and may fail. So it is recommended to setup jail manually.
+The steps to configure a system is bit different for each flavour of linux. I have writen bash script (arch_setup.sh and ubuntu_setup.sh for arch and ubuntu system respectively) to automate the process of installation of jail but they are not tested throughly and may fail. So it is recommended to setup jail manually.
 
 #### Arch specific steps
 
@@ -43,9 +43,9 @@ Since judge depends on psmisc package and requires pymysql for db interaction, f
 # pip install pymysql
 ```
 
-#### Debian specific steps
+#### Ubuntu specific steps
 
-In debian system 'debootstrap' is requried to setup base file system. Install it using
+In Ubuntu system 'debootstrap' is requried to setup base file system. Install it using
 ```
 # apt-get install debootstrap
 ```
@@ -59,20 +59,21 @@ Once this is done, enter inside the jail and setup all the compilers and interpr
 # chroot /path/to/chroot
 # echo "deb http://archive.ubuntu.com/ubuntu raring main universe" > "/etc/apt/sources.list"
 # apt-get update
-# apt-get install bf bc g++ fpc mono-gmcs openjdk-6-jdk perl php5 python python3 rhino ruby
-```
-Since judge depends on psmisc package and requires pymysql for db interaction, following are also required to be installed.
-```
-# apt-get install psmisc python3-pip
-# pip3 install pymysql
+# apt-get install bf bc g++ fpc mono-complete mono-mcs openjdk-8-jdk perl php python python3 rhino ruby
+# ln -s /usr/bin/mcs /usr/bin/gmcs
 ```
 You also need to configure perl
 ```
 # locale-gen en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
 # dpkg-reconfigure locales
 ```
+Since judge depends on psmisc package and requires pymysql for db interaction, following are also required to be installed.
+```
+# apt-get install psmisc python3-pip
+# pip3 install pymysql
+```
 
-#### Steps common to both arch and debian system
+#### Steps common to both Arch and Ubuntu system
 
 Finally create user 'judge' and change permission of directories to ensure security.
 ```
