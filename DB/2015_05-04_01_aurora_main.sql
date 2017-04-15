@@ -45,8 +45,7 @@ INSERT INTO `admin` (`variable`, `value`) VALUES
 ('endtime', '0'),
 ('starttime', '0'),
 ('port', '8723'),
-('ip', '127.0.0.1'),
-('currentContest', 'test');
+('ip', '127.0.0.1');
 -- --------------------------------------------------------
 
 --
@@ -142,8 +141,6 @@ CREATE TABLE IF NOT EXISTS `problems` (
   `statement` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `image` longblob,
   `imgext` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `sampleinput` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  `sampleoutput` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `input` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `output` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `timelimit` float DEFAULT NULL,

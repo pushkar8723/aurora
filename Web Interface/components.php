@@ -254,7 +254,7 @@ function doCompetitionCheck(){
     //No need for a cron job since nobody's gunna push code if they're not on the site anyways
     $query = "select value from admin where variable = 'mode'";
     $result = DB::findOneFromQuery($query);
-    if($result['value'] != 'Active' && $result['value'] != 'Lockdown') {
+    if($result['value'] == 'Passive') {
         $curTime = time();
         $query = "select endtime from contest where endtime >= $curTime and starttime<=$curTime";
         $result = DB::findOneFromQuery($query);

@@ -27,7 +27,8 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo "<div class='contestheader'><h1 class='text-center'>$contest[name]</h1><div id='contesttimer'><h4>Starts in: N/A</h4></div></div>";
             if (isset($contest['starttime'])|| (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
                 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-                     echo "<a class='btn btn-default pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/preparecontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i>Prepare Contest</a>";
+                    if ($contest['starttime'] > time())
+                        echo "<a class='btn btn-default pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/preparecontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i>Prepare Contest</a>";
                     $query = "select * from problems where pgroup = '$_GET[code]' order by code";
                     echo "<a class='btn btn-default pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
                 } else {
