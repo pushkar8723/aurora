@@ -15,7 +15,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                 });
             });
         </script>
-        <h1>Team Settings - <?php echo $_GET['code']; ?></h1>
+        <div class="text-center page-header"><h1>Team Settings - <?php echo $_GET['code']; ?></h1></div>
         <form method='post' class='form-horizontal' action='<?php echo SITE_URL; ?>/process.php'>
             <input type="hidden" value="<?php echo $res['tid']; ?>" name="tid" />
             <div class='form-group'>
@@ -130,7 +130,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     } else {
         $query = "select tid, teamname, gid, status from teams";
         $res = DB::findAllFromQuery($query);
-        echo "<h3>List of Teams</h3><table class='table table-hover'><tr><th>ID</th><th>Name</th><th>Group ID</th><th>Status</th><th>Options</th></tr>";
+        echo "<div class='text-center page-header'><h1>List of Teams</h1></div><table class='table table-hover'><thead><tr><th>ID</th><th>Name</th><th>Group ID</th><th>Status</th><th>Options</th></tr></thead>";
         foreach ($res as $row) {
             echo "<tr><td>$row[tid]</td><td>$row[teamname]</td><td>$row[gid]</td><td>$row[status]</td><td><a class='btn btn-primary' href='" . SITE_URL . "/adminteam/$row[teamname]'><i class='glyphicon glyphicon-edit'></i> Edit</a></td></tr>";
         }

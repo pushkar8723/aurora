@@ -18,18 +18,18 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         ctime--;
                         window.setTimeout("timer();", 1000);
                     } else {
-                        $("div#contesttimer").html("<h4>Starts in: NA</h4>");
+                        $("div#contesttimer").html("<h4>Starts in: N/A</h4>");
                     }
                 }
                 timer();
             </script>
             <?php
-            echo "<div class='contestheader'><center><h1>$contest[name]</h1></center><div id='contesttimer'><h4>Starts in:</h4></div></div>";
+            echo "<div class='contestheader'><h1 class='text-center'>$contest[name]</h1><div id='contesttimer'><h4>Starts in: N/A</h4></div></div>";
             if (isset($contest['starttime'])|| (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
                 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-                     echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/preparecontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i>Prepare Contest</a>";
+                     echo "<a class='btn btn-default pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/preparecontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i>Prepare Contest</a>";
                     $query = "select * from problems where pgroup = '$_GET[code]' order by code";
-                    echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
+                    echo "<a class='btn btn-default pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
                 } else {
                     $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted' order by code";
                 }
@@ -37,7 +37,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $query = "";
             }
             $prob = DB::findAllFromQuery($query);
-            echo "<table class='table table-hover'><tr><th>Name</th><th>Score</th><th>Code</th><th>Submissions</th></tr>";
+            echo "<table class='table table-hover'><thead><tr><th>Name</th><th>Score</th><th>Code</th><th>Submissions</th></tr></thead>";
             if ($prob) {
 				foreach ($prob as $row) {
                 	echo "<tr><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[score]</a></td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td></tr>";
@@ -48,11 +48,11 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo "<br/><br/><br/><div style='padding: 10px;'><h1>Contest not Found :(</h1>The contest you are looking for is not found. Are you on the wrong website?</div><br/><br/><br/>";
         }
     } else {
-        echo "<center><h1>Contests</h1></center>";
+        echo "<div class='text-center page-header'><h1>Contests</h1></div>";
         $query = "select * from contest order by starttime desc";
         $result = DB::findAllFromQuery($query);
         echo "<table class='table table-hover'>
-            <tr><th>Code</th><th>Name</th><th>Start Time</th><th>End Time</th></tr>";
+            <thead><tr><th>Code</th><th>Name</th><th>Start Time</th><th>End Time</th></tr></thead>";
         foreach ($result as $row) {
             echo "<tr><td><a href='" . SITE_URL . "/contests/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/contests/$row[code]'>$row[name]</a></td><td><a href='" . SITE_URL . "/contests/$row[code]'>" . date("d-M-Y, h:i:s a", $row['starttime']) . "</a></td><td><a href='" . SITE_URL . "/contests/$row[code]'>" . date("d-M-Y, h:i:s a", $row['endtime']) . "</a></td></tr>";
         }

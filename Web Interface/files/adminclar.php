@@ -22,10 +22,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
             <li " . (($tab == 'pending') ? ("class='active'") : ("")) . "><a href='" . SITE_URL . "/adminclar&group=pending'>Pending</a></li>
             <li " . (($tab == 'replied') ? ("class='active'") : ("")) . "><a href='" . SITE_URL . "/adminclar&group=replied'>Replied</a></li>
             <li " . (($tab == 'deleted') ? ("class='active'") : ("")) . "><a href='" . SITE_URL . "/adminclar&group=deleted'>Deleted</a></li>
-        </ul>";
+        </ul>
+        <br/>
+        <div class='panel panel-default'><div class='panel-body'>";
     $data = DB::findAllWithCount("select * ", $query, $page, 10);
     $result = $data['data'];
-    foreach ($result as $row) {
+    foreach ($result as $key => $row) {
         $save = $row['reply'];
         $row['query'] = preg_replace("/\n/", "<br>", $row['query']);
         $row['reply'] = preg_replace("/\n/", "<br>", $row['reply']);
@@ -39,18 +41,20 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
             $prob['name'] = 'Feedback';
             $prob['code'] = 'contact';
         }
-        echo "<a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a> (<a href='" . SITE_URL . "/$prob[code]'>$prob[name]</a>):<br/>
-                <b>Q. ".htmlspecialchars($row[query])."</b><br/>";
+        if($key!=0) echo "<hr/>";
+        echo "<b><a href='" . SITE_URL . "/teams/$team[teamname]'>$team[teamname]</a> (<a href='" . SITE_URL . "/$prob[code]'>$prob[name]</a>):<br/>
+                Q. ".htmlspecialchars($row[query])."</b><br/>";
         if ($row['reply'] != "") {
             echo "A. ". htmlspecialchars($row[reply]) . "<br/><br/>";
         }
-        echo "<form class='form-inline' role='form' method='post' action='" . SITE_URL . "/process.php'>";
-        echo "<div class='form-group'>Access:</div><div class='form-group'><select class='form-control'  name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select></div><br/><br/>";
-        echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
-<textarea class='form-control' name='reply' style='width: 450px; height: 100px;'>$save</textarea><br/><br/>
-<input type='submit' class='btn btn-primary' name='clarreply' value='Reply / Change Reply'/>
-</form><hr/>";
+        echo "<form role='form' method='post' action='" . SITE_URL . "/process.php'>";
+       echo "<input type='hidden' name='tid' value='$row[tid]' /><input type='hidden' name='pid' value='$row[pid]' /><input type='hidden' name='time' value='$row[time]' />
+<textarea class='form-control' name='reply' placeholder='Enter response...'>$save</textarea><br/>
+<div class='form-inline'><select class='form-control'  name='access'><option value='public' " . (($row['access'] == "public") ? ("selected='selected' ") : ("")) . ">Public</option><option value='deleted' " . (($row['access'] == "deleted") ? ("selected='selected' ") : ("")) . ">Deleted</option></select>  <input type='submit' class='btn btn-success' name='clarreply' value='Reply / Change Reply'/></div>
+
+</form>";
     }
+    echo "</div></div>";
     pagination($data['noofpages'], SITE_URL . "/adminclar"."&group=$tab", $page, 10);
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";

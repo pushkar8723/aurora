@@ -29,7 +29,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
 
         function validate(){
                 
-                var regex = /[A-Z]{2,6}[/][0-9]{4,5}[/]201[1-4]$/;
+                var regex = /[A-Z]{2,6}[/][0-9]{4,5}[/]201[1-8]$/;
                 //console.log('A'.match(regex));
                 var roll1 = document.getElementById("roll1").value;
                 var m = regex.exec(roll1);

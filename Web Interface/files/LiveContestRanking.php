@@ -1,12 +1,12 @@
 <?php
 /** @author: utk
  */
-include_once '../functions.php';
+include_once(dirname(__FILE__) . '/../functions.php');
 include_once 'SSE_Util.php';
 
 function liveContestRanking($contestCode, $limit) {
 	$query = "SELECT ranktable FROM contest WHERE code = '$contestCode'";
-	$table = '<table class="table table-striped table-bordered table-condensed">' ;
+	$table = '<table class="table table-hover">' ;
 	$result = DB::findOneFromQuery($query);
 	$rankTable = json_decode($result['ranktable'], true);
 	$rank = 1;

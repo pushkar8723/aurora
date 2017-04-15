@@ -2,7 +2,7 @@
 
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     ?>
-    <center><h1>Rankings</h1></center>
+    <div class='page-header text-center'><h1>Rankings</h1></div>
     <?php
     if(isset($_GET['code'])){
         $tab = addslashes($_GET['code']);
@@ -44,7 +44,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
 //    $res = DB::findAllFromQuery($query);
 //    foreach ($res as $row)
 //        $tot[$row['tid']] = $row['count'];
-    echo "<table class='table table-hover'><tr><th>Rank</th><th>Team Name</th><th>Team Group</th><th>Score</th></tr>";
+    echo "<table class='table table-hover'><thead><tr><th>Rank</th><th>Team Name</th><th>Team Group</th><th>Score</th></tr></thead>";
     foreach ($data as $row) {
         //$subs = ((isset($ac[$row['tid']])) ? ($ac[$row['tid']]) : ("0")) . "/" . ((isset($tot[$row['tid']])) ? ($tot[$row['tid']]) : ("0"));<td>$subs</td>
         echo "<tr><td>" . $i++ . "</td><td><a href='" . SITE_URL . "/teams/$row[teamname]'>$row[teamname]</a></td><td>" . $group[$row['gid']] . "</td><td>$row[score]</td></tr>";

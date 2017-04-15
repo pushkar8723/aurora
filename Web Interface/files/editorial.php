@@ -19,7 +19,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                echo "<br/><br/><br/><div style='padding: 10px;'><h1>Editorial not Found :(</h1>The editorial you are looking for doesn't exsits.</div><br/><br/><br/>";
             }else{
                 $content = stripslashes($contentRes["content"]);
-                echo "<center><h1>$result[name] - Editorial</h1></center><div class='btn-group'><a class='btn btn-primary' href='" . SITE_URL . "/problems/$result[code]'>Problem</a></div>
+                echo "<div class='text-center page-header'><h1>$result[name] - Editorial</h1></div><div class='btn-group'><a class='btn btn-default' href='" . SITE_URL . "/problems/$result[code]'>Problem</a></div>
             <br/><br/>" . $content . "<br/>";
             }
         }

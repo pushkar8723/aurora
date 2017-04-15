@@ -24,14 +24,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         <div class='form-group'>
             <label class='control-label col-lg-2'></label>
             <div class='col-md-4'>
-                <input type='submit' class='btn btn-primary' name='addbmsg' value='Send' />
+                <input type='submit' class='btn btn-default' name='addbmsg' value='Send' />
             </div>
         </div>
     </div>
 </form>
 <h4>Messages</h4>
 <table class='table table-hover'>
-    <tr><th>Title</th><th>Message</th><th>Delete</th></tr>    
+    <thead><tr><th>Title</th><th>Message</th><th>Delete</th></tr></thead>
 <?php
     $query = "select * from broadcast where deleted = 0";
     $result = DB::findAllFromQuery($query);

@@ -1,14 +1,14 @@
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-    echo "<h1>Groups Settings</h1>
+    echo "<div class=\"page-header text-center\"><h1>Groups Settings</h1></div>
         <form method='post' action='".SITE_URL."/process.php'>
         <div class='col-lg-3'><input class='form-control' type='text' name='groupname' /></div>
-        <input class='btn btn-primary' type='submit' name='addgroup' value='Add Group' />
+        <input class='btn btn-default' type='submit' name='addgroup' value='Add Group' />
         </form>";
     $query = "select * from groups";
     $result = DB::findAllFromQuery($query);
-    echo "<h3>List of Groups</h3>
-        <table class='table table-hover'><tr><th>Name</th><th>Option</th></tr>";
+    echo "<h3 class='text-center'>List of Groups</h3>
+        <table class='table table-hover'><thead><tr><th>Name</th><th>Actions</th></tr></thead>";
     foreach ($result as $row){
         echo "<tr>
             <td>
