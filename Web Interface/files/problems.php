@@ -41,18 +41,18 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         "</span>";
             }
             echo "<span class='btn-group' style='float:right;'>" . ((isset($_SESSION['loggedin'])) ? ("<a class='btn btn-default' href='" . SITE_URL . "/status/$_GET[code]," . $_SESSION['team']['name'] . "'>My Submissions</a>") : ("")) . "<a class='btn btn-default' href='" . SITE_URL . "/status/$_GET[code]'>All Submissions</a></span></div>
-            <br/><br/>" . $statement . "<br/>";
+            <br/><br/>" . $statement . "<br/><br/>";
             if ($result[sampleinput] && $result[sampleoutput]) {
                 echo "<div class='row'>
                     <div class='col-md-6' style='overflow-x: auto;'><h4>Sample Input</h4><div class='limit'><pre class='brush: text'>$result[sampleinput]</pre></div></div>
                     <div class='col-md-6' style='overflow-x: auto;'><h4>Sample Output</h4><div class='limit'><pre class='brush: text'>$result[sampleoutput]</pre></div></div>
                 </div>";
             }
-            echo "<div class='row'>
+            echo "<strong>Languages: </strong>$result[languages]<br/><br/>
+                <div class='row'>
                 <div class='col-md-4'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
-                            <strong>Problem ID: </strong>$result[code]<br/>
                             <strong>Time Limit: </strong>$result[timelimit] Second(s)<br/>
                             <strong>Score: </strong>$result[score] Point(s)<br/>
                             <strong>Input File Limit: </strong>$result[maxfilesize] Bytes<br/><br/>
