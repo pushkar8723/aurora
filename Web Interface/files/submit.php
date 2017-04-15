@@ -53,7 +53,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                             <td>
                                 <select class="form-control" id='lang' name='lang'>
                                     <?php
-                                    $lang = split(',', $prob['languages']);
+                                    $lang = explode(',', $prob['languages']);
                                     foreach ($lang as $row) {
                                         if ($row == 'Brain')
                                             echo "<option value='$row'".((isset ($_GET['edit']) && $row == $runs['language'])?"selected='selected'":"").">Brainf**k</option>";

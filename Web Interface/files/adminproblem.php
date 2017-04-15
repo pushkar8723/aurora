@@ -125,7 +125,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                                                 str += ((str != '') ? ',' : '') + this.options[i].value;
                                         document.getElementById('languages').value = str;" multiple='multiple' >
                                     <?php
-                                    $language = split(',', $res[languages]);
+                                    $language = explode(',', $res[languages]);
                                     foreach($valtoname as $key => $value)
                                         echo "<option value='$key' ".((in_array($key, $language)?("selected='selected'"):(""))).">$value</option>";
                                     ?>
