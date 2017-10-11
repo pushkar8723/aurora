@@ -14,7 +14,20 @@ Aurora is divided into two parts
 2. Python scripts which compiles, executes and tests the correctiveness of the solution.
 
 Both these components communicates with each other and interacts with the database. 
-Setup guidelines can be found inside each of these components.
+Setup guidelines can be found inside each of these components or you can also refer to our [Setup Guide](https://github.com/pushkar8723/Aurora/wiki/Setup-Guide).
+
+Having issue with Aurora?
+-------------------------
+
+See if our [FAQ Page](https://github.com/pushkar8723/Aurora/wiki/FAQ) has solution to your problem.
+
+If not then raise an issue [here](https://github.com/pushkar8723/Aurora/issues). I will try my best to solve it as soon as possible (no promises though).
+
+Want to contribute?
+-------------------
+
+Just create a PR on a seprate branch with appropriate name and describe the changes thoroughly.
+Also make sure you have full ownership of the code you submit.
 
 Acknowledgement
 ---------------
