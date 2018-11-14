@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:5
+    volumes:
+      - ./DB:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=aurora
+
+  web:
+    build: ./Web Interface
+    image: pushkar8723/aurora-web
+    ports:
+      - 80:80
+    environment:
+      - AURORA_SQL_USER=root
+      - AURORA_SQL_PASS=aurora
+      - AURORA_SQL_DB=aurora_main
+      - AURORA_SQL_HOST=mysql
+    volumes:
+      - ./conf:/etc/apache2/sites-enabled
+
+  judge:
+    build: ./Judge
+    image: pushkar8723/aurora-judge
+    ports:
+      - 8723:8723
+    environment:
+      - AURORA_SQL_HOSTNAME=mysql
+      - AURORA_SQL_USERNAME=root
+      - AURORA_SQL_PASSWORD=aurora
+      - AURORA_SQL_DATABASE=aurora_main

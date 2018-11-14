@@ -10,13 +10,17 @@ if "-judge" not in sys.argv:
 	sys.exit(0);
 
 timeoffset = 0
+
+def getEnv(key, default):
+	return os.environ[key] if key in os.environ else default
+
 # Initialize Database and judge Constants
-sql_hostname = '127.0.0.1'
-sql_hostport = 3306
-sql_username = 'aurora'
-sql_password = 'aurora'
-sql_database = 'aurora_main'
-HOST, PORT = "127.0.0.1", 8723
+sql_hostname = getEnv('AURORA_SQL_HOSTNAME', '127.0.0.1')
+sql_hostport = getEnv('AURORA_SQL_HOSTPORT', 3306)
+sql_username = getEnv('AURORA_SQL_USERNAME', 'aurora')
+sql_password = getEnv('AURORA_SQL_PASSWORD', 'aurora')
+sql_database = getEnv('AURORA_SQL_DATABASE', 'aurora_main')
+HOST, PORT = "0.0.0.0", 8723
 #timeoffset = 19800
 
 # Initialize Language Constants
@@ -31,7 +35,7 @@ langarr = {
 "Brain" : {"extension": "b", "system":"find /usr/bin/ -name bf", "execute":"bf env/[exename].b[inputfile]"},
 "C" : {"extension":"c", "system":"find /usr/bin/ -name cc", "compile":"cc env/[codefilename].c -O2 -fomit-frame-pointer -o env/[codefilename] -lm"+ioeredirect, "execute":"env/[exename][inputfile]"},
 "C++": {"extension": "cpp", "system": "find /usr/bin/ -name g++", "compile": "g++ env/[codefilename].cpp -O2 -fomit-frame-pointer -o env/[codefilename]"+ioeredirect, "execute": "env/[exename][inputfile]"},
-"C#" : {"extension": "cs", "system":"find /usr/bin/ -name gmcs", "compile":"gmcs env/[codefilename].cs -out:env/[codefilename].exe"+ioeredirect, "execute":"mono env/[exename].exe[inputfile]"},
+"C#" : {"extension": "cs", "system":"find /usr/bin/ -name mcs", "compile":"mcs env/[codefilename].cs -out:env/[codefilename].exe"+ioeredirect, "execute":"mono env/[exename].exe[inputfile]"},
 "Java" : {"extension" : "java", "system":"find /usr/bin/ -name javac", "compile":"javac -g:none -Xlint -d env env/[codefilename].java"+ioeredirect, "execute":"java -client -classpath env [exename][inputfile]"},
 "JavaScript": {"extension":"js", "system": "find /usr/bin/ -name rhino", "execute":"rhino -f env/[exename].js[inputfile]"},
 "Pascal": {"extension":"pas", "system":"find /usr/bin/ -name fpc", "compile":"fpc env/[codefilename].pas -O2 -oenv/[codefilename]"+ioeredirect, "execute":"env/[exename][inputfile]"},

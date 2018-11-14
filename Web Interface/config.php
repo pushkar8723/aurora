@@ -1,11 +1,15 @@
 <?php
+function getEnvVar($key, $default) {
+  return getenv($key) ? getenv($key) : $default;
+}
+
 // Change the following parameters according to the instructions beside them
-define("SITE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/aurora");      // path to directory
-define("SQL_USER", "aurora");           // Database username    
-define("SQL_PASS", "aurora");           // Database password
-define("SQL_DB", "aurora_main");        // Database name
-define("SQL_HOST", "127.0.0.1");        // Database host
-define("SQL_PORT", "3306");             // Database port
+define("SITE_URL", "http://" . $_SERVER['HTTP_HOST']);      // path to directory
+define("SQL_USER", getEnvVar("AURORA_SQL_USER", "aurora"));                // Database username    
+define("SQL_PASS", getEnvVar("AURORA_SQL_PASS", "aurora"));                // Database password
+define("SQL_DB", getEnvVar("AURORA_SQL_DB", "aurora_main"));               // Database name
+define("SQL_HOST", getEnvVar("AURORA_SQL_HOST", "127.0.0.1"));             // Database host
+define("SQL_PORT", getEnvVar("AURORA_SQL_PORT", "3306"));                  // Database port
 displayErrors(FALSE);                   // Display PHP errors or not.
 date_default_timezone_set("Asia/Kolkata"); //Set your timezone, resolves most timer errors
 // Language specific variables 
@@ -20,10 +24,9 @@ $valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "b", "C" => "c", "C++" 
  * 
  * 
  */
-
-session_start();
-session_set_cookie_params (0, substr(SITE_URL, strlen("http://" . $_SERVER['HTTP_HOST'])));
 ini_set("session.gc_maxlifetime", 86400);
+session_set_cookie_params (0, substr(SITE_URL, strlen("http://" . $_SERVER['HTTP_HOST'])));
+session_start();
 function displayErrors($option = true) {
   if ($option) {
     error_reporting(E_ALL | E_STRICT);

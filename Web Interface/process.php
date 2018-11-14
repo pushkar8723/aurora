@@ -24,13 +24,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $_POST['teamname'] = addslashes($_POST['teamname']);
             $_POST['password'] = customhash(addslashes($_POST['password']));
             $query = "select * from teams where teamname  = '$_POST[teamname]' and pass = '$_POST[password]'";
-            echo $query;
             $res = DB::findOneFromQuery($query);
             if ($res && ($res['status'] == 'Normal' || $res['status'] == 'Admin')) {
                 $save = $_SESSION;
-                session_destroy();
                 session_regenerate_id(true);
-                session_start();
                 $_SESSION = $save;
                 $_SESSION['team']['id'] = $res['tid'];
                 $_SESSION['team']['name'] = $res['teamname'];
