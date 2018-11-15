@@ -132,15 +132,6 @@ if(platform.system()!='Linux'):
 os.system("clear")
 print("\nArgus Online Judge : Execution Protocol\n");
 
-# Obtain lock
-if(os.path.exists("lock.txt")):
-	print("Error : Could not obtain lock on Execution Protocol\n")
-	print("This problem usually occurs if you are trying to run two instances of this script on the same machine at the same time. However, if this is not the case, the solution to this problem would be to shut down all instances of this script, manually delete the 'lock.txt' file (which shall be in the same directory as this) and restart a single instance of it. The latter is usually due to an improper termination the last time this was run, or an error in the script itself.\n");
-	sys.exit(1);
-else:
-	lock = open("lock.txt","w");
-	print("Obtained lock on Execution Protocol\n");
-
 # System Check
 system()
 if len(languages)==0:
