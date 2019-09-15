@@ -1,9 +1,9 @@
 Aurora v2
 =========
 
-Aurora is an open source OJ inspired by SPOJ. Derived from its initial version [Aurora-Online-Judge](https://github.com/kaustubh-karkare/aurora-online-judge). This version improves exsisting features by removing many redundant procedures, using sockets, easy load distribution and also increases security, scalibily to meet the need of a small scale organization.
-Its web interface is redesigned from scratch to make it look more SPOJ like so that users find it to comfortable to adjust and can also serve as a platform for practice as well as compete with other teams. Few features were added so that the administrators find it easy to handle.
-It is designed to meet the requirement specific to CQM matches hosted at BIT Mesra but most of its components can be easily changed to meet requirement of any other organisation.
+Aurora is an open source OJ inspired by SPOJ. Derived from its initial version [Aurora-Online-Judge](https://github.com/kaustubh-karkare/aurora-online-judge). This version improves the exsisting features by removing many redundant procedures, using sockets, easy load distribution, increases security and scalibily to meet the need of a small scale organization.
+Its web interface is redesigned from scratch to make it look more SPOJ like. So that users find it to comfortable to adjust. It can also serve as a platform to practice as well as compete with other teams. Few features were added so that the administrators find it easy to handle.
+It is designed to meet the requirement specific to CQM matches hosted at BIT Mesra, but most of its components can be easily changed to meet requirement of any other organisation.
 
 Setup Judge
 -----------
@@ -11,17 +11,18 @@ Setup Judge
 Aurora is divided into two parts
 
 1. Web Interface
-2. Python scripts which compiles, executes and tests the correctiveness of the solution.
+2. Judge written in python, which compiles, executes and tests the correctiveness of the solution.
 
 Both these components communicates with each other and interacts with the database. 
-Setup guidelines can be found inside each of these components or you can also refer to our [Setup Guide](https://github.com/pushkar8723/Aurora/wiki/Setup-Guide).
+Images for both of these components are available [here](https://github.com/pushkar8723/aurora/packages).
+[Docker Compose file for reference](https://github.com/pushkar8723/aurora/blob/master/docker-compose.yml)
 
 Having issue with Aurora?
 -------------------------
 
 See if our [FAQ Page](https://github.com/pushkar8723/Aurora/wiki/FAQ) has solution to your problem.
 
-If not then raise an issue [here](https://github.com/pushkar8723/Aurora/issues). I will try my best to solve it as soon as possible (no promises though).
+Still have problems? Then raise an issue [here](https://github.com/pushkar8723/Aurora/issues). I will try my best to solve it as soon as possible (no promises though).
 
 Want to contribute?
 -------------------

@@ -12,7 +12,7 @@ services:
 
   web:
     build: ./Web Interface
-    image: pushkar8723/aurora-web
+    image: docker.pkg.github.com/pushkar8723/aurora/web
     ports:
       - 80:80
     environment:
@@ -25,7 +25,7 @@ services:
 
   judge:
     build: ./Judge
-    image: pushkar8723/aurora-judge
+    image: docker.pkg.github.com/pushkar8723/aurora/judge
     ports:
       - 8723:8723
     environment:
