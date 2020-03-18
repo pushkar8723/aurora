@@ -1,10 +1,10 @@
-name: Docker
+name: Judge Docker
 
 on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
-      - gh-action-setup
+      - master
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -40,7 +40,7 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "gh-action-setup" ] && VERSION=latest
+          [ "$VERSION" == "master" ] && VERSION=latest
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
