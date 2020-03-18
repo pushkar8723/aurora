@@ -15,13 +15,16 @@ jobs:
     - name: Build the Docker image
       run: docker-compose build
 
+    - name: Log into registry
+      run: echo "${{ secrets.GH_ACTION_DOCKER_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
     - name: Push image
       run: |
         JUDGE_IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/judge
         WEB_IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/web
 
         # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        VERSION=$(echo "${{ github.head_ref }}" | sed -e 's,.*/\(.*\),\1,')
 
         echo JUDGE_IMAGE_ID=$JUDGE_IMAGE_ID
         echo WEB_IMAGE_ID=$WEB_IMAGE_ID
