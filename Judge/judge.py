@@ -24,7 +24,7 @@ def getEnv(key, default):
 def getDockerSecretValue(key, fallback):
 	file = getEnv(key, None)
 	if file and os.path.exists(file):
-		return file_read(file)
+		return file_read(file).strip()
 	else:
 		return fallback
 

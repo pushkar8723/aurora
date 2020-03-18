@@ -15,7 +15,7 @@ function getEnvVar($key, $default) {
 function getDockerSecretValue($key, $fallbackValue) {
   $file = getEnvVar($key, null);
   if ($file && file_exists($file)) {
-    return file_get_contents($file);
+    return trim(file_get_contents($file));
   } else {
     return $fallbackValue;
   }
