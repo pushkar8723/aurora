@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build ./Judge --tag judge
+        run: docker build ./Judge --tag $IMAGE_NAME
 
       - name: Log into registry
         run: echo "${{ secrets.GH_ACTION_DOCKER_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -40,10 +40,10 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+          [ "$VERSION" == "gh-action-setup" ] && VERSION=latest
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag image $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
