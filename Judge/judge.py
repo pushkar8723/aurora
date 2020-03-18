@@ -11,15 +11,29 @@ if "-judge" not in sys.argv:
 
 timeoffset = 0
 
+# File Read/Write Functions
+def file_read(filename):
+	if not os.path.exists(filename): return "";
+	f = codecs.open(filename,"r","utf-8"); d = f.read(); f.close(); return d.replace("\r","")
+def file_write(filename,data):
+	f = codecs.open(filename,"w","utf-8"); f.write(data.replace("\r","")); f.close();
+
 def getEnv(key, default):
 	return os.environ[key] if key in os.environ else default
 
+def getDockerSecretValue(key, fallback):
+	file = getEnv(key, None)
+	if file and os.path.exists(file):
+		return file_read(file)
+	else:
+		return fallback
+
 # Initialize Database and judge Constants
-sql_hostname = getEnv('AURORA_SQL_HOSTNAME', '127.0.0.1')
-sql_hostport = getEnv('AURORA_SQL_HOSTPORT', 3306)
-sql_username = getEnv('AURORA_SQL_USERNAME', 'aurora')
-sql_password = getEnv('AURORA_SQL_PASSWORD', 'aurora')
-sql_database = getEnv('AURORA_SQL_DATABASE', 'aurora_main')
+sql_hostname = getDockerSecretValue('AURORA_SQL_HOSTNAME_FILE', getEnv('AURORA_SQL_HOSTNAME', '127.0.0.1'))
+sql_hostport = getDockerSecretValue('AURORA_SQL_HOSTPORT_FILE', getEnv('AURORA_SQL_HOSTPORT', 3306))
+sql_username = getDockerSecretValue('AURORA_SQL_USERNAME_FILE', getEnv('AURORA_SQL_USERNAME', 'aurora'))
+sql_password = getDockerSecretValue('AURORA_SQL_PASSWORD_FILE', getEnv('AURORA_SQL_PASSWORD', 'aurora'))
+sql_database = getDockerSecretValue('AURORA_SQL_DATABASE_FILE', getEnv('AURORA_SQL_DATABASE', 'aurora_main'))
 HOST, PORT = "0.0.0.0", 8723
 #timeoffset = 19800
 
@@ -53,13 +67,6 @@ running = 0
 mypid = int(os.getpid())
 timediff = 0
 languages = []
-
-# File Read/Write Functions
-def file_read(filename):
-	if not os.path.exists(filename): return "";
-	f = codecs.open(filename,"r","utf-8"); d = f.read(); f.close(); return d.replace("\r","")
-def file_write(filename,data):
-	f = codecs.open(filename,"w","utf-8"); f.write(data.replace("\r","")); f.close();
 
 # Systems Check
 def system():
@@ -99,6 +106,9 @@ def execute(exename,language, timelimit):
 	inputfile = " <env/input.txt 1>env/output.txt 2>env/error.txt"
 	if language == "Java" and not(os.path.exists("env/"+exename+".class")): 
 			exename = "main/"+exename
+	# Limiting max process that can be spawned by a user to 100 to protect against 
+	# fork bombs. Also, switching the use to 'judge' to run the submitted program.
+	# After the allocated time limit, all process spawned by 'judge' user is killed.
 	cmd = 'ulimit -p 100; su judge -c \"'+langarr[language]["execute"]+"; exit;\""
 	cmd = cmd.replace("[exename]", exename)
 	cmd = cmd.replace("[inputfile]", inputfile)
@@ -119,6 +129,7 @@ def execute(exename,language, timelimit):
 	timediff = endtime - starttime
 	
 	os.system("chmod 750 .")
+	# kill all process spawned by user 'judge'
 	os.system("pkill -u judge")
 	print("Return Code : "+str(t))
 	return t
@@ -175,6 +186,8 @@ def runjudge(runid):
 			codefile.write(run["code"].replace("\r","")); codefile.close();
 			if "-cache" not in sys.argv: file_write("env/input.txt",run["input"]);
 			else:
+				if not(os.path.exists("io_cache")):
+					os.mkdir("io_cache")
 				try:
 					with open("io_cache/Aurora Online Judge - Problem ID "+str(run["pid"])+" - Input.txt"): pass
 				except IOError:

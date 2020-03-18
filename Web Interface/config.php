@@ -1,15 +1,33 @@
 <?php
+/**
+ * Returns value of environment varialbe, if set.
+ * Otherwise returns the default value.
+ */
 function getEnvVar($key, $default) {
   return getenv($key) ? getenv($key) : $default;
 }
 
+/**
+ * Checks if the file exists at the path defined by the
+ * environment variable. If it exists, then simple return
+ * the file contens. Other the fallback value.
+ */
+function getDockerSecretValue($key, $fallbackValue) {
+  $file = getEnvVar($key, null);
+  if ($file && file_exists($file)) {
+    return file_get_contents($file);
+  } else {
+    return $fallbackValue;
+  }
+}
+
 // Change the following parameters according to the instructions beside them
-define("SITE_URL", "http://" . $_SERVER['HTTP_HOST']);      // path to directory
-define("SQL_USER", getEnvVar("AURORA_SQL_USER", "aurora"));                // Database username    
-define("SQL_PASS", getEnvVar("AURORA_SQL_PASS", "aurora"));                // Database password
-define("SQL_DB", getEnvVar("AURORA_SQL_DB", "aurora_main"));               // Database name
-define("SQL_HOST", getEnvVar("AURORA_SQL_HOST", "127.0.0.1"));             // Database host
-define("SQL_PORT", getEnvVar("AURORA_SQL_PORT", "3306"));                  // Database port
+define("SITE_URL", "http://" . $_SERVER['HTTP_HOST']);
+define("SQL_USER", getDockerSecretValue('AURORA_SQL_USER_FILE', getEnvVar("AURORA_SQL_USER", "aurora")));
+define("SQL_PASS", getDockerSecretValue('AURORA_SQL_PASS_FILE', getEnvVar("AURORA_SQL_PASS", "aurora")));
+define("SQL_DB", getDockerSecretValue('AURORA_SQL_DB_FILE', getEnvVar("AURORA_SQL_DB", "aurora_main")));
+define("SQL_HOST", getDockerSecretValue('AURORA_SQL_HOST_FILE', getEnvVar("AURORA_SQL_HOST", "127.0.0.1")));
+define("SQL_PORT", getDockerSecretValue('AURORA_SQL_PORT_FILE', getEnvVar("AURORA_SQL_PORT", "3306")));
 displayErrors(FALSE);                   // Display PHP errors or not.
 date_default_timezone_set("Asia/Kolkata"); //Set your timezone, resolves most timer errors
 // Language specific variables 
@@ -21,7 +39,6 @@ $valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "b", "C" => "c", "C++" 
 /* 
  * 
  * NO NEED TO CHANGE THE CODE BELOW
- * 
  * 
  */
 ini_set("session.gc_maxlifetime", 86400);
