@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:5
+    secrets:
+      - mysql_password
+    volumes:
+      - ./DB:/docker-entrypoint-initdb.d
+      - ./DB/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_password
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  web:
+    image: docker.pkg.github.com/pushkar8723/aurora/web
+    secrets:
+      - mysql_password
+    ports:
+      - 8080:80
+    environment:
+      - AURORA_SQL_USER=root
+      - AURORA_SQL_PASS_FILE=/run/secrets/mysql_password
+      - AURORA_SQL_DB=aurora_main
+      - AURORA_SQL_HOST=mysql
+    volumes:
+      - ./conf:/etc/apache2/sites-enabled
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+  
+  judge:
+    image: docker.pkg.github.com/pushkar8723/aurora/judge
+    secrets:
+      - mysql_password
+    environment:
+      - AURORA_SQL_HOSTNAME=mysql
+      - AURORA_SQL_USERNAME=root
+      - AURORA_SQL_PASSWORD_FILE=/run/secrets/mysql_password
+      - AURORA_SQL_DATABASE=aurora_main
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+secrets:
+  mysql_password:
+    external: true
