@@ -4,7 +4,7 @@ on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
-      - master
+      - gh-action-setup
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -28,7 +28,7 @@ jobs:
           if [ -f docker-compose.test.yml ]; then
             docker-compose --file docker-compose.test.yml build
           else
-            docker build ./Judge --file Dockerfile
+            docker build ./Judge
           fi
 
   # Push image to GitHub Packages.
@@ -44,10 +44,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build ./Judge --file Dockerfile --tag image
+        run: docker build ./Judge --tag judge
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GH_ACTION_DOCKER_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image
         run: |
