@@ -13,28 +13,31 @@ There are `docker-compose` files sepecific to following usecases.
 <details>
 <summary>Local Setup</summary>
 
-**[docker-compose.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.yml)** can be used to simple run and test out Aurora on a local environment.
-
-Simply run `docker-compose up` to pull all the images and run it.
-
-Then visit [localhost](http://localhost) to test the application.
-
-**_Note:_ Since we are using Github packages, you would need to [configure docker for use with Github token](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) or docker won't be able to pull the images and may start building the image instead.**
+> **[docker-compose.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.yml)** can be used to simple run and test out Aurora on a local environment.
+>
+> Simply run `docker-compose up` to pull all the images and run it.
+>
+> Then visit [localhost](http://localhost) to test the application.
+>
+> **_Note:_ Since we are using Github packages, you would need to [configure docker for use with Github token](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) or docker won't be able to pull the images and may start building the image instead.**
 </details>
 
 <details>
 <summary>Dev Setup</summary>
 
-**[docker-compose.dev.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.dev.yml)** can be used to build, run and test out Aurora on a local environment.
-
-Simply run `docker-compose -f docker-compose.dev.yml build` to build.
-
-Run `docker-compose -f docker-compose.dev.yml up` to run it on [localhost](http://localhost).
+> **[docker-compose.dev.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.dev.yml)** can be used to build, run and test out Aurora on a local environment.
+>
+> Simply run `docker-compose -f docker-compose.dev.yml build` to build.
+>
+> Run `docker-compose -f docker-compose.dev.yml up` to run it on [localhost](http://localhost).
 </details>
 
 <details>
 <summary>Prod Setup</summary>
 
+> **[docker-compose.prod.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.prod.yml)** is meant to be used as template for prod configuration.
+>
+> Check our [guidelines](https://github.com/pushkar8723/aurora/wiki/Guidelines-for-Using-Docker-Images-in-Production) on how to use this template.
 </details>
 
 Facing an issue
@@ -53,8 +56,8 @@ Also make sure you have full ownership of the code you submit.
 Acknowledgement
 ---------------
 
-* Kaustubh Karkare, creator of Aurora Online Judge from which this version was derived.
-* Siddhartha Sahu, created functions.php which is extensively used for database interaction.
+* [Kaustubh Karkare](https://github.com/kaustubh-karkare), creator of Aurora Online Judge from which this version was derived.
+* [Siddhartha Sahu](https://github.com/sdht0), created functions.php which is extensively used for database interaction.
 
 License
 -------
