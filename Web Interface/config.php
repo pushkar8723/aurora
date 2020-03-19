@@ -22,7 +22,7 @@ function getDockerSecretValue($key, $fallbackValue) {
 }
 
 // Change the following parameters according to the instructions beside them
-define("SITE_URL", "");
+define("SITE_URL", getEnvVar("AURORA_BASE_URL", ""));
 define("SQL_USER", getDockerSecretValue('AURORA_SQL_USER_FILE', getEnvVar("AURORA_SQL_USER", "aurora")));
 define("SQL_PASS", getDockerSecretValue('AURORA_SQL_PASS_FILE', getEnvVar("AURORA_SQL_PASS", "aurora")));
 define("SQL_DB", getDockerSecretValue('AURORA_SQL_DB_FILE', getEnvVar("AURORA_SQL_DB", "aurora_main")));
