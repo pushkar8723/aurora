@@ -16,10 +16,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
     if (isset($_POST['login'])) {
         if (!isset($_POST['teamname']) || $_POST['teamname'] == '') {
             $_SESSION['msg'] = "Teamname missing";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (!isset($_POST['password']) || $_POST['password'] == '') {
             $_SESSION['msg'] = "Teamname missing";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else {
             $_POST['teamname'] = addslashes($_POST['teamname']);
             $_POST['password'] = customhash(addslashes($_POST['password']));
@@ -34,13 +34,13 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $_SESSION['loggedin'] = "true";
                 $_SESSION['team']['status'] = $res['status'];
                 $_SESSION['team']['time'] = time();
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             } else if ($res) {
                 $_SESSION['msg'] = "You can not log in as your current status is : $res[status]";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             } else {
                 $_SESSION['msg'] = "Incorrect Username/Password";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         }
 // ---------------------- LOG OUT -------------------------- //
@@ -109,10 +109,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         if ($res) { // Lvl 4
                             if ($admin['mode'] == 'Active' && $admin['endtime'] >= time() && $res['contest'] == 'practice') { // Lvl 5
                                 $_SESSION['msg'] = "Submissions are only accepted for CQM question right now. Come back later.";
-                                redirectTo($_SESSION['url']);
+                                redirectTo(SITE_URL . $_SESSION['url']);
                             } else if ($admin['mode'] == 'Passive' && $res['contest'] == 'contest' && $_SESSION['team']['status'] != 'Admin') { // Lvl 6
                                 $_SESSION['msg'] = "Submissions are only accepted for Practice question right now.";
-                                redirectTo($_SESSION['url']);
+                                redirectTo(SITE_URL . $_SESSION['url']);
                             } else if ($res['status'] == 'Active' || $_SESSION['team']['status'] == 'Admin') { // Lvl 7
                                 $submittime = time();
                                 $query = "INSERT INTO runs (pid,tid,language,access,submittime) VALUES ('$res[pid]', '" . $_SESSION['team']['id'] . "', '$_POST[lang]', 'private', '" . $submittime . "')";
@@ -139,35 +139,35 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                                     } else {
                                         DB::query("Delete from runs where rid = $rid");
                                         $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
-                                        redirectTo($_SESSION['url']);
+                                        redirectTo(SITE_URL . $_SESSION['url']);
                                     }
                                 } else {
                                     $_SESSION['msg'] = "Some error occured during submission. If the problem continues contact Admin";
-                                    redirectTo($_SESSION['url']);
+                                    redirectTo(SITE_URL . $_SESSION['url']);
                                 }
                             } else {
                                 $_SESSION['msg'] = "Problem is not active for submissions.";
-                                redirectTo($_SESSION['url']);
+                                redirectTo(SITE_URL . $_SESSION['url']);
                             }
                         } else {
                             $_SESSION['msg'] = "Either the problem does not exsits or the language is not allowed.";
-                            redirectTo($_SESSION['url']);
+                            redirectTo(SITE_URL . $_SESSION['url']);
                         }
                     } else {
                         $_SESSION['msg'] = "Submitted code exceeds size limits.";
-                        redirectTo($_SESSION['url']);
+                        redirectTo(SITE_URL . $_SESSION['url']);
                     }
                 } else {
                     $_SESSION['msg'] = "You missed some necessary values.";
-                    redirectTo($_SESSION['url']);
+                    redirectTo(SITE_URL . $_SESSION['url']);
                 }
             } else {
                 $_SESSION['msg'] = "You cannot submit at this time.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         } else {
             $_SESSION['msg'] = "You should be logged in to make a submission.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         }
 // -------------------------------- REGISTER ---------------------------- //
     } else if (isset($_POST['register'])) {
@@ -190,22 +190,22 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
 //$_SESSION['msg'] = "Insert into teams (teamname, pass, status, name1, roll1, branch1, email1, phone1, name2, roll2, branch2, email2, phone2, name3, roll3, branch3, email3, phone3, score, penalty) 
 //values ('" . addslashes($_POST['teamname']) . "', '" . addslashes($_POST['password']) . "', 'Normal', '" . addslashes($_POST['name1']) . "', '" . addslashes($_POST['roll1']) . "','" . addslashes($_POST['branch1']) . "','" . addslashes($_POST['email1']) . "','" . addslashes($_POST['phno1']) . "','" . addslashes($_POST['name2']) . "', '" . addslashes($_POST['roll2']) . "', '" . addslashes($_POST['branch2']) . "', '" . addslashes($_POST['email2']) . "', '" . addslashes($_POST['phno2']) . "', '" . addslashes($_POST['name3']) . "', '" . addslashes($_POST['roll3']) . "', '" . addslashes($_POST['branch3']) . "','" . addslashes($_POST['email3']) . "','" . addslashes($_POST['phno3']) . "','0','0')";
                             $_SESSION['msg'] = "Some error occured. Try again. If the problem continues contact admin.";
-                            redirectTo($_SESSION['url']);
+                            redirectTo(SITE_URL . $_SESSION['url']);
                         }
                     } else {
                         $_SESSION['reg'] = $_POST;
                         $_SESSION['msg'] = "Teamname already registered.";
-                        redirectTo($_SESSION['url']);
+                        redirectTo(SITE_URL . $_SESSION['url']);
                     }
                 } else {
                     $_SESSION['reg'] = $_POST;
                     $_SESSION['msg'] = "Password mismatch.";
-                    redirectTo($_SESSION['url']);
+                    redirectTo(SITE_URL . $_SESSION['url']);
                 }
             } else {
                 $_SESSION['reg'] = $_POST;
                 $_SESSION['msg'] = "Team name should contain only alphabets numbers @ and _.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         }
 // ------------------------------- ACCOUNT UPDATE ---------------------------- //
@@ -219,32 +219,32 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         $query = "update teams set pass = '" . customhash(addslashes($_POST['pass1'])) . "' " . ((isset($_POST['group']) && $_POST['group'] != "") ? (", gid='" . addslashes($_POST['group']) . "' ") : ("")) . "where tid='" . $_SESSION['team']['id'] . "'";
                         $res = DB::query($query);
                         $_SESSION['msg'] = "Password Updated";
-                        redirectTo($_SESSION['url']);
+                        redirectTo(SITE_URL . $_SESSION['url']);
                     } else {
                         $_SESSION['msg'] = "Old password incorrect.";
-                        redirectTo($_SESSION['url']);
+                        redirectTo(SITE_URL . $_SESSION['url']);
                     }
                 } else {
                     $_SESSION['msg'] = "Password do not match or password is empty.";
-                    redirectTo($_SESSION['url']);
+                    redirectTo(SITE_URL . $_SESSION['url']);
                 }
             } else if (isset($_POST['group'])) {
                 if ($_POST['group'] != '') {
                     $query = "update teams set gid='" . addslashes($_POST['group']) . "' where tid='" . $_SESSION['team']['id'] . "'";
                     $res = DB::query($query);
                     $_SESSION['msg'] = "Group Updated";
-                    redirectTo($_SESSION['url']);
+                    redirectTo(SITE_URL . $_SESSION['url']);
                 } else {
                     $_SESSION['msg'] = "Incorrect group.";
-                    redirectTo($_SESSION['url']);
+                    redirectTo(SITE_URL . $_SESSION['url']);
                 }
             } else {
                 $_SESSION['msg'] = "Not enough values.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         } else {
             $_SESSION['msg'] = "You should be logged in.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         }
     } else if (isset($_POST['clar'])) {
         if (isset($_SESSION['loggedin'])) {
@@ -253,14 +253,14 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 values ('" . time() . "', '" . addslashes($_POST['pid']) . "', '" . $_SESSION['team']['id'] . "', '" . (addslashes($_POST['query'])) . "', 'public')";
                 $res = DB::query($query);
                 $_SESSION['msg'] = "Clarification posted... we will reply soon.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             } else {
                 $_SESSION['msg'] = "Empty Query :(";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         } else {
             $_SESSION['msg'] = "You should be logged in.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         }
     } else if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {  // request only admin can make
         if (isset($_POST['judgeupdate'])) {
@@ -280,7 +280,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 DB::query($query);
             }
             $_SESSION['msg'] = "Judge Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['addproblem'])) {
             $prob = Array();
             $prob['name'] = addslashes($_POST['name']);
@@ -305,7 +305,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $query = "insert into problems (" . implode(array_keys($prob), ",") . ") values ('" . implode(array_values($prob), "','") . "')";
             DB::query($query);
             $_SESSION['msg'] = "Problem Added.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['updateproblem'])) {
             $query = "select * from admin where variable='ip' or variable ='port'";
             $check = DB::findAllFromQuery($query);
@@ -371,7 +371,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 fclose($client);
             }
             $_SESSION['msg'] .= "Problem Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['addcontest'])) {
             $newcontest['code'] = addslashes($_POST['code']);
             $newcontest['name'] = addslashes($_POST['name']);
@@ -384,7 +384,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             echo $query;
             DB::query($query);
             $_SESSION['msg'] = "Contest Added.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['updatecontest'])) {
             $id = addslashes($_POST['id']);
             $newcontest['code'] = addslashes($_POST['code']);
@@ -399,7 +399,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 DB::query($query);
             }
             $_SESSION['msg'] = "Contest Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['updateteam'])) {
             $tid = addslashes($_POST['tid']);
             $team['teamname'] = $_POST['teamname'];
@@ -427,10 +427,10 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                     DB::query($query);
                 }
                 $_SESSION['msg'] = "Team Updated.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             } else {
                 $_SESSION['msg'] = "Teamname didn't satisfy the criteria.";
-                redirectTo($_SESSION['url']);
+                redirectTo(SITE_URL . $_SESSION['url']);
             }
         } else if (isset($_POST['rejudge'])) {
             $query = "select * from admin where variable ='mode' or variable ='endtime' or variable='ip' or variable ='port'";
@@ -476,17 +476,17 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             fwrite($client, 'rejudge');
             fclose($client);
             $_SESSION['msg'] .= "Problem(s) set to rejudge.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['dq'])) {
             $query = "update runs set result = 'DQ' where rid = " . addslashes($_POST['rid']);
             DB::query($query);
             $_SESSION['msg'] = "Solution Disqualified.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['runaccess'])) {
             $query = "update runs set access = '" . addslashes($_POST['access']) . "' where rid = " . addslashes($_POST['rid']);
             DB::query($query);
             $_SESSION['msg'] = "Access Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['judgesocket'])) {
             $_POST['ip'] = addslashes($_POST['ip']);
             $query = "update admin set value='$_POST[ip]' where variable='ip'";
@@ -495,13 +495,13 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $query = "update admin set value='$_POST[port]' where variable='port'";
             DB::query($query);
             $_SESSION['msg'] = "Socket Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['judgenotice'])) {
             $_POST['notice'] = addslashes($_POST['notice']);
             $query = "update admin set value='$_POST[notice]' where variable='notice'";
             DB::query($query);
             $_SESSION['msg'] = "Notice Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['clarreply'])) {
             $tid = addslashes($_POST['tid']);
             $pid = addslashes($_POST['pid']);
@@ -511,26 +511,26 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $query = "update clar set reply='$reply', access='$access' where tid=$tid and pid=$pid and time=$time";
             DB::query($query);
             $_SESSION['msg'] = "Reply Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['addgroup'])) {
             $groupname = addslashes($_POST['groupname']);
             $query = "insert into groups (groupname) values ('$groupname')";
             DB::query($query);
             $_SESSION['msg'] = "Group Created.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['updategroup'])) {
             $gid = addslashes($_POST['gid']);
             $groupname = addslashes($_POST['groupname']);
             $query = "update groups set groupname ='$groupname' where gid=$gid";
             DB::query($query);
             $_SESSION['msg'] = "Group Updated.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['deletegroup'])) {
             $gid = addslashes($_POST['gid']);
             $query = "delete from groups where gid=$gid";
             DB::query($query);
             $_SESSION['msg'] = "Group Deleted.";
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['statusupdate'])) {
             $pid = addslashes($_POST['pid']);
             $status = addslashes($_POST['status']);
@@ -541,12 +541,12 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             $bcast['msg'] = addslashes($_POST['bmsg']);
             DB::insert('broadcast', $bcast);
             $_SESSION['msg'] = 'Message queued for delievery.';
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_POST['delbmsg'])) {
             $id = addslashes($_POST['id']);
             DB::delete('broadcast', "id=$id");
             $_SESSION['msg'] = 'Message deleted.';
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         } else if (isset($_GET['freeze'])) {
             require_once 'components.php';
             if (!in_array(strtolower($_GET['freeze']), array("admin", "broadcast", "clar", "contest", "groups", "logs", "problems", "teams", "runs", "subs_code"))) {
@@ -574,7 +574,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
             } else {
                 $_SERVER['msg'] = "Contest code not allowed. Please change contest's code";
             }
-            redirectTo($_SESSION['url']);
+            redirectTo(SITE_URL . $_SESSION['url']);
         }
     }
 } else {
