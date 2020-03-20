@@ -102,6 +102,10 @@ def create(codefilename,language):
 
 # Program Execution
 def execute(exename,language, timelimit):
+	# Check if docker secrets are used and if so make them readable to only
+	# root user.
+	if(os.path.exists("/run/secrets")): os.system("chmod -R 500 /run/secrets")
+	
 	global running, timediff
 	inputfile = " <env/input.txt 1>env/output.txt 2>env/error.txt"
 	if language == "Java" and not(os.path.exists("env/"+exename+".class")): 
@@ -282,10 +286,6 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
 		self.data = self.data.decode('utf-8')
 		# Likewise, self.wfile is a file-like object used to write back
 		# to the client
-
-		# Check if docker secrets are used and if so make them readable to only
-		# root user.
-		if(os.path.exists("/run/secrets")): os.system("chmod -R 500 /run/secrets")
 
 		if(self.data == 'rejudge'):
 			print((("{} wrote:").format(self.client_address[0])))
