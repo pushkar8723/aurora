@@ -46,7 +46,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
 // ---------------------- LOG OUT -------------------------- //
     } else if (isset($_GET['logout'])) {
         session_destroy();
-        redirectTo(SITE_URL);
+        redirectTo(SITE_URL . "/");
     } else if (isset($_GET['rid'])) {
         $_GET['rid'] = addslashes($_GET['rid']);
         $query = "select displayio, access, runs.tid, runs.pid, runs.rid, result, runs.language as language, subs_code.code as code, subs_code.output as output, problems.output as correct, input from runs, subs_code, problems where runs.rid = $_GET[rid] and runs.rid = subs_code.rid and problems.pid = runs.pid";
@@ -184,7 +184,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                         $res = DB::findOneFromQuery($query);
                         if ($res) {
                             $_SESSION['msg'] = "Team successfully registered.";
-                            redirectTo(SITE_URL);
+                            redirectTo(SITE_URL . "/");
                         } else {
                             $_SESSION['reg'] = $_POST;
 //$_SESSION['msg'] = "Insert into teams (teamname, pass, status, name1, roll1, branch1, email1, phone1, name2, roll2, branch2, email2, phone2, name3, roll3, branch3, email3, phone3, score, penalty) 
