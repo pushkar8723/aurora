@@ -37,7 +37,7 @@ There are `docker-compose` files sepecific to following usecases.
 
 > **[docker-compose.prod.yml](https://github.com/pushkar8723/aurora/blob/master/docker-compose.prod.yml)** is meant to be used as template for prod configuration.
 >
-> Check our [guidelines](https://github.com/pushkar8723/aurora/wiki/Guidelines-for-Using-Docker-Images-in-Production) on how to use this template.
+> Check our [guidelines](https://github.com/pushkar8723/aurora/wiki/Using-Docker-in-Production) on how to use this template.
 </details>
 
 Facing an issue
