@@ -11,21 +11,21 @@ Aurora uses docker for development as well as for running the application. Image
 There are `docker-compose` files sepecific to following usecases.
 
 <details>
-<summary>Local Setup</summary>
+<summary>Run Locally</summary>
 
-> **[docker-compose.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.yml)** can be used to simple run and test out Aurora on a local environment.
+> **[docker-compose.yml](https://github.com/pushkar8723/aurora/blob/master/docker-compose.yml)** can be used to simple run and test out Aurora on a local environment.
 >
 > Simply run `docker-compose up` to pull all the images and run it.
 >
 > Then visit [localhost](http://localhost) to test the application.
 >
-> **_Note:_ Since we are using Github packages, you would need to [configure docker for use with Github token](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) or docker won't be able to pull the images and may start building the image instead.**
+> **_Note:_ Since we are using Github packages, you would need to [configure docker for use with Github token](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) or docker won't be able to pull the images and docker may start building the image instead. You can follow our [Docker Setup Guide](https://github.com/pushkar8723/aurora/wiki/Docker-Setup) to mitigate this build step.**
 </details>
 
 <details>
 <summary>Dev Setup</summary>
 
-> **[docker-compose.dev.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.dev.yml)** can be used to build, run and test out Aurora on a local environment.
+> **[docker-compose.dev.yml](https://github.com/pushkar8723/aurora/blob/master/docker-compose.dev.yml)** can be used to build, run and test out Aurora on a local environment.
 >
 > Simply run `docker-compose -f docker-compose.dev.yml build` to build.
 >
@@ -35,7 +35,7 @@ There are `docker-compose` files sepecific to following usecases.
 <details>
 <summary>Prod Setup</summary>
 
-> **[docker-compose.prod.yml](https://github.com/pushkar8723/aurora/blob/gh-action-setup/docker-compose.prod.yml)** is meant to be used as template for prod configuration.
+> **[docker-compose.prod.yml](https://github.com/pushkar8723/aurora/blob/master/docker-compose.prod.yml)** is meant to be used as template for prod configuration.
 >
 > Check our [guidelines](https://github.com/pushkar8723/aurora/wiki/Guidelines-for-Using-Docker-Images-in-Production) on how to use this template.
 </details>

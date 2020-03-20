@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libxml++2.6-dev
                bcmath \
                opcache \
     && docker-php-ext-install -j "$(nproc)" mbstring pdo tokenizer xml zip \
-    && a2enmod rewrite
+    && a2enmod rewrite && a2enmod ssl
 
 WORKDIR /var/www/html
 
