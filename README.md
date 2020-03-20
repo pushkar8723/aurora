@@ -43,7 +43,7 @@ There are `docker-compose` files sepecific to following usecases.
 Documentation
 -------------
 
-We are using [Aurora Wiki](https://github.com/pushkar8723/aurora/wiki/Aurora-Wiki) to maintain our documentations.
+We are using [Aurora Wiki](https://github.com/pushkar8723/aurora/wiki) to maintain our documentations.
 
 Facing an issue
 ---------------
