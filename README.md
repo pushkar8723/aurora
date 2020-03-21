@@ -1,6 +1,9 @@
 Aurora v2
 =========
 
+![Web Docker](https://github.com/pushkar8723/aurora/workflows/Web%20Docker/badge.svg)
+![Judge Docker](https://github.com/pushkar8723/aurora/workflows/Judge%20Docker/badge.svg)
+
 Aurora is an open-source OJ inspired by SPOJ. Derived from [Aurora-Online-Judge](https://github.com/kaustubh-karkare/aurora-online-judge), this version improves the scalability and security of the application to meet the requirements for a small scale organization. Its web interface is redesigned from scratch to make it look more SPOJ like. So that users find it comfortable to adjust. It can also serve as a platform to practice as well as compete with other teams. Few features were added so that the administrators find it easy to maintain.
 It was designed to meet the requirement specific to CQM matches hosted at BIT Mesra, but most of its components can be easily updated to meet the requirement of any other educational organization.
 
