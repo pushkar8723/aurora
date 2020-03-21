@@ -42,7 +42,12 @@ $valtoext = array("AWK"=>"awk", "Bash"=>"sh", "Brain" => "b", "C" => "c", "C++" 
  * 
  */
 ini_set("session.gc_maxlifetime", 86400);
-session_set_cookie_params (0, substr(SITE_URL, strlen("http://" . $_SERVER['HTTP_HOST'])));
+session_set_cookie_params(array(
+  'lifetime' => 0,
+  'path' => SITE_URL,
+  'samesite' => 'Lax',
+  'httponly' => true
+));
 session_start();
 function displayErrors($option = true) {
   if ($option) {
