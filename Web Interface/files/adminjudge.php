@@ -105,6 +105,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     <?php
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>

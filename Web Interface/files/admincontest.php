@@ -1,7 +1,7 @@
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
+        $_GET['code'] = $_GET['code'];
         $query = "select * from contest where code = '$_GET[code]'";
         $res = DB::findOneFromQuery($query);
         ?>
@@ -83,6 +83,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     }
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>

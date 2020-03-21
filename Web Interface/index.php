@@ -9,7 +9,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
     session_regenerate_id(true);
     session_start();
     $_SESSION['msg'] = "Judge is in Lockdown mode and so you have been logged out.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 doCompetitionCheck(); //Activate competition when planned
 ?>
@@ -119,7 +119,7 @@ doCompetitionCheck(); //Activate competition when planned
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora</a>
+                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>/">Aurora</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
@@ -175,7 +175,7 @@ doCompetitionCheck(); //Activate competition when planned
         <div class="container bodycont">
             <div class='row'>
                 <div class='col-md-9' id='mainbar'>
-                    <?php if (isset($_SESSION['msg'])) { ?>
+                    <?php if (isset($_SESSION['msg']) && $_SESSION['msg'] != "") { ?>
                         <div class="alert alert-info" style="margin-top: 20px;">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <div class="text-center"><?php

@@ -2,7 +2,6 @@
 
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         ?>
         <div class='page-header text-center'><h1><?= $_GET['code'] ?>'s Submissions<?= isset($_GET['filter']) ? "($_GET[filter])" : "" ?></h1></div>
         <?php

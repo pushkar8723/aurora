@@ -1,8 +1,8 @@
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateEditorial'])){
-        $_POST['code'] = addslashes($_POST['code']);
-        $_POST['statement'] = addslashes($_POST['statement']);
+        $_POST['code'] = $_POST['code'];
+        $_POST['statement'] = $_POST['statement'];
         $result = DB::findOneFromQuery("select pid from problems where code = '$_POST[code]'");
         if($result == NULL){
             $_SESSION['msg'] = "Problem with code $_POST[code] not found!";
@@ -21,7 +21,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
 //        $_SESSION['msg'] = 'Editorial Updated';
     }
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         $query = "select pid, code from problems where code = '$_GET[code]'";
         $res = DB::findOneFromQuery($query);
         if($res != NULL){
@@ -62,7 +61,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     }
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>
 <script type="text/javascript" src="<?php echo JS_URL; ?>/tinymce/tinymce.min.js"></script>

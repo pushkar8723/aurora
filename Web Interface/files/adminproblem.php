@@ -1,11 +1,10 @@
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         $query = "select * from problems where code = '$_GET[code]'";
         $res = DB::findOneFromQuery($query);
         ?>
-        <a class='btn btn-default pull-right' style='margin-top: 10px;' href='<?= SITE_URL . "/problems/" . $_GET[code]?>'> View problem</a>
+        <a class='btn btn-default pull-right' style='margin-top: 10px;' href='<?= SITE_URL . "/problems/" . $_GET['code']?>'> View problem</a>
         <div class="text-center page-header"><h1>Problem Settings - <?php echo "$_GET[code]"; ?></h1></div>
         <form class='form-horizontal' role='form' method='post' action='<?php echo SITE_URL; ?>/process.php' enctype='multipart/form-data'>
             <input type='hidden' name='pid' value='<?php echo $res['pid']; ?>' />
@@ -422,6 +421,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     }
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>

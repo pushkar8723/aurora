@@ -1,7 +1,6 @@
 <?php
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         if (isAdmin()) {
             $query = "select * from problems where code = '$_GET[code]'";
         } else {
@@ -161,7 +160,19 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $counter=$counter++;
                 $lastgroup = $row['pgroup'];
             }
-            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):(""))."><td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td><td class='tabletaghidden' >$row[type]</td><td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td><td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td><td><span class='badge'>$row[score] pt</span></td><td>" . (isset($editorial[$row['pid']])?("<a href='" . SITE_URL . "/editorial/$row[code]'>Link</a>"):(($_SESSION['team']['status'] == 'Admin')?"<a href='". SITE_URL . "/admineditorial/$row[code]'>Add</a>":"None")) . "</td></tr>";
+            echo "<tr ".((isset($solved[$row['pid']]))?("class='success'"):("")).">
+                <td><a href='" . SITE_URL . "/problems/$row[code]'>$row[name]</a></td>
+                <td class='tabletaghidden' >$row[type]</td>
+                <td><a href='" . SITE_URL . "/submit/$row[code]'>$row[code]</a></td>
+                <td><a href='" . SITE_URL . "/status/$row[code]'>$row[solved]/$row[total]</a></td>
+                <td><span class='badge'>$row[score] pt</span></td>
+                <td>" . (isset($editorial[$row['pid']])
+                    ? ("<a href='" . SITE_URL . "/editorial/$row[code]'>Link</a>")
+                    : ((isset($_SESSION['team']) && $_SESSION['team']['status'] == 'Admin')
+                        ? "<a href='". SITE_URL . "/admineditorial/$row[code]'>Add</a>"
+                        : "None"))
+                . "</td>
+            </tr>";
             $counter=$counter+1;
         }
         if(!empty($res)) echo "</table></div>"; //in the rare event there is NOTHING, need to remove divs to avoid fucking up layout

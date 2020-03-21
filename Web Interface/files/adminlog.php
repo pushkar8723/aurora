@@ -29,7 +29,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         $page = 1;
     $body = "from logs";
     if(isset($_GET['code'])){
-        $body .= " where tid like '%[team]%=>%".addslashes($_GET['code'])."%'";
+        $body .= " where tid like '%[team]%=>%". $_GET['code'] ."%'";
     }
     $body .= " order by time desc";
     $result = DB::findAllWithCount("select *", $body, $page, 10);
@@ -42,6 +42,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     pagination($result['noofpages'], SITE_URL."/adminlog".((isset($_GET['code']))?("/$_GET[code]"):("")), $page, 10);
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>

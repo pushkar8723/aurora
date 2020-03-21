@@ -2,29 +2,43 @@ import pymysql as sql
 import platform,re, os, shutil, signal, sys, _thread as thread, time, urllib, socketserver as SocketServer, subprocess, codecs
 
 if "-judge" not in sys.argv:
-	print("\nArgus Online Judge : Execution Protocol (Linux Version 1.0)");
+	print("\nArgus Online Judge : Execution Protocol (Linux Version 1.0)")
 	print("\nCommand Line Options :")
 	print("    -judge    : Connect to the server and start judging submissions.")
 	print("    -cache    : Use IO Files in Current Directory instead of downloading them.")
 	print()
-	sys.exit(0);
+	sys.exit(0)
 
 timeoffset = 0
+
+# File Read/Write Functions
+def file_read(filename):
+	if not os.path.exists(filename): return ""
+	f = codecs.open(filename,"r","utf-8"); d = f.read(); f.close(); return d.replace("\r","")
+def file_write(filename,data):
+	f = codecs.open(filename,"w","utf-8"); f.write(data.replace("\r","")); f.close()
 
 def getEnv(key, default):
 	return os.environ[key] if key in os.environ else default
 
+def getDockerSecretValue(key, fallback):
+	file = getEnv(key, None)
+	if file and os.path.exists(file):
+		return file_read(file).strip()
+	else:
+		return fallback
+
 # Initialize Database and judge Constants
-sql_hostname = getEnv('AURORA_SQL_HOSTNAME', '127.0.0.1')
-sql_hostport = getEnv('AURORA_SQL_HOSTPORT', 3306)
-sql_username = getEnv('AURORA_SQL_USERNAME', 'aurora')
-sql_password = getEnv('AURORA_SQL_PASSWORD', 'aurora')
-sql_database = getEnv('AURORA_SQL_DATABASE', 'aurora_main')
+sql_hostname = getDockerSecretValue('AURORA_SQL_HOSTNAME_FILE', getEnv('AURORA_SQL_HOSTNAME', '127.0.0.1'))
+sql_hostport = getDockerSecretValue('AURORA_SQL_HOSTPORT_FILE', getEnv('AURORA_SQL_HOSTPORT', 3306))
+sql_username = getDockerSecretValue('AURORA_SQL_USERNAME_FILE', getEnv('AURORA_SQL_USERNAME', 'aurora'))
+sql_password = getDockerSecretValue('AURORA_SQL_PASSWORD_FILE', getEnv('AURORA_SQL_PASSWORD', 'aurora'))
+sql_database = getDockerSecretValue('AURORA_SQL_DATABASE_FILE', getEnv('AURORA_SQL_DATABASE', 'aurora_main'))
 HOST, PORT = "0.0.0.0", 8723
 #timeoffset = 19800
 
 # Initialize Language Constants
-php_prefix = "<?php ini_set('log_errors',1); ini_set('error_log','env/error.txt'); ?>";
+php_prefix = "<?php ini_set('log_errors',1); ini_set('error_log','env/error.txt'); ?>"
 ioeredirect = " 0<env/input.txt 1>env/output.txt 2>env/error.txt"
 
 # Addition of new Language requires change below 
@@ -54,19 +68,12 @@ mypid = int(os.getpid())
 timediff = 0
 languages = []
 
-# File Read/Write Functions
-def file_read(filename):
-	if not os.path.exists(filename): return "";
-	f = codecs.open(filename,"r","utf-8"); d = f.read(); f.close(); return d.replace("\r","")
-def file_write(filename,data):
-	f = codecs.open(filename,"w","utf-8"); f.write(data.replace("\r","")); f.close();
-
 # Systems Check
 def system():
 	global languages
-	if not os.path.isdir("env"): os.mkdir("env");
+	if not os.path.isdir("env"): os.mkdir("env")
 	for lang in langarr:
-		if(lang != "Text" and os.popen(langarr[lang]["system"]).read()!=""): languages.append(lang);
+		if(lang != "Text" and os.popen(langarr[lang]["system"]).read()!=""): languages.append(lang)
 
 # Program Compilation
 def create(codefilename,language):
@@ -95,57 +102,74 @@ def create(codefilename,language):
 
 # Program Execution
 def execute(exename,language, timelimit):
+	# Check if docker secrets are used and if so make them readable to only
+	# root user.
+	if(os.path.exists("/run/secrets")): os.system("chmod -R 500 /run/secrets")
+
 	global running, timediff
 	inputfile = " <env/input.txt 1>env/output.txt 2>env/error.txt"
 	if language == "Java" and not(os.path.exists("env/"+exename+".class")): 
 			exename = "main/"+exename
+	# Limiting max process that can be spawned by a user to 100 to protect against 
+	# fork bombs. Also, switching the user to 'judge' to run the submitted program.
+	# After the allocated time limit, all process spawned by 'judge' user is killed.
 	cmd = 'ulimit -p 100; su judge -c \"'+langarr[language]["execute"]+"; exit;\""
 	cmd = cmd.replace("[exename]", exename)
 	cmd = cmd.replace("[inputfile]", inputfile)
 
+	# Change permission to allow only root user to be
+	# able to execute commands in the directory.
 	os.system("chmod 100 .")
+
+	# Make files input, error and output file accessible
+	# to every user
 	if(os.path.exists("env/input.txt")): os.system("chmod 777 env/input.txt")
 	if(os.path.exists("env/error.txt")): os.system("chmod 777 env/error.txt")
 	if(os.path.exists("env/output.txt")): os.system("chmod 777 env/output.txt")
 
+	# Run program for limited time
 	starttime = time.time()
 	proc = subprocess.Popen([cmd], shell=True, preexec_fn=os.setsid)
 	try:
 		print(proc.communicate(timeout=timelimit))
 		t = proc.returncode
 	except subprocess.TimeoutExpired:
-		t = 124
+		t = 124 # Code for TLE
 	endtime = time.time()
 	timediff = endtime - starttime
-	
-	os.system("chmod 750 .")
+
+	# kill all process spawned by user 'judge'
 	os.system("pkill -u judge")
+
+	# Make directly readable / executable again to root user.
+	os.system("chmod 750 .")
+
 	print("Return Code : "+str(t))
 	return t
 
 # Perform system checks
 if(platform.system()!='Linux'):
 	print("Error : This script can only be run on Linux.")
-	sys.exit(0);
+	sys.exit(0)
 
 # Print Heading
 os.system("clear")
-print("\nArgus Online Judge : Execution Protocol\n");
+print("\nArgus Online Judge : Execution Protocol\n")
 
 # System Check
 system()
 if len(languages)==0:
 	print("Error : No Languages supported on this System.")
-	sys.exit(1);
-else: languages.append('Text');
+	sys.exit(1)
+else: languages.append('Text')
 print("Supported Languages : "+str(languages)+"\n")
-sys.stdout.flush();
+sys.stdout.flush()
 def runjudge(runid):
 	try:
 		# Connect to Database
 		print(runid)
 		print("Connecting to Server ...")
-		link = sql.connect(host=sql_hostname,port=sql_hostport,user=sql_username,passwd=sql_password,db=sql_database,charset='utf8');
+		link = sql.connect(host=sql_hostname,port=sql_hostport,user=sql_username,passwd=sql_password,db=sql_database,charset='utf8')
 		cursor = link.cursor(sql.cursors.DictCursor)
 		print("Connected to Server ...")
 		print()       
@@ -156,25 +180,28 @@ def runjudge(runid):
 			cursor.execute("SELECT runs1.rid as rid,runs1.pid as pid,tid,runs1.language,subs_code.name as name,subs_code.code as code,error,timelimit FROM runs AS runs1,problems, subs_code WHERE problems.pid=runs1.pid and runs1.rid = subs_code.rid and runs1.access!='deleted' and runs1.rid = '"+str(runid)+"' and runs1.language in "+str(tuple(languages))+" ORDER BY runs1.rid ASC LIMIT 0,1")
 		# Select an Unjudged Submission
 		run = cursor.fetchone()
-		cursor.execute("UPDATE runs SET result='...' WHERE rid='%d'" % (run["rid"]));
-		print("Selected Run ID %d for Evaluation." % (run["rid"]));
+		cursor.execute("UPDATE runs SET result='...' WHERE rid='%d'" % (run["rid"]))
+		print("Selected Run ID %d for Evaluation." % (run["rid"]))
 		
-		os.system("rm -r env/*");
-		print("Cleared Environment for Program Execution.");
+		os.system("rm -r env/*")
+		print("Cleared Environment for Program Execution.")
 		
 		# Initialize Variables
-		result = None; timetaken = 0; running = 0
-		sys.stdout.flush();
+		result = None
+		timetaken = 0
+		sys.stdout.flush()
 		# Write Code & Input File
 		if result==None:
 			if run["language"]=="Java": codefilename = run["name"]
 			elif run["language"]=="Text": codefilename = "output"
-			else: codefilename = "code";
+			else: codefilename = "code"
 			codefile = codecs.open("env/"+codefilename+"."+langarr[run["language"]]["extension"],"w","utf-8")
-			if(run["language"]=="PHP"): codefile.write(php_prefix); # append prefix for PHP
-			codefile.write(run["code"].replace("\r","")); codefile.close();
-			if "-cache" not in sys.argv: file_write("env/input.txt",run["input"]);
+			if(run["language"]=="PHP"): codefile.write(php_prefix) # append prefix for PHP
+			codefile.write(run["code"].replace("\r","")); codefile.close()
+			if "-cache" not in sys.argv: file_write("env/input.txt",run["input"])
 			else:
+				if not(os.path.exists("io_cache")):
+					os.mkdir("io_cache")
 				try:
 					with open("io_cache/Aurora Online Judge - Problem ID "+str(run["pid"])+" - Input.txt"): pass
 				except IOError:
@@ -187,18 +214,17 @@ def runjudge(runid):
 
 		# Compile, if required
 		if result==None:
-			result = create(codefilename,run["language"]); # Compile
-		sys.stdout.flush();
+			result = create(codefilename,run["language"]) # Compile
+		sys.stdout.flush()
 		# Increase Time Limit in case some languages
 		if run["language"] in ('Java', 'Python', 'Python3', 'Ruby', 'PHP', 'C#', 'JavaScript'):
 			if run["language"] in ("Java", "C#", "JavaScript"):
-				run['timelimit'] *= 2;
+				run['timelimit'] *= 2
 			elif run["language"] in ("Python", "Ruby", "PHP", "Python3"):
-				run['timelimit'] *= 3;
+				run['timelimit'] *= 3
 
 		# Run the program through a new thread, and kill it after some time
 		if result==None and run["language"]!="Text":
-			running = 0
 			print("Spawning process ...")
 			t = execute(codefilename,run["language"], run['timelimit'])
 			#while running==0: pass # Wait till process begins
@@ -222,7 +248,7 @@ def runjudge(runid):
 				timetaken = timediff
 			else:
 				timetaken = timediff
-		sys.stdout.flush();
+		sys.stdout.flush()
 		# Compare the output
 		output = ""
 		if result==None and run["language"]!="Text" and file_read("env/error.txt")!="":
@@ -243,20 +269,20 @@ def runjudge(runid):
 
 		# Write results to database
 		error = file_read("env/error.txt")
-		cursor.execute("UPDATE runs SET time='%.3f',result='%s' WHERE rid=%d" % (float(timetaken),result,int(run["rid"])));
-		cursor.execute("UPDATE subs_code SET error=\"%s\",output=\"%s\" WHERE rid=%d" %(re.escape(error), re.escape(output),int(run["rid"])));
+		cursor.execute("UPDATE runs SET time='%.3f',result='%s' WHERE rid=%d" % (float(timetaken),result,int(run["rid"])))
+		cursor.execute("UPDATE subs_code SET error=\"%s\",output=\"%s\" WHERE rid=%d" %(re.escape(error), re.escape(output),int(run["rid"])))
 		print("Result (%s,%.3f) updated on Server.\n" % (result,timetaken))
-		sys.stdout.flush();
+		sys.stdout.flush()
 		# Commit changes
-		link.commit();
+		link.commit()
 
 		# Disconnect from Server
-		try: cursor.close();
+		try: cursor.close()
 		except: pass
-		try: link.close();
+		try: link.close()
 		except: pass
 		print("Disconnected from Server.\n")
-		sys.stdout.flush();
+		sys.stdout.flush()
 	except sql.Error as e:
 	    print("MySQL Error %d : %s\n" % (e.args[0],e.args[1]))
 
@@ -269,10 +295,11 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
 		self.data = self.data.decode('utf-8')
 		# Likewise, self.wfile is a file-like object used to write back
 		# to the client
+
 		if(self.data == 'rejudge'):
 			print((("{} wrote:").format(self.client_address[0])))
 			print(self.data)
-			link = sql.connect(host=sql_hostname,port=sql_hostport,user=sql_username,passwd=sql_password,db=sql_database);
+			link = sql.connect(host=sql_hostname,port=sql_hostport,user=sql_username,passwd=sql_password,db=sql_database)
 			cursor = link.cursor(sql.cursors.DictCursor)
 			cursor.execute("SELECT rid FROM runs WHERE result is NULL and access != 'deleted'")
 			link.close()
@@ -318,10 +345,10 @@ if __name__ == "__main__":
 		print("Exception : "+str(e)+"\n")
 	# Release lock
 	try:
-		lock.close();
-		os.unlink("lock.txt");
+		lock.close()
+		os.unlink("lock.txt")
 	except: pass
 	print("Released lock on Execution Protocol.\n")
 
 	# Terminate
-	print("Argus Online Judge : Execution Protocol Terminated.\n");
+	print("Argus Online Judge : Execution Protocol Terminated.\n")

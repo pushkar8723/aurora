@@ -1,18 +1,10 @@
-FROM php:7.2-apache
+FROM php:7.4-apache
 
 RUN apt-get update && apt-get install -y --no-install-recommends libxml++2.6-dev \
-    zlib1g-dev libicu-dev g++ libssl-dev git \
-    && pecl install apcu-5.1.5 && \
-           docker-php-ext-enable apcu && \
-           docker-php-ext-install \
-               intl \
-               mbstring \
-               pdo_mysql \
-               zip \
-               bcmath \
-               opcache \
-    && docker-php-ext-install -j "$(nproc)" mbstring pdo tokenizer xml zip \
-    && a2enmod rewrite
+    zlib1g-dev libicu-dev g++ libssl-dev git libzip-dev
+RUN docker-php-ext-install intl pdo_mysql zip bcmath opcache
+RUN docker-php-ext-install -j "$(nproc)" tokenizer xml
+RUN a2enmod rewrite && a2enmod ssl && a2enmod headers
 
 WORKDIR /var/www/html
 

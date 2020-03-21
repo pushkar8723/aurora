@@ -31,16 +31,15 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 $runs = DB::findOneFromQuery($query);
                 if($runs['access'] == "public" || (isset($_SESSION['loggedin']) && $runs['tid'] == $_SESSION['team']['id']) || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin")){
                     $query = "select languages, code from problems where pid = $runs[pid]".(($_SESSION['team']['status'] == "Admin")?"":" and status = 'Active' ");
-                    $_SESSION['subcode'] = addslashes($runs['code']);
+                    $_SESSION['subcode'] = $runs['code'];
                 } else {
                     echo "<br/><br/><br/><div style='padding: 10px;'><h1>Permission Denied :(</h1>You don't have permission to edit this solution.</div><br/><br/><br/>";
                     return ;
                 }
             } else if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
-                $_GET['code'] = addslashes($_GET['code']);
+                $_GET['code'] = $_GET['code'];
                 $query = "select languages from problems where code ='$_GET[code]'";
             } else {
-                $_GET['code'] = addslashes($_GET['code']);
                 $query = "select languages from problems where code ='$_GET[code]' and status = 'Active'";
             }
             $prob = DB::findOneFromQuery($query);

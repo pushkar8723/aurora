@@ -1,0 +1,77 @@
+# This file is meant to be used as template for prod configuration.
+# Your configuration may vary as per your requirement.
+
+version: '3.1'
+
+services:
+  # Changing this service name will require you to update
+  # AURORA_SQL_HOST and AURORA_SQL_HOSTNAME environment variable
+  # for web and judge containers.
+  mysql:
+    # Mysql version 8 is not supported yet.
+    image: mysql:5
+    secrets:
+      - mysql_password
+    volumes:
+      # For initializing db
+      # Make sure sql files are present before first deploy
+      - ./DB:/docker-entrypoint-initdb.d
+      # For persisting the database
+      # If this is not done, then the data will be stored in
+      # container and will get lost when the container is destoryed.
+      - ./DB/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_password
+    deploy:
+      # Replication will not work because of data lock construct in mysql
+      # TODO: Check how mysql cluster setup can be done on docker
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  web:
+    image: docker.pkg.github.com/pushkar8723/aurora/web
+    depends_on:
+      - mysql
+    secrets:
+      - mysql_password
+    ports:
+      # Aurora will be accessible on port 8080 of the host box.
+      # Change this as per your requirement.
+      - 8080:80
+    environment:
+      - AURORA_SQL_USER=root
+      - AURORA_SQL_PASS_FILE=/run/secrets/mysql_password
+      - AURORA_SQL_DB=aurora_main
+      - AURORA_SQL_HOST=mysql
+    volumes:
+      - ./conf:/etc/apache2/sites-enabled
+    deploy:
+      # Replication is not supported yet
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+  
+  judge:
+    image: docker.pkg.github.com/pushkar8723/aurora/judge
+    depends_on:
+      - mysql
+    secrets:
+      - mysql_password
+    environment:
+      - AURORA_SQL_HOSTNAME=mysql
+      - AURORA_SQL_USERNAME=root
+      - AURORA_SQL_PASSWORD_FILE=/run/secrets/mysql_password
+      - AURORA_SQL_DATABASE=aurora_main
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+secrets:
+  # It is recommened to store root password in a docker secret.
+  mysql_password:
+    external: true

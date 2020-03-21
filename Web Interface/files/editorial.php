@@ -1,7 +1,6 @@
 <?php
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == "Admin") {
             $query = "select * from problems where code = '$_GET[code]'";
             $result = DB::findOneFromQuery($query);
