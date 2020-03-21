@@ -117,24 +117,33 @@ def execute(exename,language, timelimit):
 	cmd = cmd.replace("[exename]", exename)
 	cmd = cmd.replace("[inputfile]", inputfile)
 
+	# Change permission to allow only root user to be
+	# able to execute commands in the directory.
 	os.system("chmod 100 .")
+
+	# Make files input, error and output file accessible
+	# to every user
 	if(os.path.exists("env/input.txt")): os.system("chmod 777 env/input.txt")
 	if(os.path.exists("env/error.txt")): os.system("chmod 777 env/error.txt")
 	if(os.path.exists("env/output.txt")): os.system("chmod 777 env/output.txt")
 
+	# Run program for limited time
 	starttime = time.time()
 	proc = subprocess.Popen([cmd], shell=True, preexec_fn=os.setsid)
 	try:
 		print(proc.communicate(timeout=timelimit))
 		t = proc.returncode
 	except subprocess.TimeoutExpired:
-		t = 124
+		t = 124 # Code for TLE
 	endtime = time.time()
 	timediff = endtime - starttime
-	
-	os.system("chmod 750 .")
+
 	# kill all process spawned by user 'judge'
 	os.system("pkill -u judge")
+
+	# Make directly readable / executable again to root user.
+	os.system("chmod 750 .")
+
 	print("Return Code : "+str(t))
 	return t
 
