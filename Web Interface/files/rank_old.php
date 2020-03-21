@@ -38,7 +38,6 @@ function timeformating($a) {
 }
 
 if (isset($_GET['code'])) {
-    $_GET['code'] = addslashes($_GET['code']);
     $query = "select * from contest where code = '$_GET[code]'";
     $contest = DB::findOneFromQuery($query);
     ?>

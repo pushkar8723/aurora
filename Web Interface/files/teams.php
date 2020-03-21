@@ -7,7 +7,6 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $group[$row['gid']] = $row['groupname'];
     }
     if (isset($_GET['code'])) {
-        $_GET['code'] = addslashes($_GET['code']);
         $teamname = urldecode($_GET['code']);
         $query = "select * from teams where teamname = '$teamname'";
         $res = DB::findOneFromQuery($query);

@@ -5,7 +5,6 @@ function timeformating($a) {
 }
 
 if (isset($_GET['code'])) {
-    $_GET['code'] = addslashes($_GET['code']);
     $query = "select * from contest where code = '$_GET[code]'";
     $contest = DB::findOneFromQuery($query);
     $query = "select value from admin where variable = 'penalty'";
@@ -30,16 +29,18 @@ if (isset($_GET['code'])) {
         $probCells .= "<th><a target='_blank' href='". SITE_URL . "/problems/$code". "'>".$code."</a></th>";
     }
     echo "<table class='table table-hover table-bordered'><thead><tr><th>Rank</th><th>Teamname</th><th>Score</th>$probCells<th>Final Time</th></tr></thead>";
-    foreach ($rank as $val) {
-        $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
-        $val['time'] = timeformating($val['time']);
-        $finaltime = timeformating($finaltime);
-        $probCells = "";
-        foreach($pidToProbCode as $pid=>$code){
-            $probCells .= "<td style='text-align:center'>". (array_key_exists($pid, $val['solved'])?"<span class='glyphicon glyphicon-ok' style='color: green'></span> (<span style='color:". ($val['solved'][$pid]>0?"red":"green") ."'>". $val['solved'][$pid]. "</span>)":"-") ."</td>";
+    if ($rank) {
+        foreach ($rank as $val) {
+            $finaltime = $val['time'] + $val['penalty'] * $admin['value'] * 60;
+            $val['time'] = timeformating($val['time']);
+            $finaltime = timeformating($finaltime);
+            $probCells = "";
+            foreach($pidToProbCode as $pid=>$code){
+                $probCells .= "<td style='text-align:center'>". (array_key_exists($pid, $val['solved'])?"<span class='glyphicon glyphicon-ok' style='color: green'></span> (<span style='color:". ($val['solved'][$pid]>0?"red":"green") ."'>". $val['solved'][$pid]. "</span>)":"-") ."</td>";
+            }
+            echo "<tr><td>$i</td><td><a href='" . SITE_URL . "/teams/$val[teamname]'>$val[teamname]</a></td><td>$val[score] (<span style='color:". ($val['penalty']>0?"red":"green") ."'>$val[penalty]</span>)</td>". $probCells ."<td>$finaltime</td></tr>";
+            $i++;
         }
-        echo "<tr><td>$i</td><td><a href='" . SITE_URL . "/teams/$val[teamname]'>$val[teamname]</a></td><td>$val[score] (<span style='color:". ($val['penalty']>0?"red":"green") ."'>$val[penalty]</span>)</td>". $probCells ."<td>$finaltime</td></tr>";
-        $i++;
     }
     echo "</table>";
 } else {

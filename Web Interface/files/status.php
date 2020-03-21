@@ -4,7 +4,7 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
         $page = $_GET['page'];
     else
         $page = 1;
-    $options = explode(',', addslashes($_GET['code']));
+    $options = explode(',', $_GET['code']);
     $query = "select pid, name from problems where code='$options[0]'";
     $push = DB::findOneFromQuery($query);
     $pid = $push['pid'];

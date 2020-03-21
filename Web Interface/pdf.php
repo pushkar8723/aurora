@@ -17,7 +17,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
         <body>
             <div class='container'>
                 <?php
-                $pgroup = addslashes($_GET['code']);
+                $pgroup = $_GET['code'];
                 $res = DB::findAllFromQuery("Select * from problems where pgroup = '$pgroup'");
                 $i=1;
                 foreach ($res as $result) {
@@ -35,6 +35,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
     <?php
 } else {
     $_SESSION['msg'] = "Access Denied: You need to be administrator to access that page.";
-    redirectTo(SITE_URL);
+    redirectTo(SITE_URL . "/");
 }
 ?>

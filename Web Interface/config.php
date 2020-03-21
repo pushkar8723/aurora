@@ -76,5 +76,16 @@ define("MAIL_PATH", "Mail.php");
 
 define("ERROR_LOG", dirname(__FILE__) . "/errors.txt");
 
+
+// Sanitizing POST variables
+foreach ($_POST as $key => $value) {
+  $_POST[$key] = addslashes($value);
+}
+
+// Sanitizing GET variables
+foreach ($_GET as $key => $value) {
+  $_GET[$key] = addslashes($value);
+}
+
 require_once 'functions.php';
 

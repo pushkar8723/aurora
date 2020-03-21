@@ -1,7 +1,7 @@
 <?php
 if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin')) {
     if (isset($_SESSION['loggedin'])) {
-        redirectTo(SITE_URL);
+        redirectTo(SITE_URL . "/");
     }
     ?>
     <script type='text/javascript'>
