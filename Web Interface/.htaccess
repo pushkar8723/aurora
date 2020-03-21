@@ -549,3 +549,14 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
   RewriteRule ^([^./]+)$ ?tab=$1 [L]
   RewriteRule ^([^./]+)/([^./]+)$ ?tab=$1&code=$2 [L]
 </IfModule>
+
+<IfModule mod_headers.c>
+  # auroa is allowed to be put in iframes on same origin
+  Header set X-Frame-Options SAMEORIGIN
+  # Protect your visitors against Cross-site Scripting attacks
+  Header set X-XSS-Protection "1; mode=block"
+  # This header blocks content sniffing that could transform non-executable MIME types into executable MIME types
+  Header set X-Content-Type-Options nosniff
+  # This header controls how much referrer information from your site is sent to another server
+  Header set Referrer-Policy: no-referrer
+</IfModule>
