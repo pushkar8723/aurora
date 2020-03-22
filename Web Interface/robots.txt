@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /problems/
+Allow: /submissions/
+Allow: /rankings/
+Allow: /contests/

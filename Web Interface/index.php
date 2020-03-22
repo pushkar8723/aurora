@@ -14,9 +14,11 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin())
 doCompetitionCheck(); //Activate competition when planned
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="description" content="Aurora is a dockerized open-source online judge. It can be easily deployed and scaled. It also employs the latest security checks to secure the application.">
+        <meta name="keywords" content="open source, online judge, docker, secure, scaleable">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <link type="text/css" rel="stylesheet" href="<?php echo SITE_URL ?>/css/bootstrap.css" media="screen" />
@@ -30,7 +32,7 @@ doCompetitionCheck(); //Activate competition when planned
                     $('#sidebar').height($('#mainbar').height());
             });
         </script>
-        <title>Aurora</title>
+        <title>Aurora - An open-source online judge</title>
         <link rel='shortcut icon' href='<?php echo SITE_URL; ?>/img/favicon.png' />
     </head>
     <body>
